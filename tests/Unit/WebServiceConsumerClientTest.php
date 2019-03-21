@@ -12,6 +12,7 @@ class WebServiceConsumerClientTest extends TestCase
 {
     public function testConsumerHasSameFactoryAndUriAsConstructed(): void
     {
+        /** @var WebServiceFactory&\PHPUnit\Framework\MockObject\MockObject $factory */
         $factory = $this->createMock(WebServiceFactory::class);
         $uri = 'https://example.com';
 

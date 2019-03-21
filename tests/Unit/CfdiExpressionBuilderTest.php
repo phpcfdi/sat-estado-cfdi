@@ -62,7 +62,7 @@ class CfdiExpressionBuilderTest extends TestCase
         $this->assertSame('mmVYiA==', $expression->getSello());
     }
 
-    public function textConstructWithIncompleteXmlThrowsException()
+    public function textConstructWithIncompleteXmlThrowsException(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Xml document does not have root element');
@@ -71,7 +71,7 @@ class CfdiExpressionBuilderTest extends TestCase
         new CfdiExpressionBuilder($document);
     }
 
-    public function testWithEmptyXml()
+    public function testWithEmptyXml(): void
     {
         $this->expectException(Error::class);
 
@@ -79,7 +79,7 @@ class CfdiExpressionBuilderTest extends TestCase
         CfdiExpressionBuilder::createFromString($contents);
     }
 
-    public function testWithInvalidXml()
+    public function testWithInvalidXml(): void
     {
         $this->expectException(Error::class);
 
@@ -87,7 +87,7 @@ class CfdiExpressionBuilderTest extends TestCase
         CfdiExpressionBuilder::createFromString($contents);
     }
 
-    public function testWithInvalidCfdiRootElement()
+    public function testWithInvalidCfdiRootElement(): void
     {
         $this->expectException(\RuntimeException::class);
 
@@ -95,7 +95,7 @@ class CfdiExpressionBuilderTest extends TestCase
         CfdiExpressionBuilder::createFromString($contents);
     }
 
-    public function testWithInvalidCfdiInvalidNamespace()
+    public function testWithInvalidCfdiInvalidNamespace(): void
     {
         $this->expectException(\RuntimeException::class);
 
@@ -103,7 +103,7 @@ class CfdiExpressionBuilderTest extends TestCase
         CfdiExpressionBuilder::createFromString($contents);
     }
 
-    public function testWithInvalidCfdiInvalidVersion32()
+    public function testWithInvalidCfdiInvalidVersion32(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('version');
@@ -112,7 +112,7 @@ class CfdiExpressionBuilderTest extends TestCase
         CfdiExpressionBuilder::createFromString($contents);
     }
 
-    public function testWithInvalidCfdiInvalidVersion33()
+    public function testWithInvalidCfdiInvalidVersion33(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('version');
@@ -121,7 +121,7 @@ class CfdiExpressionBuilderTest extends TestCase
         CfdiExpressionBuilder::createFromString($contents);
     }
 
-    public function testWithComprobanteButNoData33()
+    public function testWithComprobanteButNoData33(): void
     {
         $contents = '<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/3" Version="3.3"/>';
         $builder = CfdiExpressionBuilder::createFromString($contents);
@@ -137,7 +137,7 @@ class CfdiExpressionBuilderTest extends TestCase
         $this->assertFalse($builder->isVersion32());
     }
 
-    public function testWithComprobanteButNoData32()
+    public function testWithComprobanteButNoData32(): void
     {
         $contents = '<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/3" version="3.2"/>';
         $builder = CfdiExpressionBuilder::createFromString($contents);
