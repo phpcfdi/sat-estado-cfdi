@@ -7,7 +7,6 @@
 [![Scrutinizer][badge-quality]][quality]
 [![Coverage Status][badge-coverage]][coverage]
 [![Total Downloads][badge-downloads]][downloads]
-[![SensioLabsInsight][badge-sensiolabs]][sensiolabs]
 
 > Consulta el estado de un cfdi en el webservice del SAT
 
@@ -190,7 +189,6 @@ and licensed for use under the MIT License (MIT). Please see [LICENSE][] for mor
 [license]: https://github.com/PhpCfdi/SatEstadoCfdi/blob/master/LICENSE
 [build]: https://travis-ci.org/PhpCfdi/SatEstadoCfdi?branch=master
 [quality]: https://scrutinizer-ci.com/g/PhpCfdi/SatEstadoCfdi/
-[sensiolabs]: https://insight.sensiolabs.com/projects/:INSIGHT_UUID
 [coverage]: https://scrutinizer-ci.com/g/PhpCfdi/SatEstadoCfdi/code-structure/master/code-coverage
 [downloads]: https://packagist.org/packages/phpcfdi/sat-estado-cfdi
 
@@ -199,6 +197,5 @@ and licensed for use under the MIT License (MIT). Please see [LICENSE][] for mor
 [badge-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
 [badge-build]: https://img.shields.io/travis/PhpCfdi/SatEstadoCfdi/master.svg?style=flat-square
 [badge-quality]: https://img.shields.io/scrutinizer/g/PhpCfdi/SatEstadoCfdi/master.svg?style=flat-square
-[badge-sensiolabs]: https://insight.sensiolabs.com/projects/:INSIGHT_UUID/mini.png
 [badge-coverage]: https://img.shields.io/scrutinizer/coverage/g/PhpCfdi/SatEstadoCfdi/master.svg?style=flat-square
 [badge-downloads]: https://img.shields.io/packagist/dt/phpcfdi/sat-estado-cfdi.svg?style=flat-square
