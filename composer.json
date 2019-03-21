@@ -1,5 +1,5 @@
 {
-    "name": "phpcfdi/satestadocfdi",
+    "name": "phpcfdi/sat-estado-cfdi",
     "description": "Consulta el estado de un cfdi en el webservice del SAT",
     "keywords": ["sat", "cfdi", "ConsultaCFDIService.svc"],
     "homepage": "https://github.com/PhpCfdi/SatEstadoCfdi",

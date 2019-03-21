@@ -38,7 +38,7 @@ que mejor te convenga.
 Usa [composer](https://getcomposer.org/)
 
 ```shell
-composer require phpcfdi/satestadocfdi
+composer require phpcfdi/sat-estado-cfdi
 ```
 
 
@@ -192,7 +192,7 @@ and licensed for use under the MIT License (MIT). Please see [LICENSE][] for mor
 [quality]: https://scrutinizer-ci.com/g/PhpCfdi/SatEstadoCfdi/
 [sensiolabs]: https://insight.sensiolabs.com/projects/:INSIGHT_UUID
 [coverage]: https://scrutinizer-ci.com/g/PhpCfdi/SatEstadoCfdi/code-structure/master/code-coverage
-[downloads]: https://packagist.org/packages/phpcfdi/satestadocfdi
+[downloads]: https://packagist.org/packages/phpcfdi/sat-estado-cfdi
 
 [badge-source]: http://img.shields.io/badge/source-PhpCfdi/SatEstadoCfdi-blue.svg?style=flat-square
 [badge-release]: https://img.shields.io/github/release/PhpCfdi/SatEstadoCfdi.svg?style=flat-square
@@ -201,4 +201,4 @@ and licensed for use under the MIT License (MIT). Please see [LICENSE][] for mor
 [badge-quality]: https://img.shields.io/scrutinizer/g/PhpCfdi/SatEstadoCfdi/master.svg?style=flat-square
 [badge-sensiolabs]: https://insight.sensiolabs.com/projects/:INSIGHT_UUID/mini.png
 [badge-coverage]: https://img.shields.io/scrutinizer/coverage/g/PhpCfdi/SatEstadoCfdi/master.svg?style=flat-square
-[badge-downloads]: https://img.shields.io/packagist/dt/phpcfdi/satestadocfdi.svg?style=flat-square
+[badge-downloads]: https://img.shields.io/packagist/dt/phpcfdi/sat-estado-cfdi.svg?style=flat-square
