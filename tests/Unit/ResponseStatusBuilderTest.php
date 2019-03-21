@@ -17,7 +17,7 @@ class ResponseStatusBuilderTest extends TestCase
         // default states
         $this->assertTrue($response->request()->isNotFound());
         $this->assertTrue($response->active()->isNotFound());
-        $this->assertTrue($response->cancellabe()->isNotCancellable());
+        $this->assertTrue($response->cancellable()->isNotCancellable());
         $this->assertTrue($response->cancellation()->isUndefined());
     }
 

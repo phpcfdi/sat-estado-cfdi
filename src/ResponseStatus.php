@@ -13,7 +13,7 @@ class ResponseStatus
     private $active;
 
     /** @var Status\CfdiCancellableStatus */
-    private $cancellabe;
+    private $cancellable;
 
     /** @var Status\CfdiCancellationStatus */
     private $cancellation;
@@ -21,12 +21,12 @@ class ResponseStatus
     public function __construct(
         Status\CfdiRequestStatus $request,
         Status\CfdiActiveStatus $active,
-        Status\CfdiCancellableStatus $cancellabe,
+        Status\CfdiCancellableStatus $cancellable,
         Status\CfdiCancellationStatus $cancellation
     ) {
         $this->request = $request;
         $this->active = $active;
-        $this->cancellabe = $cancellabe;
+        $this->cancellable = $cancellable;
         $this->cancellation = $cancellation;
     }
 
@@ -40,9 +40,9 @@ class ResponseStatus
         return $this->active;
     }
 
-    public function cancellabe(): Status\CfdiCancellableStatus
+    public function cancellable(): Status\CfdiCancellableStatus
     {
-        return $this->cancellabe;
+        return $this->cancellable;
     }
 
     public function cancellation(): Status\CfdiCancellationStatus

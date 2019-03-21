@@ -55,7 +55,7 @@ $consumer = (new \PhpCfdi\SatEstadoCfdi\WebServiceDiscover())->createFactory()->
 
 $response = $consumer->execute('...expression');
 
-if ($response->cancellabe()->isNotCancellable()) {
+if ($response->cancellable()->isNotCancellable()) {
     echo 'CFDI no es cancelable';
 }
 ```

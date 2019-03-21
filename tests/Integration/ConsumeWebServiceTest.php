@@ -24,7 +24,7 @@ class ConsumeWebServiceTest extends TestCase
 
         $this->assertTrue($status->request()->isFound());
         $this->assertTrue($status->active()->isActive());
-        $this->assertTrue($status->cancellabe()->isDirectMethod());
+        $this->assertTrue($status->cancellable()->isDirectMethod());
         $this->assertTrue($status->cancellation()->isUndefined());
     }
 
@@ -42,7 +42,7 @@ class ConsumeWebServiceTest extends TestCase
 
         $this->assertTrue($status->request()->isFound());
         $this->assertTrue($status->active()->isActive());
-        $this->assertTrue($status->cancellabe()->isDirectMethod());
+        $this->assertTrue($status->cancellable()->isDirectMethod());
         $this->assertTrue($status->cancellation()->isUndefined());
     }
 }
