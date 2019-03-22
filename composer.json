@@ -31,14 +31,16 @@
         "php-http/discovery": "^1.6"
     },
     "require-dev": {
+        "ext-curl": "*",
         "sunrise/http-factory": "^1.0",
         "sunrise/http-message": "^1.0",
-        "sunrise/stream": "^1.0",
+        "sunrise/http-client-curl": "^1.0",
         "phpunit/phpunit": "^8.0",
         "overtrue/phplint": "^1.0",
         "squizlabs/php_codesniffer": "^3.0",
         "friendsofphp/php-cs-fixer": "^2.4",
-        "phpstan/phpstan-shim": "^0.11"
+        "phpstan/phpstan-shim": "^0.11",
+        "kriswallsmith/buzz": "^1.0"
     },
     "suggest": {
         "kriswallsmith/buzz": "PSR-18: HTTP Client implementation, discoverable by php-http-discover",
