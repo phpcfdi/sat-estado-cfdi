@@ -1,15 +1,15 @@
 filter:
     excluded_paths:
-        - 'tests/*'
-        - 'vendor/*'
+        - 'tests/'
+        - 'vendor/'
 
-checks:
-    php:
-        code_rating: true
-        duplication: true
+build:
+    nodes:
+        analysis:
+            tests:
+                override:
+                    - phpcs-run --standard=phpcs.xml.dist src/ tests/
+                    - php-scrutinizer-run --enable-security-analysis
 
 tools:
-    php_code_sniffer:
-        config:
-            standard: "PSR2"
     external_code_coverage: true
