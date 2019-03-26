@@ -10,26 +10,29 @@
 
 > Consulta el estado de un cfdi en el webservice del SAT
 
-This library contains helpers to consume the **Servicio de Consulta de CFDI** from **SAT**.
+:us: This library contains helpers to consume the **Servicio de Consulta de CFDI** from **SAT**.
 The documentation of this project is in spanish as this is the natural language for intented audience.
 
-Esta librería contiene objetos de ayuda para consumir el **Servicio de Consulta de CFDI del SAT**.
+:mexico: Esta librería contiene objetos de ayuda para consumir el **Servicio de Consulta de CFDI del SAT**.
+La documentación del proyecto está en español porque ese es el lenguaje de los usuarios que la utilizarán.
+
+**Servicio de Consulta de CFDI del SAT**:
 
 - Servicio productivo: <https://consultaqr.facturaelectronica.sat.gob.mx/ConsultaCFDIService.svc>
 - Servicio de pruebas: <https://pruebacfdiconsultaqr.cloudapp.net/ConsultaCFDIService.svc>
 - Documentación: <https://www.sat.gob.mx/cs/Satellite?blobcol=urldata&blobkey=id&blobtable=MungoBlobs&blobwhere=1461173518263&ssbinary=true>
 
-Cambios recientes en el servicio:
+**Cambios recientes en el servicio**:
 
-- Por motivo del cambio en el proceso de facturación en 2018 agregaron nuevos estados
+- Por motivo del cambio en el proceso de facturación en 2018 agregaron nuevos estados.
 - Por una razón desconocida y hasta cierto punto inexplicable, el WSDL ya no se encuentra disponible desde 2018.
 Aunque sí se puede consumir el servicio.
 
 Esta librería **no utiliza SOAP** para hacer la llamada, hace una llamada HTTP que construye e interpreta.
 
 Para contactar al servicio utiliza [PSR-18: HTTP Client](https://www.php-fig.org/psr/psr-18/)
-y [PSR-17: HTTP Factories](https://www.php-fig.org/psr/psr-17/). De esta forma, tu puedes usar el cliente HTTP
-que mejor te convenga.
+y [PSR-17: HTTP Factories](https://www.php-fig.org/psr/psr-17/).
+De esta forma, tu puedes usar el cliente HTTP que mejor te convenga.
 
 
 ## Instalación
@@ -130,33 +133,67 @@ S - ...       | Vigente       | Cancelable con aceptación | Solicitud rechazada
 
 ### Compatibilidad con PSR-7 PSR-17 y PSR-18
 
-Esta librería busca alta compatibilidad con los estándares propuestos por el PHP-FIG.
-Por lo que implementa los siguientes estándares. 
+Esta librería busca alta compatibilidad con los estándares propuestos por el [PHP-FIG](https://www.php-fig.org/).
+Por lo que utiliza los siguientes estándares. 
 
 - PSR-7: HTTP message interfaces: Interfaces de HTTP Request y Response.
 - PSR-17: HTTP Factories: Interfaces de fábricas de HTTP Request y Response (para PSR-7).
 - PSR-18: HTTP Client: Interfaces para clientes HTTP (el que hace la llamada POST).
 
-Esta librería no contiene los objetos que puedan implementar los estándares,
+Esta librería no contiene las implementaciones de los estándares,
 las librerías que implementan las interfaces ya existen fuera del ámbito de la aplicación.
 
-Si tu aplicación no está utilizando ningún componente que ya entregue estos objetos,
-te recomiendo usar `WebServiceDiscover` e instalar utilizando composer:
+Te recomiendo usar las librerías de Sunrise
+[`sunrise/http-client-curl`](https://github.com/sunrise-php/http-client-curl),
+[`sunrise/http-factory`](https://github.com/sunrise-php/http-factory) y
+[`sunrise/http-message`](https://github.com/sunrise-php/http-message).
 
 ```shell
-# librería para implementar PSR-7 y PSR-17
-composer require nyholm/psr7
-
-# librería para implementar PSR-18 (se puede auto-descubrir)
-composer require kriswallsmith/buzz
-
-# librería para que se pueda auto-descubrir PSR-7 con nyholm/psr7, guzzle6, diactoros e slim
-composer require php-http/message-factory
+# librerías para implementar PSR-18, PSR-17 y PSR-7
+composer require sunrise/http-client-curl, sunrise/http-factory y sunrise/http-message
 ```
 
-Puedes utilizar directamente `WebServiceFactory` pero tendrás que darle los objetos que impĺementan
-`Psr\Http\Client\ClientInterface`, `Psr\Http\Message\RequestFactoryInterface` y
-`Psr\Http\Message\StreamFactoryInterface`.
+Y puedes crear tu cliente de esta forma:
+
+```php
+<?php
+use PhpCfdi\SatEstadoCfdi\WebServiceFactory;
+
+function createSunriseSatEstadoCfdiFactory(): WebServiceFactory {
+    $responseFactory = new Sunrise\Http\Factory\ResponseFactory();
+    $requestFactory = new Sunrise\Http\Factory\RequestFactory();
+    $streamFactory = new Sunrise\Http\Factory\StreamFactory();
+    $httpClient = new \Sunrise\Http\Client\Curl\Client($responseFactory, $streamFactory);
+    return new WebServiceFactory($httpClient, $requestFactory, $streamFactory);
+}
+
+$consumer = createSunriseSatEstadoCfdiFactory()->getConsumer();
+```
+
+
+### Compatibilidad con HTTP Plug
+
+Si tu aplicación usa HTTP Plug o es compatible con `php-http/discovery` entonces podrías usar
+la clase `WebServiceDiscover`.
+
+```php
+<?php
+$discover = new \PhpCfdi\SatEstadoCfdi\WebServiceDiscover();
+$factory = $discover->createFactory();
+$consumer = $factory->getConsumer();
+```
+
+En el archivo [`tests/Discoverables/Sunrise.php`](blob/master/tests/Discoverables/Sunrise.php)
+puedes ver una librería para que las implementaciones de Sunrise sean automáticamente descubiertas.
+
+Para decirle al descubridor de componentes de HTTP Plug que las reconozca incluye las siguientes
+líneas: 
+
+```php
+<?php
+\Http\Discovery\Psr17FactoryDiscovery::prependStrategy(\PhpCfdi\SatEstadoCfdi\Tests\Discoverables\Sunrise::class);
+\Http\Discovery\Psr18ClientDiscovery::prependStrategy(\PhpCfdi\SatEstadoCfdi\Tests\Discoverables\Sunrise::class);
+``` 
 
 
 ## Compatilibilidad
