@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpCfdi\SatEstadoCfdi\Discoverables;
+namespace PhpCfdi\SatEstadoCfdi\Tests\Discoverables;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Strategy\DiscoveryStrategy;

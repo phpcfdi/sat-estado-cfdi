@@ -8,5 +8,5 @@ error_reporting(-1);
 // require composer autoloader
 require_once __DIR__ . '/../vendor/autoload.php';
 
-\Http\Discovery\Psr17FactoryDiscovery::prependStrategy(\PhpCfdi\SatEstadoCfdi\Discoverables\Sunrise::class);
-\Http\Discovery\Psr18ClientDiscovery::prependStrategy(\PhpCfdi\SatEstadoCfdi\Discoverables\Sunrise::class);
+\Http\Discovery\Psr17FactoryDiscovery::prependStrategy(\PhpCfdi\SatEstadoCfdi\Tests\Discoverables\Sunrise::class);
+\Http\Discovery\Psr18ClientDiscovery::prependStrategy(\PhpCfdi\SatEstadoCfdi\Tests\Discoverables\Sunrise::class);
