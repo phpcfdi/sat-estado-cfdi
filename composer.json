@@ -42,9 +42,9 @@
         "phpstan/phpstan-shim": "^0.11"
     },
     "suggest": {
-        "kriswallsmith/buzz": "PSR-18: HTTP Client implementation, discoverable by php-http-discover",
-        "php-http/message-factory": "Help discover PSR-17 message factories (guzzle, diactoros, slim and nyholm/psr7)",
-        "nyholm/psr7": "PSR-17: HTTP Factories implementation"
+        "sunrise/http-client-curl": "PSR-18: HTTP Client implementation",
+        "sunrise/http-factory": "PSR-17: HTTP Factories implementation",
+        "sunrise/http-message": "PSR-7: HTTP message interfaces implementation"
     },
     "autoload": {
         "psr-4": {
