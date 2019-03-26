@@ -8,18 +8,10 @@ sudo: false
 php:
   - 7.2
   - 7.3
-  - 7.4snapshot
-  - nightly
-
-matrix:
-  allow_failures:
-    - php:
-        - 7.4snapshot
-        - nightly
 
 cache:
   - directories:
-      - $HOME/.composer
+    - $HOME/.composer
 
 before_script:
   - travis_retry composer install --no-interaction --prefer-dist
