@@ -21,7 +21,7 @@
     "require": {
         "php": ">=7.2",
         "ext-dom": "*",
-        "spatie/enum": "^1.1",
+        "eclipxe/enum": "^0.2",
         "psr/http-client": "^1.0",
         "psr/http-message": "^1.0",
         "psr/http-factory": "^1.0",
