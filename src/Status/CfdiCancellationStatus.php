@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi\Status;
 
-use Spatie\Enum\Enum;
+use Eclipxe\Enum\Enum;
 
 /**
  * @method static self undefined()
