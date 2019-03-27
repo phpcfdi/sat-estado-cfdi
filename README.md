@@ -24,8 +24,8 @@ La documentación del proyecto está en español porque ese es el lenguaje de lo
 
 **Cambios recientes en el servicio**:
 
-- Por motivo del cambio en el proceso de facturación en 2018 agregaron nuevos estados.
-- Por una razón desconocida y hasta cierto punto inexplicable, el WSDL ya no se encuentra disponible desde 2018.
+- Por motivo del cambio en el proceso de cancelación, en 2018 agregaron nuevos estados.
+- Por una razón desconocida -e inexplicable-, el WSDL ya no se encuentra disponible desde 2018.
 Aunque sí se puede consumir el servicio.
 
 Esta librería **no utiliza SOAP** para hacer la llamada, hace una llamada HTTP que construye e interpreta.
@@ -43,18 +43,24 @@ Usa [composer](https://getcomposer.org/)
 composer require phpcfdi/sat-estado-cfdi
 ```
 
+Si tienes problemas para instalar es probable que no cuentes con paques que satisfagan las dependencias de
+[`psr/http-client-implementation`](https://packagist.org/providers/psr/http-client-implementation),
+[`psr/http-message-implementation`](https://packagist.org/providers/psr/http-message-implementation) y
+[`psr/http-factory-implementation`](https://packagist.org/providers/psr/http-factory-implementation).
+Instala alguno de esos paquetes también. [Ver ejemplo](#compatibilidad-con-psr-7-psr-17-y-psr-18)
 
 ## Ejemplo básico de uso
 
 Los pasos básicos son:
 
-- Crear la fábrica de objetos `WebServiceFactory`.
+- Crear la fábrica de objetos `WebServiceFactory` [Ver ejemplo](#compatibilidad-con-psr-7-psr-17-y-psr-18).
 - Pedirle a la fábrica de objetos que nos entregue un consumidor `Consumer`.
 - Solicitarle al consumidor que ejecute la petición sobre una expresión.
 
 ```php
 <?php
-$consumer = (new \PhpCfdi\SatEstadoCfdi\WebServiceDiscover())->createFactory()->getConsumer();
+/** @var \PhpCfdi\SatEstadoCfdi\WebServiceFactory $factory */
+$consumer = $factory->getConsumer();
 
 $response = $consumer->execute('...expression');
 
@@ -107,7 +113,7 @@ Posibles estados:
     - `requestMethod`: Si el estado reportó `Cancelable con aceptación`.
     - `notCancellable`: en cualquier otro caso.
 
-- `CfdiCancellationStatus cancelation`: `EstatusCancelacion`.
+- `CfdiCancellationStatus cancellation`: `EstatusCancelacion`.
     - `cancelDirect`: Si el estado reportó `Cancelado sin aceptación`.
     - `pending`: Si el estado reportó `En proceso`.
     - `cancelByTimeout`: Si el estado reportó `Plazo vencido`.
@@ -125,10 +131,20 @@ S - ...       | Cancelado     | *                         | Plazo vencido       
 S - ...       | Cancelado     | *                         | Cancelado con aceptación | Cancelado con aceptación del receptor
 S - ...       | Cancelado     | *                         | Cancelado sin aceptación | No fue requerido preguntarle al receptor y se canceló
 S - ...       | Vigente       | No cancelable             | *                        | No se puede cancelar
-S - ...       | Vigente       | Cancelable sin aceptación | *                        | Se puede cancelar pero no se ha realizado solicitud, termina en SuccessStatus
-S - ...       | Vigente       | Cancelable con aceptación | (ninguno)                | Se puede cancelar pero no se ha realizado solicitud, Termina en Pending
-S - ...       | Vigente       | Cancelable con aceptación | En proceso               | Se hizo la solicitud y se está en espera
-S - ...       | Vigente       | Cancelable con aceptación | Solicitud rechazada      | Se hizo la solicitud y se está en espera
+S - ...       | Vigente       | Cancelable sin aceptación | *                        | Se puede cancelar, pero no se ha realizado la cancelación
+S - ...       | Vigente       | Cancelable con aceptación | (ninguno)                | Se puede cancelar, pero no se ha realizado la solicitud
+S - ...       | Vigente       | Cancelable con aceptación | En proceso               | Se hizo la solicitud y está en espera de respuesta
+S - ...       | Vigente       | Cancelable con aceptación | Solicitud rechazada      | Se hizo la solicitud y fue rechazada
+
+Cuando tienes un CFDI *Cancelable con aceptación* y mandas a hacer la cancelación (*En proceso*),
+el receptor puede aceptar la cancelación (*Cancelado con aceptación*) o rechazarla (*Solicitud rechazada*).
+Si es la primera vez que se hace la solicitud el receptor tiene 72 horas para aceptarla o rechazarla,
+si no lo hace entonces automáticamente será cancelada (*Plazo vencido*).
+
+Podrías volver a enviar la solicitud de cancelación *por segunda vez* aún cuando la solicitud fue rechazada.
+En ese caso, el receptor puede aceptar o rechazar la cancelación, pero ya no aplicará un lapzo de 72 horas.
+Eso significa que podrías tener el CFDI en estado de cancelación *en proceso* indefinidamente.
+O, incluso, que la cancelación suceda meses después de lo esperado.
 
 
 ### Compatibilidad con PSR-7 PSR-17 y PSR-18
@@ -137,8 +153,11 @@ Esta librería busca alta compatibilidad con los estándares propuestos por el [
 Por lo que utiliza los siguientes estándares. 
 
 - PSR-7: HTTP message interfaces: Interfaces de HTTP Request y Response.
+  <https://www.php-fig.org/psr/psr-7/>
 - PSR-17: HTTP Factories: Interfaces de fábricas de HTTP Request y Response (para PSR-7).
+  <https://www.php-fig.org/psr/psr-17/>
 - PSR-18: HTTP Client: Interfaces para clientes HTTP (el que hace la llamada POST).
+  <https://www.php-fig.org/psr/psr-18/>
 
 Esta librería no contiene las implementaciones de los estándares,
 las librerías que implementan las interfaces ya existen fuera del ámbito de la aplicación.
@@ -150,7 +169,7 @@ Te recomiendo usar las librerías de Sunrise
 
 ```shell
 # librerías para implementar PSR-18, PSR-17 y PSR-7
-composer require sunrise/http-client-curl, sunrise/http-factory y sunrise/http-message
+composer require sunrise/http-client-curl sunrise/http-factory sunrise/http-message
 ```
 
 Y puedes crear tu cliente de esta forma:
@@ -173,8 +192,9 @@ $consumer = createSunriseSatEstadoCfdiFactory()->getConsumer();
 
 ### Compatibilidad con HTTP Plug
 
-Si tu aplicación usa HTTP Plug o es compatible con `php-http/discovery` entonces podrías usar
-la clase `WebServiceDiscover`.
+Si tu aplicación usa HTTP Plug o es compatible con
+[`php-http/discovery`](http://docs.php-http.org/en/latest/discovery.html)
+entonces podrías usar la clase `WebServiceDiscover`.
 
 ```php
 <?php
@@ -183,8 +203,8 @@ $factory = $discover->createFactory();
 $consumer = $factory->getConsumer();
 ```
 
-En el archivo [`tests/Discoverables/Sunrise.php`](blob/master/tests/Discoverables/Sunrise.php)
-puedes ver una librería para que las implementaciones de Sunrise sean automáticamente descubiertas.
+En el archivo [`tests/Discoverables/Sunrise.php`](tests/Discoverables/Sunrise.php)
+puedes ver una clase para que las implementaciones de Sunrise sean automáticamente descubiertas.
 
 Para decirle al descubridor de componentes de HTTP Plug que las reconozca incluye las siguientes
 líneas: 
