@@ -40,12 +40,12 @@ class CfdiExpressionBuilderTest extends TestCase
         $builder = CfdiExpressionBuilder::createFromString($contents);
         $expression = $builder->build();
 
-        $this->assertSame('3.3', $expression->getVersion());
-        $this->assertSame('POT9207213D6', $expression->getRfcEmisor());
-        $this->assertSame('DIM8701081LA', $expression->getRfcReceptor());
-        $this->assertSame('2010.01', $expression->getTotal());
-        $this->assertSame('CEE4BE01-ADFA-4DEB-8421-ADD60F0BEDAC', $expression->getUuid());
-        $this->assertSame('/OAgdg==', $expression->getSello());
+        $this->assertSame('3.3', $expression->version());
+        $this->assertSame('POT9207213D6', $expression->rfcEmisor());
+        $this->assertSame('DIM8701081LA', $expression->rfcReceptor());
+        $this->assertSame('2010.01', $expression->total());
+        $this->assertSame('CEE4BE01-ADFA-4DEB-8421-ADD60F0BEDAC', $expression->uuid());
+        $this->assertStringEndsWith('/OAgdg==', $expression->sello());
     }
 
     public function testCanBuildDataFromCfdi32(): void
@@ -54,15 +54,15 @@ class CfdiExpressionBuilderTest extends TestCase
         $builder = CfdiExpressionBuilder::createFromString($contents);
         $expression = $builder->build();
 
-        $this->assertSame('3.2', $expression->getVersion());
-        $this->assertSame('CTO021007DZ8', $expression->getRfcEmisor());
-        $this->assertSame('XAXX010101000', $expression->getRfcReceptor());
-        $this->assertSame('4685.00', $expression->getTotal());
-        $this->assertSame('80824F3B-323E-407B-8F8E-40D83FE2E69F', $expression->getUuid());
-        $this->assertSame('mmVYiA==', $expression->getSello());
+        $this->assertSame('3.2', $expression->version());
+        $this->assertSame('CTO021007DZ8', $expression->rfcEmisor());
+        $this->assertSame('XAXX010101000', $expression->rfcReceptor());
+        $this->assertSame('4685.00', $expression->total());
+        $this->assertSame('80824F3B-323E-407B-8F8E-40D83FE2E69F', $expression->uuid());
+        $this->assertStringEndsWith('mmVYiA==', $expression->sello());
     }
 
-    public function textConstructWithIncompleteXmlThrowsException(): void
+    public function testConstructWithIncompleteXmlThrowsException(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Xml document does not have root element');

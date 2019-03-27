@@ -11,6 +11,13 @@ In summary, [SemVer](https://semver.org/) can be viewed as ` Breaking . Feature 
 **Version `0.x.x` doesn't have to apply any of the SemVer rules**
 
 
+## Version 0.4.0 2019-03-25
+
+- Split this package to separate concerns.
+- More information about this separation of concerns inside `docs/DEVNOTES.md`.
+- Rewrite `README.md`
+
+
 ## Version 0.3.0 2019-03-25
 
 - Move from `spatie/enum` to `eclipxe/enum`.

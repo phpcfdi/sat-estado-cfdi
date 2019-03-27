@@ -31,16 +31,6 @@ class ResponseStatusBuilder
         $this->estatusCancelacion = $estatusCancelacion;
     }
 
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            strval($data['CodigoEstatus'] ?? ''),
-            strval($data['Estado'] ?? ''),
-            strval($data['EsCancelable'] ?? ''),
-            strval($data['EstatusCancelacion'] ?? '')
-        );
-    }
-
     public function getRequestStatus(): CfdiRequestStatus
     {
         // S - Comprobante obtenido satisfactoriamente

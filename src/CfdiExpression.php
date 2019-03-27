@@ -35,65 +35,62 @@ class CfdiExpression
         string $uuid,
         string $sello = ''
     ) {
-        if (! in_array($version, ['3.2', '3.3'], true)) {
-            throw new \UnexpectedValueException('The version is not allowed');
-        }
         $this->version = $version;
         $this->rfcEmisor = $rfcEmisor;
         $this->rfcReceptor = $rfcReceptor;
         $this->total = $total;
         $this->totalFloat = floatval(trim(str_replace(',', '', $this->total)));
         $this->uuid = $uuid;
-        $this->sello = substr($sello, -8);
+        $this->sello = $sello;
     }
 
-    public function getVersion(): string
+    public function version(): string
     {
         return $this->version;
     }
 
-    public function getRfcEmisor(): string
+    public function rfcEmisor(): string
     {
         return $this->rfcEmisor;
     }
 
-    public function getRfcReceptor(): string
+    public function rfcReceptor(): string
     {
         return $this->rfcReceptor;
     }
 
-    public function getTotal(): string
+    public function total(): string
     {
         return $this->total;
     }
 
-    public function getTotalFloat(): float
+    public function totalAsFloat(): float
     {
         return $this->totalFloat;
     }
 
-    public function getUuid(): string
+    public function uuid(): string
     {
         return $this->uuid;
     }
 
-    public function getSello(): string
+    public function sello(): string
     {
         return $this->sello;
     }
 
     public function expression(): string
     {
-        if ('3.3' === $this->version) {
-            return $this->expressionVersion33();
-        }
         if ('3.2' === $this->version) {
             return $this->expressionVersion32();
+        }
+        if ('3.3' === $this->version) {
+            return $this->expressionVersion33();
         }
         return '';
     }
 
-    public function expressionVersion32(): string
+    protected function expressionVersion32(): string
     {
         return '?' . implode('&', [
             're=' . strval($this->rfcEmisor),
@@ -103,7 +100,7 @@ class CfdiExpression
         ]);
     }
 
-    public function expressionVersion33(): string
+    protected function expressionVersion33(): string
     {
         $total = rtrim(number_format($this->totalFloat, 6, '.', ''), '0');
         if ('.' === substr($total, -1, 1)) {
@@ -114,7 +111,7 @@ class CfdiExpression
             're=' . strval($this->rfcEmisor),
             'rr=' . strval($this->rfcReceptor),
             'tt=' . $total,
-            'fe=' . $this->sello,
+            'fe=' . substr($this->sello, -8),
         ]);
     }
 }
