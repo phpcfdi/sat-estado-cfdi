@@ -160,6 +160,18 @@ Eso significa que podrías tener el CFDI en estado de cancelación *en proceso* 
 O, incluso, que la cancelación suceda meses después de lo esperado.
 
 
+## Prueba de cumplimiento de implementación
+
+Se incluye la clase `PhpCfdi\SatEstadoCfdi\ComplianceTester\ComplianceTester` que contacta al
+webservice del SAT con datos conocidos y evalua la respuesta.
+
+Los paquetes `phpcfdi/sat-estado-cfdi-soap` y `phpcfdi/sat-estado-cfdi-http-sunrise` implementan
+un test para asegurarse que cumplen correctamente.
+
+Si haces tu propia implementación, asegúrate de crear un test que lo cubra, puedes ver como ejemplo
+<https://github.com/phpcfdi/sat-estado-cfdi-soap/blob/master/tests/Compliance/ComplianceTest.php>
+
+
 ## Compatilibilidad
 
 Esta librería se mantendrá compatible con al menos la versión con
@@ -171,7 +183,7 @@ sin temor a romper tu aplicación.
 
 ## Contribuciones
 
-Las contribuciones con bienvenidas. Por favor leee [CONTRIBUTING][] para más detalles
+Las contribuciones con bienvenidas. Por favor lee [CONTRIBUTING][] para más detalles
 y recuerda revisar el archivo de tareas pendientes [TODO][] y el [CHANGELOG][].
 
 
