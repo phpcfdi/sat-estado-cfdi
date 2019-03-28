@@ -28,23 +28,6 @@ La documentación del proyecto está en español porque ese es el lenguaje de lo
 - Por una razón desconocida -e inexplicable-, el WSDL ya no se encuentra disponible desde 2018.
 Aunque sí se puede consumir el servicio.
 
-Esta librería **no implementa directamente** ningún conector HTTP o SOAP del servicio.
-
-Tu puedes implementar el tuyo implementando la interfaz `ConsumerClientInterface`.
-
-O si lo prefieres, existen dos consumidores oficiales:
-
-- [phpcfdi/sat-estado-cfdi-soap](https://github.com/phpcfdi/sat-estado-cfdi-soap):
-  Consume el webservice haciendo una llamada SOAP (sin WSDL) para obtener el resultado.
-- [phpcfdi/sat-estado-cfdi-http-psr](https://github.com/phpcfdi/sat-estado-cfdi-http-psr)
-  Consume el webservice haciendo una HTTP utilizando objetos de PSR-7, PSR17 y PSR18 *que tu provees*.
-- [phpcfdi/sat-estado-cfdi-http-sunrise](https://github.com/phpcfdi/sat-estado-cfdi-http-sunrise)
-  Consume el webservice haciendo una HTTP utilizando objetos de PSR-7, PSR17 y PSR18 con los paquetes de *sunrise*.
-
-Aún sin las implementaciones, esta librería te puede ser útil pues contiene el estándar al que deben adherirse
-las implementaciones y para que puedas tu contruir tu propia implementación.
-
-
 ## Instalación
 
 Usa [composer](https://getcomposer.org/)
@@ -57,19 +40,15 @@ composer require phpcfdi/sat-estado-cfdi
 
 Los pasos básicos son:
 
-- Tener un objeto que implemente `ConsumerClientInterface`.
-- Crear un `Consumer`
+- Tener un cliente que implemente `ConsumerClientInterface`.
+- Crear un consumidor del servicio `Consumer`
 - Realizar la solicitud con una *expresión* definida.
 - Usar el resultado
 
 ```php
 <?php
-use PhpCfdi\SatEstadoCfdi\Consumer;
-use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
-
-/** @var ConsumerClientInterface $client */
-
-$consumer = new Consumer($client);
+/** @var \PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface $client */
+$consumer = new \PhpCfdi\SatEstadoCfdi\Consumer($client);
 
 $response = $consumer->execute('...expression');
 
@@ -81,7 +60,10 @@ if ($response->cancellable()->isNotCancellable()) {
 ### Expresiones (input)
 
 El consumidor requiere una expresión para poder consultar.
+La expresión es el texto que viene en el código QR de la representación impresa de un CFDI.
+
 Las expresiones son diferentes para CFDI 3.2, CFDI 3.3 y RET 1.0.
+Tienen reglas específicas de formato y de la información que debe contener.
 
 Si no cuentas con la expresión, te recomiendo usar la librería
 [`phpcfdi/cfdi-expresiones`](https://github.com/phpcfdi/cfdi-expresiones) que puedes instalar
@@ -100,7 +82,7 @@ $expression = $expressionExtractor->extract($document);
 
 ### Estados (salida)
 
-Después de consumir el servicio, se responderá con un objeto agrupador de los cuatro estados.
+Después de consumir el servicio, se responderá con un objeto `CfdiStatus` que agrupa de los cuatro estados.
 
 No compares directamente los valores de los estados, en su lugar utiliza los métodos `is*`,
 por ejemplo `$response->active()->isCancelled()`.
@@ -155,7 +137,25 @@ Eso significa que podrías tener el CFDI en estado de cancelación *en proceso* 
 O, incluso, que la cancelación suceda meses después de lo esperado.
 
 
-## Prueba de cumplimiento de implementación
+## Clientes de conexión
+
+Esta librería no es la que hace directamente las conexión al webservice del SAT.
+
+Esta función se la delega a un objeto `ConsumerClientInterface`.
+
+Tu puedes implementar tu cliente de conexión personalizado para tu entorno siempre que
+implementes la interfaz `ConsumerClientInterface`.
+
+O si lo prefieres, existen los siguientes consumidores oficiales:
+
+- [phpcfdi/sat-estado-cfdi-soap](https://github.com/phpcfdi/sat-estado-cfdi-soap):
+  Consume el webservice haciendo una llamada SOAP (sin WSDL) para obtener el resultado.
+- [phpcfdi/sat-estado-cfdi-http-psr](https://github.com/phpcfdi/sat-estado-cfdi-http-psr)
+  Consume el webservice haciendo una HTTP utilizando objetos de PSR-7, PSR17 y PSR18 *que tu provees*.
+- [phpcfdi/sat-estado-cfdi-http-sunrise](https://github.com/phpcfdi/sat-estado-cfdi-http-sunrise)
+  Consume el webservice haciendo una HTTP utilizando objetos de PSR-7, PSR17 y PSR18 con los paquetes de *sunrise*.
+
+### Prueba de cumplimiento de implementación
 
 Se incluye la clase `PhpCfdi\SatEstadoCfdi\ComplianceTester\ComplianceTester` que contacta al
 webservice del SAT con datos conocidos y evalua la respuesta.
