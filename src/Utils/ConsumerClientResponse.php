@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PhpCfdi\SatEstadoCfdi;
+namespace PhpCfdi\SatEstadoCfdi\Utils;
 
 use ArrayObject;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientResponseInterface;
 
 /**
- * This is a generic implementation of ConsumerClientResponse, feel free to use your own.
+ * This is a generic implementation of ConsumerClientResponseInterface
+ * You can use it or you can create your own if you are creating your own implementation.
  */
 class ConsumerClientResponse implements ConsumerClientResponseInterface
 {

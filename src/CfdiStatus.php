@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi;
 
-class ResponseStatus
+class CfdiStatus
 {
     /** @var Status\CfdiRequestStatus */
     private $request;

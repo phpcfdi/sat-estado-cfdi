@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi\Tests;
 
-use PhpCfdi\SatEstadoCfdi\ConsumerClientResponse;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientResponseInterface;
+use PhpCfdi\SatEstadoCfdi\Utils\ConsumerClientResponse;
 
 class FakeConsumerClient implements ConsumerClientInterface
 {

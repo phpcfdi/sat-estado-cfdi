@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace PhpCfdi\SatEstadoCfdi;
 
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
+use PhpCfdi\SatEstadoCfdi\Utils\CfdiStatusBuilder;
 
-class WebServiceConsumer
+class Consumer
 {
     public const WEBSERVICE_URI_PRODUCTION = 'https://consultaqr.facturaelectronica.sat.gob.mx/ConsultaCFDIService.svc';
 
@@ -34,11 +35,11 @@ class WebServiceConsumer
         return $this->uri;
     }
 
-    public function execute(string $expression): ResponseStatus
+    public function execute(string $expression): CfdiStatus
     {
         $responseConsumer = $this->getClient()->consume($this->getUri(), $expression);
 
-        $builder = new ResponseStatusBuilder(
+        $builder = new CfdiStatusBuilder(
             $responseConsumer->get('CodigoEstatus'),
             $responseConsumer->get('Estado'),
             $responseConsumer->get('EsCancelable'),
