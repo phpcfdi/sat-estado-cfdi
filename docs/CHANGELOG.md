@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## Version 0.5.0 2019-03-28
+
+- Remove `CfdiExpression` and `CfdiExpressionBuilder` (now on its own project `phpcfdi/cfdi-expresiones`)
+- Rename `ResponseStatus` to `CfdiStatus`
+- Rename `ResponseStatusBuilder` to `Utils\CfdiStatusBuilder`
+- Rename `ConsumerClientResponse` to `Utils\ConsumerClientResponse`
+- Rename `WebServiceConsumer` to `Consumer`
+- Document usage example on `README.md`.
+
+
 ## Version 0.4.0 2019-03-25
 
 - Split this package to separate concerns.
