@@ -1,25 +1,25 @@
 # Contributing
 
-Contributions are welcome. We accept pull requests on [GitHub](https://github.com/PhpCfdi/SatEstadoCfdi).
+Contributions are welcome. We accept pull requests on [GitHub](https://github.com/phpcfdi/sat-estado-cfdi).
 
 This project adheres to a
-[Contributor Code of Conduct](https://github.com/PhpCfdi/SatEstadoCfdi/blob/master/CODE_OF_CONDUCT.md).
+[Contributor Code of Conduct](https://github.com/phpcfdi/sat-estado-cfdi/blob/master/CODE_OF_CONDUCT.md).
 By participating in this project and its community, you are expected to uphold this code.
 
 ## Team members
 
 * [Carlos C Soto](https://github.com/eclipxe13) - original author and maintainer
-* [GitHub constributors](https://github.com/PhpCfdi/SatEstadoCfdi/graphs/contributors)
+* [GitHub constributors](https://github.com/phpcfdi/sat-estado-cfdi/graphs/contributors)
 
 ## Communication Channels
 
 You can find help and discussion in the following places:
 
-* GitHub Issues: <https://github.com/PhpCfdi/SatEstadoCfdi/issues>
+* GitHub Issues: <https://github.com/phpcfdi/sat-estado-cfdi/issues>
 
 ## Reporting Bugs
 
-Bugs are tracked in our project's [issue tracker](https://github.com/PhpCfdi/SatEstadoCfdi/issues).
+Bugs are tracked in our project's [issue tracker](https://github.com/phpcfdi/sat-estado-cfdi/issues).
 
 When submitting a bug report, please include enough information for us to reproduce the bug.
 A good bug report includes the following sections:
@@ -42,8 +42,8 @@ section below, you may create bugfix branches and send us pull requests.
 ## Adding New Features
 
 If you have an idea for a new feature, it's a good idea to check out our
-[issues](https://github.com/PhpCfdi/SatEstadoCfdi/issues) or active
-[pull requests](https://github.com/PhpCfdi/SatEstadoCfdi/pulls)
+[issues](https://github.com/phpcfdi/sat-estado-cfdi/issues) or active
+[pull requests](https://github.com/phpcfdi/sat-estado-cfdi/pulls)
 first to see if the feature is already being worked on.
 If not, feel free to submit an issue first, asking whether the feature is beneficial to the project.
 This will save you from doing a lot of development work only to have your feature rejected.

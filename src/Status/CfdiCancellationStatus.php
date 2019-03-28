@@ -13,6 +13,7 @@ use Eclipxe\Enum\Enum;
  * @method static self cancelByRequest()
  * @method static self cancelByTimeout()
  * @method static self rejected()
+ *
  * @method bool isUndefined()
  * @method bool isPending()
  * @method bool isCancelDirect()

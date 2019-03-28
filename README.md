@@ -1,4 +1,4 @@
-# PhpCfdi/SatEstadoCfdi
+# phpcfdi/sat-estado-cfdi
 
 [![Source Code][badge-source]][source]
 [![Latest Version][badge-release]][release]
@@ -28,13 +28,6 @@ La documentación del proyecto está en español porque ese es el lenguaje de lo
 - Por una razón desconocida -e inexplicable-, el WSDL ya no se encuentra disponible desde 2018.
 Aunque sí se puede consumir el servicio.
 
-Esta librería **no utiliza SOAP** para hacer la llamada, hace una llamada HTTP que construye e interpreta.
-
-Para contactar al servicio utiliza [PSR-18: HTTP Client](https://www.php-fig.org/psr/psr-18/)
-y [PSR-17: HTTP Factories](https://www.php-fig.org/psr/psr-17/).
-De esta forma, tu puedes usar el cliente HTTP que mejor te convenga.
-
-
 ## Instalación
 
 Usa [composer](https://getcomposer.org/)
@@ -43,24 +36,19 @@ Usa [composer](https://getcomposer.org/)
 composer require phpcfdi/sat-estado-cfdi
 ```
 
-Si tienes problemas para instalar es probable que no cuentes con paques que satisfagan las dependencias de
-[`psr/http-client-implementation`](https://packagist.org/providers/psr/http-client-implementation),
-[`psr/http-message-implementation`](https://packagist.org/providers/psr/http-message-implementation) y
-[`psr/http-factory-implementation`](https://packagist.org/providers/psr/http-factory-implementation).
-Instala alguno de esos paquetes también. [Ver ejemplo](#compatibilidad-con-psr-7-psr-17-y-psr-18)
-
 ## Ejemplo básico de uso
 
 Los pasos básicos son:
 
-- Crear la fábrica de objetos `WebServiceFactory` [Ver ejemplo](#compatibilidad-con-psr-7-psr-17-y-psr-18).
-- Pedirle a la fábrica de objetos que nos entregue un consumidor `Consumer`.
-- Solicitarle al consumidor que ejecute la petición sobre una expresión.
+- Tener un cliente que implemente `ConsumerClientInterface`.
+- Crear un consumidor del servicio `Consumer`
+- Realizar la solicitud con una *expresión* definida.
+- Usar el resultado
 
 ```php
 <?php
-/** @var \PhpCfdi\SatEstadoCfdi\WebServiceFactory $factory */
-$consumer = $factory->getConsumer();
+/** @var \PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface $client */
+$consumer = new \PhpCfdi\SatEstadoCfdi\Consumer($client);
 
 $response = $consumer->execute('...expression');
 
@@ -71,28 +59,30 @@ if ($response->cancellable()->isNotCancellable()) {
 
 ### Expresiones (input)
 
-El consumidor requiere una expresión para poder consultar. Las expresiones son diferentes para CFDI 3.2 y 3.3.
+El consumidor requiere una expresión para poder consultar.
+La expresión es el texto que viene en el código QR de la representación impresa de un CFDI.
 
-Ejemplo de expresión para CFDI 3.3:
+Las expresiones son diferentes para CFDI 3.2, CFDI 3.3 y RET 1.0.
+Tienen reglas específicas de formato y de la información que debe contener.
 
-```text
-https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=CEE4BE01-ADFA-4DEB-8421-ADD60F0BEDAC&re=POT9207213D6&rr=DIM8701081LA&tt=2010.01&fe=/OAgdg==
-```
-
-Si no cuentas con ella, puedes usar el objeto `CfdiExpressionBuilder` para fabricarla:
+Si no cuentas con la expresión, te recomiendo usar la librería
+[`phpcfdi/cfdi-expresiones`](https://github.com/phpcfdi/cfdi-expresiones) que puedes instalar
+usando `composer require phpcfdi/cfdi-expresiones`.
 
 ```php
 <?php
 // lectura del contenido del CFDI
-$cfdiContents = file_get_contents('cfdi.xml');
-$builder = \PhpCfdi\SatEstadoCfdi\CfdiExpressionBuilder::createFromString($cfdiContents);
-$parameters = $builder->build();
-$expression = $parameters->expression();
+$document = new DOMDocument();
+$document->load('archivo-cfdi33.xml');
+
+// creación de la expresión
+$expressionExtractor = new \PhpCfdi\CfdiExpresiones\DiscoverExtractor();
+$expression = $expressionExtractor->extract($document);
 ```
 
 ### Estados (salida)
 
-Después de consumir el servicio, se responderá con un objeto con estados.
+Después de consumir el servicio, se responderá con un objeto `CfdiStatus` que agrupa de los cuatro estados.
 
 No compares directamente los valores de los estados, en su lugar utiliza los métodos `is*`,
 por ejemplo `$response->active()->isCancelled()`.
@@ -147,73 +137,34 @@ Eso significa que podrías tener el CFDI en estado de cancelación *en proceso* 
 O, incluso, que la cancelación suceda meses después de lo esperado.
 
 
-### Compatibilidad con PSR-7 PSR-17 y PSR-18
+## Clientes de conexión
 
-Esta librería busca alta compatibilidad con los estándares propuestos por el [PHP-FIG](https://www.php-fig.org/).
-Por lo que utiliza los siguientes estándares. 
+Esta librería no es la que hace directamente las conexión al webservice del SAT.
 
-- PSR-7: HTTP message interfaces: Interfaces de HTTP Request y Response.
-  <https://www.php-fig.org/psr/psr-7/>
-- PSR-17: HTTP Factories: Interfaces de fábricas de HTTP Request y Response (para PSR-7).
-  <https://www.php-fig.org/psr/psr-17/>
-- PSR-18: HTTP Client: Interfaces para clientes HTTP (el que hace la llamada POST).
-  <https://www.php-fig.org/psr/psr-18/>
+Esta función se la delega a un objeto `ConsumerClientInterface`.
 
-Esta librería no contiene las implementaciones de los estándares,
-las librerías que implementan las interfaces ya existen fuera del ámbito de la aplicación.
+Tu puedes implementar tu cliente de conexión personalizado para tu entorno siempre que
+implementes la interfaz `ConsumerClientInterface`.
 
-Te recomiendo usar las librerías de Sunrise
-[`sunrise/http-client-curl`](https://github.com/sunrise-php/http-client-curl),
-[`sunrise/http-factory`](https://github.com/sunrise-php/http-factory) y
-[`sunrise/http-message`](https://github.com/sunrise-php/http-message).
+O si lo prefieres, existen los siguientes consumidores oficiales:
 
-```shell
-# librerías para implementar PSR-18, PSR-17 y PSR-7
-composer require sunrise/http-client-curl sunrise/http-factory sunrise/http-message
-```
+- [phpcfdi/sat-estado-cfdi-soap](https://github.com/phpcfdi/sat-estado-cfdi-soap):
+  Consume el webservice haciendo una llamada SOAP (sin WSDL) para obtener el resultado.
+- [phpcfdi/sat-estado-cfdi-http-psr](https://github.com/phpcfdi/sat-estado-cfdi-http-psr)
+  Consume el webservice haciendo una HTTP utilizando objetos de PSR-7, PSR17 y PSR18 *que tu provees*.
+- [phpcfdi/sat-estado-cfdi-http-sunrise](https://github.com/phpcfdi/sat-estado-cfdi-http-sunrise)
+  Consume el webservice haciendo una HTTP utilizando objetos de PSR-7, PSR17 y PSR18 con los paquetes de *sunrise*.
 
-Y puedes crear tu cliente de esta forma:
+### Prueba de cumplimiento de implementación
 
-```php
-<?php
-use PhpCfdi\SatEstadoCfdi\WebServiceFactory;
+Se incluye la clase `PhpCfdi\SatEstadoCfdi\ComplianceTester\ComplianceTester` que contacta al
+webservice del SAT con datos conocidos y evalua la respuesta.
 
-function createSunriseSatEstadoCfdiFactory(): WebServiceFactory {
-    $responseFactory = new Sunrise\Http\Factory\ResponseFactory();
-    $requestFactory = new Sunrise\Http\Factory\RequestFactory();
-    $streamFactory = new Sunrise\Http\Factory\StreamFactory();
-    $httpClient = new \Sunrise\Http\Client\Curl\Client($responseFactory, $streamFactory);
-    return new WebServiceFactory($httpClient, $requestFactory, $streamFactory);
-}
+Los paquetes `phpcfdi/sat-estado-cfdi-soap` y `phpcfdi/sat-estado-cfdi-http-sunrise` implementan
+un test para asegurarse que cumplen correctamente.
 
-$consumer = createSunriseSatEstadoCfdiFactory()->getConsumer();
-```
-
-
-### Compatibilidad con HTTP Plug
-
-Si tu aplicación usa HTTP Plug o es compatible con
-[`php-http/discovery`](http://docs.php-http.org/en/latest/discovery.html)
-entonces podrías usar la clase `WebServiceDiscover`.
-
-```php
-<?php
-$discover = new \PhpCfdi\SatEstadoCfdi\WebServiceDiscover();
-$factory = $discover->createFactory();
-$consumer = $factory->getConsumer();
-```
-
-En el archivo [`tests/Discoverables/Sunrise.php`](tests/Discoverables/Sunrise.php)
-puedes ver una clase para que las implementaciones de Sunrise sean automáticamente descubiertas.
-
-Para decirle al descubridor de componentes de HTTP Plug que las reconozca incluye las siguientes
-líneas: 
-
-```php
-<?php
-\Http\Discovery\Psr17FactoryDiscovery::prependStrategy(\PhpCfdi\SatEstadoCfdi\Tests\Discoverables\Sunrise::class);
-\Http\Discovery\Psr18ClientDiscovery::prependStrategy(\PhpCfdi\SatEstadoCfdi\Tests\Discoverables\Sunrise::class);
-``` 
+Si haces tu propia implementación, asegúrate de crear un test que lo cubra, puedes ver como ejemplo
+<https://github.com/phpcfdi/sat-estado-cfdi-soap/blob/master/tests/Compliance/ComplianceTest.php>
 
 
 ## Compatilibilidad
@@ -227,32 +178,32 @@ sin temor a romper tu aplicación.
 
 ## Contribuciones
 
-Las contribuciones con bienvenidas. Por favor leee [CONTRIBUTING][] para más detalles
+Las contribuciones con bienvenidas. Por favor lee [CONTRIBUTING][] para más detalles
 y recuerda revisar el archivo de tareas pendientes [TODO][] y el [CHANGELOG][].
 
 
 ## Copyright and License
 
-The PhpCfdi/SatEstadoCfdi library is copyright © [Carlos C Soto](http://eclipxe.com.mx/)
+The phpcfdi/sat-estado-cfdi library is copyright © [Carlos C Soto](http://eclipxe.com.mx/)
 and licensed for use under the MIT License (MIT). Please see [LICENSE][] for more information.
 
 
-[contributing]: https://github.com/PhpCfdi/SatEstadoCfdi/blob/master/CONTRIBUTING.md
-[changelog]: https://github.com/PhpCfdi/SatEstadoCfdi/blob/master/docs/CHANGELOG.md
-[todo]: https://github.com/PhpCfdi/SatEstadoCfdi/blob/master/docs/TODO.md
+[contributing]: https://github.com/phpcfdi/sat-estado-cfdi/blob/master/CONTRIBUTING.md
+[changelog]: https://github.com/phpcfdi/sat-estado-cfdi/blob/master/docs/CHANGELOG.md
+[todo]: https://github.com/phpcfdi/sat-estado-cfdi/blob/master/docs/TODO.md
 
-[source]: https://github.com/PhpCfdi/SatEstadoCfdi
-[release]: https://github.com/PhpCfdi/SatEstadoCfdi/releases
-[license]: https://github.com/PhpCfdi/SatEstadoCfdi/blob/master/LICENSE
-[build]: https://travis-ci.org/phpcfdi/SatEstadoCfdi?branch=master
-[quality]: https://scrutinizer-ci.com/g/PhpCfdi/SatEstadoCfdi/
-[coverage]: https://scrutinizer-ci.com/g/PhpCfdi/SatEstadoCfdi/code-structure/master/code-coverage
+[source]: https://github.com/phpcfdi/sat-estado-cfdi
+[release]: https://github.com/phpcfdi/sat-estado-cfdi/releases
+[license]: https://github.com/phpcfdi/sat-estado-cfdi/blob/master/LICENSE
+[build]: https://travis-ci.org/phpcfdi/sat-estado-cfdi?branch=master
+[quality]: https://scrutinizer-ci.com/g/phpcfdi/sat-estado-cfdi/
+[coverage]: https://scrutinizer-ci.com/g/phpcfdi/sat-estado-cfdi/code-structure/master/code-coverage
 [downloads]: https://packagist.org/packages/phpcfdi/sat-estado-cfdi
 
-[badge-source]: http://img.shields.io/badge/source-PhpCfdi/SatEstadoCfdi-blue.svg?style=flat-square
-[badge-release]: https://img.shields.io/github/release/PhpCfdi/SatEstadoCfdi.svg?style=flat-square
+[badge-source]: http://img.shields.io/badge/source-phpcfdi/sat--estado--cfdi-blue.svg?style=flat-square
+[badge-release]: https://img.shields.io/github/release/phpcfdi/sat-estado-cfdi.svg?style=flat-square
 [badge-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[badge-build]: https://img.shields.io/travis/phpcfdi/SatEstadoCfdi/master.svg?style=flat-square
-[badge-quality]: https://img.shields.io/scrutinizer/g/PhpCfdi/SatEstadoCfdi/master.svg?style=flat-square
-[badge-coverage]: https://img.shields.io/scrutinizer/coverage/g/PhpCfdi/SatEstadoCfdi/master.svg?style=flat-square
+[badge-build]: https://img.shields.io/travis/phpcfdi/sat-estado-cfdi/master.svg?style=flat-square
+[badge-quality]: https://img.shields.io/scrutinizer/g/phpcfdi/sat-estado-cfdi/master.svg?style=flat-square
+[badge-coverage]: https://img.shields.io/scrutinizer/coverage/g/phpcfdi/sat-estado-cfdi/master.svg?style=flat-square
 [badge-downloads]: https://img.shields.io/packagist/dt/phpcfdi/sat-estado-cfdi.svg?style=flat-square

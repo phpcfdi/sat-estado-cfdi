@@ -1,14 +1,20 @@
 # CHANGELOG
 
-## About SemVer
+## Version 0.5.0 2019-03-28
 
-In summary, [SemVer](https://semver.org/) can be viewed as ` Breaking . Feature . Fix `, where:
+- Remove `CfdiExpression` and `CfdiExpressionBuilder` (now on its own project `phpcfdi/cfdi-expresiones`)
+- Rename `ResponseStatus` to `CfdiStatus`
+- Rename `ResponseStatusBuilder` to `Utils\CfdiStatusBuilder`
+- Rename `ConsumerClientResponse` to `Utils\ConsumerClientResponse`
+- Rename `WebServiceConsumer` to `Consumer`
+- Document usage example on `README.md`.
 
-- Breaking version = includes incompatible changes to the API
-- Feature version = adds new feature(s) in a backwards-compatible manner
-- Fix version = includes backwards-compatible bug fixes
 
-**Version `0.x.x` doesn't have to apply any of the SemVer rules**
+## Version 0.4.0 2019-03-25
+
+- Split this package to separate concerns.
+- More information about this separation of concerns inside `docs/DEVNOTES.md`.
+- Rewrite `README.md`
 
 
 ## Version 0.3.0 2019-03-25

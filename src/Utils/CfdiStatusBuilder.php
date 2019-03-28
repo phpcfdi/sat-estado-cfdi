@@ -2,14 +2,18 @@
 
 declare(strict_types=1);
 
-namespace PhpCfdi\SatEstadoCfdi;
+namespace PhpCfdi\SatEstadoCfdi\Utils;
 
+use PhpCfdi\SatEstadoCfdi\CfdiStatus;
 use PhpCfdi\SatEstadoCfdi\Status\CfdiActiveStatus;
 use PhpCfdi\SatEstadoCfdi\Status\CfdiCancellableStatus;
 use PhpCfdi\SatEstadoCfdi\Status\CfdiCancellationStatus;
 use PhpCfdi\SatEstadoCfdi\Status\CfdiRequestStatus;
 
-class ResponseStatusBuilder
+/**
+ * Use this object to create a CfdiStatus from the raw string states from SAT webservice
+ */
+class CfdiStatusBuilder
 {
     /** @var string */
     private $codigoEstatus;
@@ -29,16 +33,6 @@ class ResponseStatusBuilder
         $this->estado = $estado;
         $this->esCancelable = $esCancelable;
         $this->estatusCancelacion = $estatusCancelacion;
-    }
-
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            strval($data['CodigoEstatus'] ?? ''),
-            strval($data['Estado'] ?? ''),
-            strval($data['EsCancelable'] ?? ''),
-            strval($data['EstatusCancelacion'] ?? '')
-        );
     }
 
     public function getRequestStatus(): CfdiRequestStatus
@@ -96,9 +90,9 @@ class ResponseStatusBuilder
         return CfdiCancellationStatus::undefined();
     }
 
-    public function create(): ResponseStatus
+    public function create(): CfdiStatus
     {
-        return new ResponseStatus(
+        return new CfdiStatus(
             $this->getRequestStatus(),
             $this->getActiveStatus(),
             $this->getCancellableStatus(),
