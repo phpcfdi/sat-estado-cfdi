@@ -33,7 +33,7 @@ class ComplianceTester
                 $this->{$test}();
             } catch (\Throwable $exception) {
                 throw new \RuntimeException(
-                    sprintf('ConsumerClientInterface %s dod not pass %s', get_class($this->client), $test),
+                    sprintf('ConsumerClientInterface %s did not pass %s', get_class($this->client), $test),
                     0,
                     $exception
                 );
