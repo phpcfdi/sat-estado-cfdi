@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi\ComplianceTester;
 
-use PhpCfdi\SatEstadoCfdi\CfdiExpression;
+use PhpCfdi\CfdiExpresiones\DiscoverExtractor;
+use PhpCfdi\SatEstadoCfdi\Consumer;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
-use PhpCfdi\SatEstadoCfdi\WebServiceConsumer;
 
 /**
- * Create this object from your tests to see if it really get data from werbservice.
- * If it throws an exceptions means that it fail
+ * Create this object from your tests to see if it really get data from webservice.
+ * If it throws an exception means that it fail
  */
 class ComplianceTester
 {
@@ -44,17 +44,17 @@ class ComplianceTester
 
     protected function contactWebServiceWithActiveCfdi(): void
     {
-        $cfdiExpression = new CfdiExpression(
-            '3.3',
-            'POT9207213D6',
-            'DIM8701081LA',
-            '2010.01',
-            'CEE4BE01-ADFA-4DEB-8421-ADD60F0BEDAC',
-            '/OAgdg=='
-        );
+        $expressionExtractor = new DiscoverExtractor();
+        $expression = $expressionExtractor->format([
+            're' => 'POT9207213D6',
+            'rr' => 'DIM8701081LA',
+            'tt' => '2010.01',
+            'id' => 'CEE4BE01-ADFA-4DEB-8421-ADD60F0BEDAC',
+            'fe' => '/OAgdg==',
+        ], 'CFDI33');
 
-        $consumer = new WebServiceConsumer($this->client);
-        $response = $consumer->execute($cfdiExpression->expression());
+        $consumer = new Consumer($this->client);
+        $response = $consumer->execute($expression);
 
         if (! $response->request()->isFound()) {
             throw new \RuntimeException('It was expected CFDI status request: found');
@@ -72,17 +72,17 @@ class ComplianceTester
 
     protected function contactWebServiceWithCancelledCfdi(): void
     {
-        $cfdiExpression = new CfdiExpression(
-            '3.3',
-            'DIM8701081LA',
-            'XEXX010101000',
-            '8413.00',
-            '3be40815-916c-4c91-84e2-6070d4bc3949',
-            '3f86Og=='
-        );
+        $expressionExtractor = new DiscoverExtractor();
+        $expression = $expressionExtractor->format([
+            're' => 'DIM8701081LA',
+            'rr' => 'XEXX010101000',
+            'tt' => '8413.00',
+            'id' => '3be40815-916c-4c91-84e2-6070d4bc3949',
+            'fe' => '3f86Og==',
+        ], 'CFDI33');
 
-        $consumer = new WebServiceConsumer($this->client);
-        $response = $consumer->execute($cfdiExpression->expression());
+        $consumer = new Consumer($this->client);
+        $response = $consumer->execute($expression);
 
         if (! $response->request()->isFound()) {
             throw new \RuntimeException('It was expected CFDI status request: found');

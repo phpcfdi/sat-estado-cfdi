@@ -58,15 +58,18 @@ composer require phpcfdi/sat-estado-cfdi
 Los pasos básicos son:
 
 - Tener un objeto que implemente `ConsumerClientInterface`.
-- Crear un `WebServiceConsumer`
+- Crear un `Consumer`
 - Realizar la solicitud con una *expresión* definida.
 - Usar el resultado
 
 ```php
 <?php
-/** @var \PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface $client */
+use PhpCfdi\SatEstadoCfdi\Consumer;
+use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
 
-$consumer = new \PhpCfdi\SatEstadoCfdi\WebServiceConsumer($client);
+/** @var ConsumerClientInterface $client */
+
+$consumer = new Consumer($client);
 
 $response = $consumer->execute('...expression');
 
@@ -78,29 +81,21 @@ if ($response->cancellable()->isNotCancellable()) {
 ### Expresiones (input)
 
 El consumidor requiere una expresión para poder consultar.
-Las expresiones son diferentes para CFDI 3.2 y 3.3.
+Las expresiones son diferentes para CFDI 3.2, CFDI 3.3 y RET 1.0.
 
-Ejemplo de expresión para CFDI 3.3:
-
-```text
-https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=CEE4BE01-ADFA-4DEB-8421-ADD60F0BEDAC&re=POT9207213D6&rr=DIM8701081LA&tt=2010.01&fe=/OAgdg==
-```
-
-Ejemplo de expresión para CFDI 3.2:
-
-```text
-?re=AAA010101AAA&rr=COSC8001137NA&tt=0000001234.567800&id=CEE4BE01-ADFA-4DEB-8421-ADD60F0BEDAC
-```
-
-Si no cuentas con ella, puedes usar el objeto `CfdiExpressionBuilder` para fabricarla:
+Si no cuentas con la expresión, te recomiendo usar la librería
+[`phpcfdi/cfdi-expresiones`](https://github.com/phpcfdi/cfdi-expresiones) que puedes instalar
+usando `composer require phpcfdi/cfdi-expresiones`.
 
 ```php
 <?php
 // lectura del contenido del CFDI
-$cfdiContents = file_get_contents('cfdi.xml');
-$expressionBuilder = \PhpCfdi\SatEstadoCfdi\CfdiExpressionBuilder::createFromString($cfdiContents);
-$expressionData = $expressionBuilder->build();
-$expression = $expressionData->expression();
+$document = new DOMDocument();
+$document->load('archivo-cfdi33.xml');
+
+// creación de la expresión
+$expressionExtractor = new \PhpCfdi\CfdiExpresiones\DiscoverExtractor();
+$expression = $expressionExtractor->extract($document);
 ```
 
 ### Estados (salida)
