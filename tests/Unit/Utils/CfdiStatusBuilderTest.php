@@ -24,43 +24,43 @@ class CfdiStatusBuilderTest extends TestCase
     public function testCreateUsingRequestDifferentThanFound(): void
     {
         $builder = new CfdiStatusBuilder('foo', '', '', '');
-        $this->assertTrue($builder->getRequestStatus()->isNotFound());
+        $this->assertTrue($builder->createQueryStatus()->isNotFound());
     }
 
     public function testCreateUsingRequestFound(): void
     {
         $builder = new CfdiStatusBuilder('S - ...', '', '', '');
-        $this->assertTrue($builder->getRequestStatus()->isFound());
+        $this->assertTrue($builder->createQueryStatus()->isFound());
     }
 
     public function testCreateUsingActiveIsActive(): void
     {
         $builder = new CfdiStatusBuilder('', 'Vigente', '', '');
-        $this->assertTrue($builder->getActiveStatus()->isActive());
+        $this->assertTrue($builder->createDocumentSatus()->isActive());
     }
 
     public function testCreateUsingActiveIsCancelled(): void
     {
         $builder = new CfdiStatusBuilder('', 'Cancelado', '', '');
-        $this->assertTrue($builder->getActiveStatus()->isCancelled());
+        $this->assertTrue($builder->createDocumentSatus()->isCancelled());
     }
 
     public function testCreateUsingActiveAnyOtherValue(): void
     {
         $builder = new CfdiStatusBuilder('', '', '', '');
-        $this->assertTrue($builder->getActiveStatus()->isNotFound());
+        $this->assertTrue($builder->createDocumentSatus()->isNotFound());
     }
 
     public function testCreateUsingCancellableIsDirectMethod(): void
     {
         $builder = new CfdiStatusBuilder('', '', 'Cancelable sin aceptación', '');
-        $this->assertTrue($builder->getCancellableStatus()->isDirectMethod());
+        $this->assertTrue($builder->createCancellableStatus()->isCancellableByDirectCall());
     }
 
     public function testCreateUsingCancellableIsRequestMethod(): void
     {
         $builder = new CfdiStatusBuilder('', '', 'Cancelable con aceptación', '');
-        $this->assertTrue($builder->getCancellableStatus()->isRequestMethod());
+        $this->assertTrue($builder->createCancellableStatus()->isCancellableByApproval());
     }
 
     /**
@@ -72,37 +72,37 @@ class CfdiStatusBuilderTest extends TestCase
     public function testCreateUsingCancellableNotCancellable(string $input): void
     {
         $builder = new CfdiStatusBuilder('', '', $input, '');
-        $this->assertTrue($builder->getCancellableStatus()->isNotCancellable());
+        $this->assertTrue($builder->createCancellableStatus()->isNotCancellable());
     }
 
     public function testCreateUsingCancellationIsPending(): void
     {
         $builder = new CfdiStatusBuilder('', '', '', 'En proceso');
-        $this->assertTrue($builder->getCancellationStatus()->isPending());
+        $this->assertTrue($builder->createCancellationStatus()->isPending());
     }
 
     public function testCreateUsingCancellationIsCancelByRequest(): void
     {
         $builder = new CfdiStatusBuilder('', '', '', 'Cancelado con aceptación');
-        $this->assertTrue($builder->getCancellationStatus()->isCancelByRequest());
+        $this->assertTrue($builder->createCancellationStatus()->isCancelledByApproval());
     }
 
     public function testCreateUsingCancellationIsCancelByTimeout(): void
     {
         $builder = new CfdiStatusBuilder('', '', '', 'Plazo vencido');
-        $this->assertTrue($builder->getCancellationStatus()->isCancelByTimeout());
+        $this->assertTrue($builder->createCancellationStatus()->isCancelledByExpiration());
     }
 
     public function testCreateUsingCancellationIsCancelDirect(): void
     {
         $builder = new CfdiStatusBuilder('', '', '', 'Cancelado sin aceptación');
-        $this->assertTrue($builder->getCancellationStatus()->isCancelDirect());
+        $this->assertTrue($builder->createCancellationStatus()->isCancelledByDirectCall());
     }
 
     public function testCreateUsingCancellationIsRejected(): void
     {
         $builder = new CfdiStatusBuilder('', '', '', 'Solicitud rechazada');
-        $this->assertTrue($builder->getCancellationStatus()->isRejected());
+        $this->assertTrue($builder->createCancellationStatus()->isDisapproved());
     }
 
     /**
@@ -113,6 +113,6 @@ class CfdiStatusBuilderTest extends TestCase
     public function testCreateUsingCancellationAnyOtherValue(string $input): void
     {
         $builder = new CfdiStatusBuilder('', '', '', $input);
-        $this->assertTrue($builder->getCancellationStatus()->isUndefined());
+        $this->assertTrue($builder->createCancellationStatus()->isUndefined());
     }
 }

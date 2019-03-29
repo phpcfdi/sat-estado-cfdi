@@ -15,6 +15,6 @@ use Eclipxe\Enum\Enum;
  * @method bool isCancelled()
  * @method bool isNotFound()
  */
-class CfdiActiveStatus extends Enum
+class DocumentStatus extends Enum
 {
 }

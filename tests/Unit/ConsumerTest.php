@@ -36,7 +36,7 @@ class ConsumerTest extends TestCase
 
         $this->assertTrue($response->request()->isFound());
         $this->assertTrue($response->active()->isActive());
-        $this->assertTrue($response->cancellable()->isRequestMethod());
+        $this->assertTrue($response->cancellable()->isCancellableByApproval());
         $this->assertTrue($response->cancellation()->isPending());
     }
 }

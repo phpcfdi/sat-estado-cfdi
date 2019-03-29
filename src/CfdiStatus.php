@@ -6,23 +6,23 @@ namespace PhpCfdi\SatEstadoCfdi;
 
 class CfdiStatus
 {
-    /** @var Status\CfdiRequestStatus */
+    /** @var Status\QueryStatus */
     private $request;
 
-    /** @var Status\CfdiActiveStatus */
+    /** @var Status\DocumentStatus */
     private $active;
 
-    /** @var Status\CfdiCancellableStatus */
+    /** @var Status\CancellableStatus */
     private $cancellable;
 
-    /** @var Status\CfdiCancellationStatus */
+    /** @var Status\CancellationStatus */
     private $cancellation;
 
     public function __construct(
-        Status\CfdiRequestStatus $request,
-        Status\CfdiActiveStatus $active,
-        Status\CfdiCancellableStatus $cancellable,
-        Status\CfdiCancellationStatus $cancellation
+        Status\QueryStatus $request,
+        Status\DocumentStatus $active,
+        Status\CancellableStatus $cancellable,
+        Status\CancellationStatus $cancellation
     ) {
         $this->request = $request;
         $this->active = $active;
@@ -30,22 +30,22 @@ class CfdiStatus
         $this->cancellation = $cancellation;
     }
 
-    public function request(): Status\CfdiRequestStatus
+    public function request(): Status\QueryStatus
     {
         return $this->request;
     }
 
-    public function active(): Status\CfdiActiveStatus
+    public function active(): Status\DocumentStatus
     {
         return $this->active;
     }
 
-    public function cancellable(): Status\CfdiCancellableStatus
+    public function cancellable(): Status\CancellableStatus
     {
         return $this->cancellable;
     }
 
-    public function cancellation(): Status\CfdiCancellationStatus
+    public function cancellation(): Status\CancellationStatus
     {
         return $this->cancellation;
     }

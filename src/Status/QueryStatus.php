@@ -13,6 +13,6 @@ use Eclipxe\Enum\Enum;
  * @method bool isFound()
  * @method bool isNotFound()
  */
-class CfdiRequestStatus extends Enum
+class QueryStatus extends Enum
 {
 }
