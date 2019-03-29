@@ -62,7 +62,7 @@ class ComplianceTester
         if (! $response->active()->isActive()) {
             throw new \RuntimeException('It was expected CFDI status active: active');
         }
-        if (! $response->cancellable()->isDirectMethod()) {
+        if (! $response->cancellable()->isCancellableByDirectCall()) {
             throw new \RuntimeException('It was expected CFDI status cancellable: directMethod');
         }
         if (! $response->cancellation()->isUndefined()) {
