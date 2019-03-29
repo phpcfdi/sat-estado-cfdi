@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace PhpCfdi\SatEstadoCfdi\Utils;
 
 use PhpCfdi\SatEstadoCfdi\CfdiStatus;
-use PhpCfdi\SatEstadoCfdi\Status\CfdiActiveStatus;
-use PhpCfdi\SatEstadoCfdi\Status\CfdiCancellableStatus;
-use PhpCfdi\SatEstadoCfdi\Status\CfdiCancellationStatus;
-use PhpCfdi\SatEstadoCfdi\Status\CfdiRequestStatus;
+use PhpCfdi\SatEstadoCfdi\Status\CancellableStatus;
+use PhpCfdi\SatEstadoCfdi\Status\CancellationStatus;
+use PhpCfdi\SatEstadoCfdi\Status\DocumentStatus;
+use PhpCfdi\SatEstadoCfdi\Status\QueryStatus;
 
 /**
  * Use this object to create a CfdiStatus from the raw string states from SAT webservice
@@ -35,68 +35,68 @@ class CfdiStatusBuilder
         $this->estatusCancelacion = $estatusCancelacion;
     }
 
-    public function getRequestStatus(): CfdiRequestStatus
+    public function createQueryStatus(): QueryStatus
     {
         // S - Comprobante obtenido satisfactoriamente
         if (0 === strpos($this->codigoEstatus, 'S - ')) {
-            return CfdiRequestStatus::found();
+            return QueryStatus::found();
         }
         // N - 60? ...
-        return CfdiRequestStatus::notFound();
+        return QueryStatus::notFound();
     }
 
-    public function getActiveStatus(): CfdiActiveStatus
+    public function createDocumentSatus(): DocumentStatus
     {
         if ('Vigente' === $this->estado) {
-            return CfdiActiveStatus::active();
+            return DocumentStatus::active();
         }
         if ('Cancelado' === $this->estado) {
-            return CfdiActiveStatus::cancelled();
+            return DocumentStatus::cancelled();
         }
         // No encontrado
-        return CfdiActiveStatus::notFound();
+        return DocumentStatus::notFound();
     }
 
-    public function getCancellableStatus(): CfdiCancellableStatus
+    public function createCancellableStatus(): CancellableStatus
     {
         if ('Cancelable sin aceptación' === $this->esCancelable) {
-            return CfdiCancellableStatus::directMethod();
+            return CancellableStatus::cancellableByDirectCall();
         }
         if ('Cancelable con aceptación' === $this->esCancelable) {
-            return CfdiCancellableStatus::requestMethod();
+            return CancellableStatus::cancellableByApproval();
         }
         // No cancelable
-        return CfdiCancellableStatus::notCancellable();
+        return CancellableStatus::notCancellable();
     }
 
-    public function getCancellationStatus(): CfdiCancellationStatus
+    public function createCancellationStatus(): CancellationStatus
     {
         if ('Cancelado sin aceptación' === $this->estatusCancelacion) {
-            return CfdiCancellationStatus::cancelDirect();
-        }
-        if ('En proceso' === $this->estatusCancelacion) {
-            return CfdiCancellationStatus::pending();
+            return CancellationStatus::cancelledByDirectCall();
         }
         if ('Plazo vencido' === $this->estatusCancelacion) {
-            return CfdiCancellationStatus::cancelByTimeout();
+            return CancellationStatus::cancelledByExpiration();
         }
         if ('Cancelado con aceptación' === $this->estatusCancelacion) {
-            return CfdiCancellationStatus::cancelByRequest();
+            return CancellationStatus::cancelledByApproval();
+        }
+        if ('En proceso' === $this->estatusCancelacion) {
+            return CancellationStatus::pending();
         }
         if ('Solicitud rechazada' === $this->estatusCancelacion) {
-            return CfdiCancellationStatus::rejected();
+            return CancellationStatus::disapproved();
         }
         // vacío
-        return CfdiCancellationStatus::undefined();
+        return CancellationStatus::undefined();
     }
 
     public function create(): CfdiStatus
     {
         return new CfdiStatus(
-            $this->getRequestStatus(),
-            $this->getActiveStatus(),
-            $this->getCancellableStatus(),
-            $this->getCancellationStatus()
+            $this->createQueryStatus(),
+            $this->createDocumentSatus(),
+            $this->createCancellableStatus(),
+            $this->createCancellationStatus()
         );
     }
 }
