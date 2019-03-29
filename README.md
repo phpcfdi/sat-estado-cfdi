@@ -85,30 +85,30 @@ $expression = $expressionExtractor->extract($document);
 Después de consumir el servicio, se responderá con un objeto `CfdiStatus` que agrupa de los cuatro estados.
 
 No compares directamente los valores de los estados, en su lugar utiliza los métodos `is*`,
-por ejemplo `$response->active()->isCancelled()`.
+por ejemplo `$response->document()->isCancelled()`.
 
 Posibles estados:
 
-- `CfdiRequestStatus request`: `CodigoEstatus`.
+- `CodigoEstatus`: `query(): QueryStatus`.
     - `found`: Si el estado inicia con `S - `.
     - `notFound`: en cualquier otro caso.
 
-- `CfdiActiveStatus active`: `Estado`.
+- `Estado`: `document(): DocumentStatus`.
     - `active`: Si el estado reportó `Vigente`.
     - `cancelled`: Si el estado reportó `Cancelado`.
     - `notFound`: en cualquier otro caso.
 
-- `CfdiCancellableStatus cancellable`: `EsCancelable`.
-    - `directMethod`: Si el estado reportó `Cancelable sin aceptación`.
-    - `requestMethod`: Si el estado reportó `Cancelable con aceptación`.
+- `EsCancelable`: `cancellable(): CancellableStatus`.
+    - `cancellableByDirectCall`: Si el estado reportó `Cancelable sin aceptación`.
+    - `cancellableByApproval`: Si el estado reportó `Cancelable con aceptación`.
     - `notCancellable`: en cualquier otro caso.
 
-- `CfdiCancellationStatus cancellation`: `EstatusCancelacion`.
-    - `cancelDirect`: Si el estado reportó `Cancelado sin aceptación`.
+- `EstatusCancelacion`: `cancellation(): CancellationStatus`.
+    - `cancelledByDirectCall`: Si el estado reportó `Cancelado sin aceptación`.
+    - `cancelledByApproval`: Si el estado reportó `Cancelado con aceptación`.
+    - `cancelledByExpiration`: Si el estado reportó `Plazo vencido`.
     - `pending`: Si el estado reportó `En proceso`.
-    - `cancelByTimeout`: Si el estado reportó `Plazo vencido`.
-    - `cancelByRequest`: Si el estado reportó `Cancelado con aceptación`.
-    - `rejected`: Si el estado reportó `Solicitud rechazada`.
+    - `disapproved`: Si el estado reportó `Solicitud rechazada`.
     - `undefined`: en cualquier otro caso.
 
 
@@ -116,7 +116,7 @@ Posibles estados:
 
 CodigoEstatus | Estado        | EsCancelable              | EstatusCancelacion       | Explicación
 ------------- | ------------- | ------------------------- | ------------------------ | -----------------------------------------------------
-N - ...       | *             | *                         | *                        | El SAT no sabe del CFDI con los datos ofrecidos
+N - ...       | *             | *                         | *                        | El SAT no sabe del CFDI con la expresión dada
 S - ...       | Cancelado     | *                         | Plazo vencido            | Cancelado por plazo vencido
 S - ...       | Cancelado     | *                         | Cancelado con aceptación | Cancelado con aceptación del receptor
 S - ...       | Cancelado     | *                         | Cancelado sin aceptación | No fue requerido preguntarle al receptor y se canceló
@@ -126,15 +126,19 @@ S - ...       | Vigente       | Cancelable con aceptación | (ninguno)          
 S - ...       | Vigente       | Cancelable con aceptación | En proceso               | Se hizo la solicitud y está en espera de respuesta
 S - ...       | Vigente       | Cancelable con aceptación | Solicitud rechazada      | Se hizo la solicitud y fue rechazada
 
-Cuando tienes un CFDI *Cancelable con aceptación* y mandas a hacer la cancelación (*En proceso*),
-el receptor puede aceptar la cancelación (*Cancelado con aceptación*) o rechazarla (*Solicitud rechazada*).
-Si es la primera vez que se hace la solicitud el receptor tiene 72 horas para aceptarla o rechazarla,
+Cuando tienes un CFDI en estato *Cancelable con aceptación*
+y mandas a hacer la cancelación entonces su estado de cancelación cambiaría a *En proceso*.
+
+El receptor puede aceptar la cancelación (*Cancelado con aceptación*) o rechazarla (*Solicitud rechazada*).
+
+Si es la *primera vez* que se hace la solicitud, el receptor tiene 72 horas para aceptarla o rechazarla,
 si no lo hace entonces automáticamente será cancelada (*Plazo vencido*).
 
-Podrías volver a enviar la solicitud de cancelación *por segunda vez* aún cuando la solicitud fue rechazada.
+Podrías volver a enviar la solicitud de cancelación *por segunda vez* aún cuando la solicitud fue previamente rechazada.
+
 En ese caso, el receptor puede aceptar o rechazar la cancelación, pero ya no aplicará un lapzo de 72 horas.
-Eso significa que podrías tener el CFDI en estado de cancelación *en proceso* indefinidamente.
-O, incluso, que la cancelación suceda meses después de lo esperado.
+Por lo anterior entonces podrías tener el CFDI en estado de cancelación *en proceso* indefinidamente.
+Incluso, que la cancelación suceda meses después de lo esperado.
 
 
 ## Clientes de conexión
@@ -152,19 +156,18 @@ O si lo prefieres, existen los siguientes consumidores oficiales:
   Consume el webservice haciendo una llamada SOAP (sin WSDL) para obtener el resultado.
 - [phpcfdi/sat-estado-cfdi-http-psr](https://github.com/phpcfdi/sat-estado-cfdi-http-psr)
   Consume el webservice haciendo una HTTP utilizando objetos de PSR-7, PSR17 y PSR18 *que tu provees*.
-- [phpcfdi/sat-estado-cfdi-http-sunrise](https://github.com/phpcfdi/sat-estado-cfdi-http-sunrise)
-  Consume el webservice haciendo una HTTP utilizando objetos de PSR-7, PSR17 y PSR18 con los paquetes de *sunrise*.
 
 ### Prueba de cumplimiento de implementación
 
 Se incluye la clase `PhpCfdi\SatEstadoCfdi\ComplianceTester\ComplianceTester` que contacta al
 webservice del SAT con datos conocidos y evalua la respuesta.
 
-Los paquetes `phpcfdi/sat-estado-cfdi-soap` y `phpcfdi/sat-estado-cfdi-http-sunrise` implementan
+Los paquetes `phpcfdi/sat-estado-cfdi-soap` y `phpcfdi/sat-estado-cfdi-http-psr` implementan
 un test para asegurarse que cumplen correctamente.
 
-Si haces tu propia implementación, asegúrate de crear un test que lo cubra, puedes ver como ejemplo
-<https://github.com/phpcfdi/sat-estado-cfdi-soap/blob/master/tests/Compliance/ComplianceTest.php>
+Si haces tu propia implementación, asegúrate de crear un test que lo cubra, puedes ver como ejemplos
+<https://github.com/phpcfdi/sat-estado-cfdi-soap/blob/master/tests/Compliance/ComplianceTest.php> o
+<https://github.com/phpcfdi/sat-estado-cfdi-http-psr/blob/master/tests/Compliance/ComplianceTest.php>
 
 
 ## Compatilibilidad
