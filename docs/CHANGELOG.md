@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Version 0.6.0 2019-03-25
+
+- Rename CfdiStatus properties, status classes and status enums using descriptions.
+- Remove references to sunrise package that is not going to exists on phpcfdi umbrella.
+- Update `README.md` according to last changes.
+
+
 ## Version 0.5.0 2019-03-28
 
 - Remove `CfdiExpression` and `CfdiExpressionBuilder` (now on its own project `phpcfdi/cfdi-expresiones`)
