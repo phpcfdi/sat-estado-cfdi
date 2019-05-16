@@ -59,7 +59,7 @@ class ComplianceTester
         if (! $response->request()->isFound()) {
             throw new \RuntimeException('It was expected CFDI status request: found');
         }
-        if (! $response->active()->isActive()) {
+        if (! $response->document()->isActive()) {
             throw new \RuntimeException('It was expected CFDI status active: active');
         }
         if (! $response->cancellable()->isCancellableByDirectCall()) {
@@ -87,7 +87,7 @@ class ComplianceTester
         if (! $response->request()->isFound()) {
             throw new \RuntimeException('It was expected CFDI status request: found');
         }
-        if (! $response->active()->isCancelled()) {
+        if (! $response->document()->isCancelled()) {
             throw new \RuntimeException('It was expected CFDI status active: cancelled');
         }
         if (! $response->cancellable()->isNotCancellable()) {

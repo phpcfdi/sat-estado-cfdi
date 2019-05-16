@@ -10,7 +10,7 @@ class CfdiStatus
     private $request;
 
     /** @var Status\DocumentStatus */
-    private $active;
+    private $document;
 
     /** @var Status\CancellableStatus */
     private $cancellable;
@@ -20,12 +20,12 @@ class CfdiStatus
 
     public function __construct(
         Status\QueryStatus $request,
-        Status\DocumentStatus $active,
+        Status\DocumentStatus $document,
         Status\CancellableStatus $cancellable,
         Status\CancellationStatus $cancellation
     ) {
         $this->request = $request;
-        $this->active = $active;
+        $this->document = $document;
         $this->cancellable = $cancellable;
         $this->cancellation = $cancellation;
     }
@@ -35,9 +35,25 @@ class CfdiStatus
         return $this->request;
     }
 
+    /**
+     * Use method document(), this method will be removed on version 0.7.0
+     *
+     * @deprecated 0.6.1:0.7.0 Due naming consistency
+     * @see document()
+     * @return Status\DocumentStatus
+     */
     public function active(): Status\DocumentStatus
     {
-        return $this->active;
+        trigger_error(
+            sprintf('Method %s::active() has been deprecated, use document() instead', __CLASS__),
+            E_USER_DEPRECATED
+        );
+        return $this->document();
+    }
+
+    public function document(): Status\DocumentStatus
+    {
+        return $this->document;
     }
 
     public function cancellable(): Status\CancellableStatus
