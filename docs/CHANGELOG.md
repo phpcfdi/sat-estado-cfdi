@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Version 0.7.0 2019-05-16
+
+- Remove CfdiStatus::request() & CfdiStatus::active() (fixes #7).
+
+
 ## Version 0.6.1 2019-05-16
 
 - On version 0.6.0 class names where renamed but property names where not.
