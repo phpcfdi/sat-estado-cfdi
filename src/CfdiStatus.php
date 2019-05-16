@@ -7,7 +7,7 @@ namespace PhpCfdi\SatEstadoCfdi;
 class CfdiStatus
 {
     /** @var Status\QueryStatus */
-    private $request;
+    private $query;
 
     /** @var Status\DocumentStatus */
     private $document;
@@ -19,20 +19,36 @@ class CfdiStatus
     private $cancellation;
 
     public function __construct(
-        Status\QueryStatus $request,
+        Status\QueryStatus $query,
         Status\DocumentStatus $document,
         Status\CancellableStatus $cancellable,
         Status\CancellationStatus $cancellation
     ) {
-        $this->request = $request;
+        $this->query = $query;
         $this->document = $document;
         $this->cancellable = $cancellable;
         $this->cancellation = $cancellation;
     }
 
+    /**
+     * Use method query(), this method will be removed on version 0.7.0
+     *
+     * @deprecated 0.6.1:0.7.0 Due naming consistency
+     * @see query()
+     * @return Status\QueryStatus
+     */
     public function request(): Status\QueryStatus
     {
-        return $this->request;
+        trigger_error(
+            sprintf('Method %s::request() has been deprecated, use query() instead', __CLASS__),
+            E_USER_DEPRECATED
+        );
+        return $this->query();
+    }
+
+    public function query(): Status\QueryStatus
+    {
+        return $this->query;
     }
 
     /**

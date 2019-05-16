@@ -30,4 +30,21 @@ class CfdiStatusTest extends TestCase
         $this->expectException(Deprecated::class);
         $cfdiStatus->active();
     }
+
+    public function testRequestPropertyThrowsDeprecationNotice(): void
+    {
+        $cfdiStatus = new CfdiStatus(
+            QueryStatus::found(),
+            DocumentStatus::active(),
+            CancellableStatus::notCancellable(),
+            CancellationStatus::undefined()
+        );
+
+        // silence errors on this call to check that active returns the same as document
+        $this->assertSame($cfdiStatus->query(), @$cfdiStatus->request());
+
+        // now call active without silence operator, this error will be catched as exception by phpunit
+        $this->expectException(Deprecated::class);
+        $cfdiStatus->request();
+    }
 }

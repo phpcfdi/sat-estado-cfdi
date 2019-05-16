@@ -15,7 +15,7 @@ class CfdiStatusBuilderTest extends TestCase
 
         $response = $builder->create();
         // default states
-        $this->assertTrue($response->request()->isNotFound());
+        $this->assertTrue($response->query()->isNotFound());
         $this->assertTrue($response->document()->isNotFound());
         $this->assertTrue($response->cancellable()->isNotCancellable());
         $this->assertTrue($response->cancellation()->isUndefined());

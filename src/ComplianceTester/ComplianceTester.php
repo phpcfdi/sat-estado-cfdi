@@ -56,7 +56,7 @@ class ComplianceTester
         $consumer = new Consumer($this->client);
         $response = $consumer->execute($expression);
 
-        if (! $response->request()->isFound()) {
+        if (! $response->query()->isFound()) {
             throw new \RuntimeException('It was expected CFDI status request: found');
         }
         if (! $response->document()->isActive()) {
@@ -84,7 +84,7 @@ class ComplianceTester
         $consumer = new Consumer($this->client);
         $response = $consumer->execute($expression);
 
-        if (! $response->request()->isFound()) {
+        if (! $response->query()->isFound()) {
             throw new \RuntimeException('It was expected CFDI status request: found');
         }
         if (! $response->document()->isCancelled()) {
