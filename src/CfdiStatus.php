@@ -30,41 +30,9 @@ class CfdiStatus
         $this->cancellation = $cancellation;
     }
 
-    /**
-     * Use method query(), this method will be removed on version 0.7.0
-     *
-     * @deprecated 0.6.1:0.7.0 Due naming consistency
-     * @see query()
-     * @return Status\QueryStatus
-     */
-    public function request(): Status\QueryStatus
-    {
-        trigger_error(
-            sprintf('Method %s::request() has been deprecated, use query() instead', __CLASS__),
-            E_USER_DEPRECATED
-        );
-        return $this->query();
-    }
-
     public function query(): Status\QueryStatus
     {
         return $this->query;
-    }
-
-    /**
-     * Use method document(), this method will be removed on version 0.7.0
-     *
-     * @deprecated 0.6.1:0.7.0 Due naming consistency
-     * @see document()
-     * @return Status\DocumentStatus
-     */
-    public function active(): Status\DocumentStatus
-    {
-        trigger_error(
-            sprintf('Method %s::active() has been deprecated, use document() instead', __CLASS__),
-            E_USER_DEPRECATED
-        );
-        return $this->document();
     }
 
     public function document(): Status\DocumentStatus
