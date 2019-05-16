@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## Version 0.6.1 2019-05-16
+
+- On version 0.6.0 class names where renamed but property names where not.
+  This release is the last of 0.6.x and is created to throw warnings on deprecated property names.
+- Rename CfdiStatus::request() to CfdiStatus::query(),
+  if CfdiStatus::request() is consumed will trigger a E_USER_DEPRECATED error.
+- Rename CfdiStatus::active() to CfdiStatus::document(),
+  if CfdiStatus::active() is consumed will trigger a E_USER_DEPRECATED error.
+
+
 ## Version 0.6.0 2019-03-25
 
 - Rename CfdiStatus properties, status classes and status enums using descriptions.
