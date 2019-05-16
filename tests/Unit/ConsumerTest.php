@@ -34,8 +34,8 @@ class ConsumerTest extends TestCase
         $consumer = new Consumer($fakeClient);
         $response = $consumer->execute($fakeExpression);
 
-        $this->assertTrue($response->request()->isFound());
-        $this->assertTrue($response->active()->isActive());
+        $this->assertTrue($response->query()->isFound());
+        $this->assertTrue($response->document()->isActive());
         $this->assertTrue($response->cancellable()->isCancellableByApproval());
         $this->assertTrue($response->cancellation()->isPending());
     }

@@ -126,7 +126,7 @@ S - ...       | Vigente       | Cancelable con aceptación | (ninguno)          
 S - ...       | Vigente       | Cancelable con aceptación | En proceso               | Se hizo la solicitud y está en espera de respuesta
 S - ...       | Vigente       | Cancelable con aceptación | Solicitud rechazada      | Se hizo la solicitud y fue rechazada
 
-Cuando tienes un CFDI en estato *Cancelable con aceptación*
+Cuando tienes un CFDI en estado *Cancelable con aceptación*
 y mandas a hacer la cancelación entonces su estado de cancelación cambiaría a *En proceso*.
 
 El receptor puede aceptar la cancelación (*Cancelado con aceptación*) o rechazarla (*Solicitud rechazada*).
