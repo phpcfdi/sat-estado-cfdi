@@ -27,6 +27,7 @@ class ConsumerTest extends TestCase
             'Estado' => 'Vigente',
             'EsCancelable' => 'Cancelable con aceptación',
             'EstatusCancelacion' => 'En proceso',
+            'ValidacionEFOS' => '200',
         ];
         $fakeExpression = 'foo-bar';
         $fakeClient = new FakeConsumerClient($fakeInput);
@@ -38,5 +39,6 @@ class ConsumerTest extends TestCase
         $this->assertTrue($response->document()->isActive());
         $this->assertTrue($response->cancellable()->isCancellableByApproval());
         $this->assertTrue($response->cancellation()->isPending());
+        $this->assertTrue($response->efos()->isExcluded());
     }
 }

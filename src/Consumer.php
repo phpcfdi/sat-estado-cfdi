@@ -43,7 +43,8 @@ class Consumer
             $responseConsumer->get('CodigoEstatus'),
             $responseConsumer->get('Estado'),
             $responseConsumer->get('EsCancelable'),
-            $responseConsumer->get('EstatusCancelacion')
+            $responseConsumer->get('EstatusCancelacion'),
+            $responseConsumer->get('ValidacionEFOS')
         );
 
         $responseStatus = $builder->create();

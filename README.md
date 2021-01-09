@@ -111,6 +111,9 @@ Posibles estados:
     - `disapproved`: Si el estado reportó `Solicitud rechazada`.
     - `undefined`: en cualquier otro caso.
 
+- `ValidacionEFOS`: `efos(): EfosStatus`.
+    - `included`: Si el estado no reportó `200`.
+    - `excluded`: Si el estado reportó `200`.
 
 #### Estados mutuamente excluyentes:
 
