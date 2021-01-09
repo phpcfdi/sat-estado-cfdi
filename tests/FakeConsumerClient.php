@@ -31,16 +31,28 @@ class FakeConsumerClient implements ConsumerClientInterface
      */
     public $lastExpression = '';
 
+    /**
+     * FakeConsumerClient constructor.
+     *
+     * @param array<string, string> $predefined
+     */
     public function __construct(array $predefined = [])
     {
         $this->setClientResponse($predefined);
     }
 
+    /**
+     * @param array<string, string> $predefined
+     */
     public function setClientResponse(array $predefined): void
     {
         $this->consumeResponse = $this->consumerClientResponseFromArray($predefined);
     }
 
+    /**
+     * @param array<string, string> $input
+     * @return ConsumerClientResponseInterface
+     */
     public static function consumerClientResponseFromArray(array $input): ConsumerClientResponseInterface
     {
         $consumeResponse = new ConsumerClientResponse();

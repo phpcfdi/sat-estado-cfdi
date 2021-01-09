@@ -30,10 +30,9 @@
     "require-dev": {
         "phpcfdi/cfdi-expresiones": "^2.0",
         "phpunit/phpunit": "^8.0",
-        "overtrue/phplint": "^1.0",
         "squizlabs/php_codesniffer": "^3.0",
         "friendsofphp/php-cs-fixer": "^2.4",
-        "phpstan/phpstan-shim": "^0.11"
+        "phpstan/phpstan": "^0.12"
     },
     "suggest": {
         "phpcfdi/cfdi-expresiones": "Genera expresiones de CFDI 3.3, CFDI 3.2 y RET 1.0"
@@ -51,18 +50,17 @@
     "scripts": {
         "dev:build": ["@dev:fix-style", "@dev:test"],
         "dev:check-style": [
-            "vendor/bin/php-cs-fixer fix --dry-run --verbose",
-            "vendor/bin/phpcs --colors -sp src/ tests/"
+            "@php vendor/bin/php-cs-fixer fix --dry-run --verbose",
+            "@php vendor/bin/phpcs --colors -sp src/ tests/"
         ],
         "dev:fix-style": [
-            "vendor/bin/php-cs-fixer fix --verbose",
-            "vendor/bin/phpcbf --colors -sp src/ tests/"
+            "@php vendor/bin/php-cs-fixer fix --verbose",
+            "@php vendor/bin/phpcbf --colors -sp src/ tests/"
         ],
         "dev:test": [
-            "vendor/bin/phplint",
-            "vendor/bin/phpunit --testdox --verbose --stop-on-failure",
-            "find . -type f -name .phpunit.result.cache -delete",
-            "vendor/bin/phpstan analyse --no-progress --verbose --level max src/ tests/"
+            "@dev:check-style",
+            "@php vendor/bin/phpunit --testdox --verbose --stop-on-failure",
+            "@php vendor/bin/phpstan analyse --no-progress --verbose --level max src/ tests/"
         ],
         "dev:coverage": [
             "@php -dzend_extension=xdebug.so vendor/bin/phpunit --coverage-text --coverage-html build/coverage/html/"
@@ -72,7 +70,7 @@
         "dev:build": "DEV: run dev:fix-style dev:tests and dev:docs, run before pull request",
         "dev:check-style": "DEV: search for code style errors using php-cs-fixer and phpcs",
         "dev:fix-style": "DEV: fix code style errors using php-cs-fixer and phpcbf",
-        "dev:test": "DEV: run phplint, phpunit and phpstan",
+        "dev:test": "DEV: run dev:check-style, phpunit and phpstan",
         "dev:coverage": "DEV: run phpunit with xdebug and storage coverage in build/coverage/html/"
     }
 }

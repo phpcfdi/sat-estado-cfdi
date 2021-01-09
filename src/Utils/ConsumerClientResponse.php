@@ -13,7 +13,7 @@ use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientResponseInterface;
  */
 class ConsumerClientResponse implements ConsumerClientResponseInterface
 {
-    /** @var ArrayObject */
+    /** @var ArrayObject<string, string> */
     private $map;
 
     public function __construct()
