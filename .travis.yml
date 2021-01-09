@@ -23,4 +23,5 @@ script:
   - vendor/bin/phpstan analyse --no-progress --level max src/ tests/
 
 notifications:
-  email: false
+  email:
+    if: branch = master
