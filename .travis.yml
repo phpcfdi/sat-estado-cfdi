@@ -16,11 +16,10 @@ before_script:
   - phpenv config-rm xdebug.ini
 
 script:
-  - vendor/bin/phplint
-  - vendor/bin/php-cs-fixer fix --verbose
-  - vendor/bin/phpcbf --colors -sp src/ tests/
+  - vendor/bin/php-cs-fixer fix --dry-run --verbose
+  - vendor/bin/phpcs --colors -sp src/ tests/
   - vendor/bin/phpunit --testdox --verbose
-  - vendor/bin/phpstan.phar analyse --no-progress --level max src/ tests/
+  - vendor/bin/phpstan analyse --no-progress --level max src/ tests/
 
 notifications:
   email: false
