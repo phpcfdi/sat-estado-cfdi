@@ -16,7 +16,6 @@ cache:
 before_script:
   - travis_retry composer install --no-interaction --prefer-dist
   - phpenv config-rm xdebug.ini
-  - mkdir -p build
 
 script:
   - vendor/bin/phplint

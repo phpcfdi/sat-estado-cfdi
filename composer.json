@@ -30,10 +30,9 @@
     "require-dev": {
         "phpcfdi/cfdi-expresiones": "^2.0",
         "phpunit/phpunit": "^8.0",
-        "overtrue/phplint": "^1.0",
         "squizlabs/php_codesniffer": "^3.0",
         "friendsofphp/php-cs-fixer": "^2.4",
-        "phpstan/phpstan-shim": "^0.11"
+        "phpstan/phpstan": "^0.11"
     },
     "suggest": {
         "phpcfdi/cfdi-expresiones": "Genera expresiones de CFDI 3.3, CFDI 3.2 y RET 1.0"
@@ -59,7 +58,7 @@
             "vendor/bin/phpcbf --colors -sp src/ tests/"
         ],
         "dev:test": [
-            "vendor/bin/phplint",
+            "@dev:check-style",
             "vendor/bin/phpunit --testdox --verbose --stop-on-failure",
             "find . -type f -name .phpunit.result.cache -delete",
             "vendor/bin/phpstan analyse --no-progress --verbose --level max src/ tests/"
