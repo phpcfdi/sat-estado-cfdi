@@ -173,7 +173,7 @@ Si haces tu propia implementación, asegúrate de crear un test que lo cubra, pu
 ## Compatilibilidad
 
 Esta librería se mantendrá compatible con al menos la versión con
-[soporte activo de PHP](http://php.net/supported-versions.php) más reciente.
+[soporte activo de PHP](https://www.php.net/supported-versions.php) más reciente.
 
 También utilizamos [Versionado Semántico 2.0.0](https://semver.org/lang/es/) por lo que puedes usar esta librería
 sin temor a romper tu aplicación.
