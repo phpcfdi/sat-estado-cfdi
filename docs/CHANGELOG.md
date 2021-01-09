@@ -13,6 +13,15 @@ on source code. On the first opportunity this changes will be included on the ne
 
 ## Releases
 
+### Version 0.7.1
+
+- Add support for PHP 8.0.
+- Change ownership from Carlos C Soto to PhpCfdi.
+- Documentation: Update README badges, contributing instructions and license.
+- Upgrade to PHPStan 0.12.
+- Update Travis-CI and Scrutinizer pipe lines.
+- Remove PHPLint.
+
 ### Version 0.7.0 2019-05-16
 
 - Remove CfdiStatus::request() & CfdiStatus::active() (fixes #7).
