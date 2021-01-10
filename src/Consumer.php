@@ -47,8 +47,6 @@ class Consumer
             $responseConsumer->get('ValidacionEFOS')
         );
 
-        $responseStatus = $builder->create();
-
-        return $responseStatus;
+        return $builder->create();
     }
 }
