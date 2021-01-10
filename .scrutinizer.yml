@@ -11,9 +11,6 @@ build:
       - composer update --no-interaction --no-progress
   nodes:
     analysis:
-      environment:
-        php:
-          version: "7.3"
       project_setup:
         override: true
       tests:
