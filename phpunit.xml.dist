@@ -10,7 +10,6 @@
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
-    <!-- exclude composer vendor folder -->
     <filter>
         <whitelist>
             <directory suffix=".php">./src/</directory>

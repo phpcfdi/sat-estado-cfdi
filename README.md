@@ -8,7 +8,7 @@
 [![Coverage Status][badge-coverage]][coverage]
 [![Total Downloads][badge-downloads]][downloads]
 
-> Consulta el estado de un cfdi en el webservice del SAT
+> Consulta el estado de un CFDI en el webservice del SAT
 
 :us: This library contains helpers to consume the **Servicio de Consulta de CFDI** from **SAT**.
 The documentation of this project is in spanish as this is the natural language for intented audience.
@@ -20,13 +20,15 @@ La documentación del proyecto está en español porque ese es el lenguaje de lo
 
 - Servicio productivo: <https://consultaqr.facturaelectronica.sat.gob.mx/ConsultaCFDIService.svc>
 - Servicio de pruebas: <https://pruebacfdiconsultaqr.cloudapp.net/ConsultaCFDIService.svc>
-- Documentación: <https://www.sat.gob.mx/cs/Satellite?blobcol=urldata&blobkey=id&blobtable=MungoBlobs&blobwhere=1461173518263&ssbinary=true>
+- SAT: <https://www.sat.gob.mx/consultas/20585/conoce-los-servicios-especializados-de-validacion>
+- Documentación del Servicio de Consulta de CFDIVersión 1.3 (2020-11-18):
+  <https://www.sat.gob.mx/cs/Satellite?blobcol=urldata&blobkey=id&blobtable=MungoBlobs&blobwhere=1579314559300&ssbinary=true>
 
 **Cambios recientes en el servicio**:
 
 - Por motivo del cambio en el proceso de cancelación, en 2018 agregaron nuevos estados.
-- Por una razón desconocida -e inexplicable-, el WSDL ya no se encuentra disponible desde 2018.
-Aunque sí se puede consumir el servicio.
+- Por una razón desconocida -e inexplicable-, el WSDL ya no se encuentra disponible desde 2018. Aunque sí se puede consumir el servicio.
+- A finales de 2020 agregaron el campo de respuesta `VerificacionEFOS`.
 
 ## Instalación
 
@@ -47,12 +49,17 @@ Los pasos básicos son:
 
 ```php
 <?php
-/** @var \PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface $client */
-$consumer = new \PhpCfdi\SatEstadoCfdi\Consumer($client);
+declare(strict_types=1);
 
-$response = $consumer->execute('...expression');
+use PhpCfdi\SatEstadoCfdi\Consumer;
+use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
 
-if ($response->cancellable()->isNotCancellable()) {
+/** @var ConsumerClientInterface $client */
+$consumer = new Consumer($client);
+
+$cfdiStatus = $consumer->execute('...expression');
+
+if ($cfdiStatus->cancellable()->isNotCancellable()) {
     echo 'CFDI no es cancelable';
 }
 ```
@@ -71,13 +78,27 @@ usando `composer require phpcfdi/cfdi-expresiones`.
 
 ```php
 <?php
+declare(strict_types=1);
+
+use PhpCfdi\CfdiExpresiones\DiscoverExtractor;
+use PhpCfdi\SatEstadoCfdi\Consumer;
+
 // lectura del contenido del CFDI
 $document = new DOMDocument();
 $document->load('archivo-cfdi33.xml');
 
 // creación de la expresión
-$expressionExtractor = new \PhpCfdi\CfdiExpresiones\DiscoverExtractor();
+$expressionExtractor = new DiscoverExtractor();
 $expression = $expressionExtractor->extract($document);
+
+// realizar la consulta con la expresión obtenida
+/** @var Consumer $consumer */
+$cfdiStatus = $consumer->execute($expression);
+
+// usar el estado
+if ($cfdiStatus->document()->isActive()) {
+    echo 'El CFDI se encuentra vigente';
+}
 ```
 
 ### Estados (salida)
@@ -111,6 +132,9 @@ Posibles estados:
     - `disapproved`: Si el estado reportó `Solicitud rechazada`.
     - `undefined`: en cualquier otro caso.
 
+- `ValidacionEFOS`: `efos(): EfosStatus`.
+    - `included`: Si el estado no reportó `200`.
+    - `excluded`: Si el estado reportó `200`.
 
 #### Estados mutuamente excluyentes:
 
@@ -134,20 +158,19 @@ El receptor puede aceptar la cancelación (*Cancelado con aceptación*) o rechaz
 Si es la *primera vez* que se hace la solicitud, el receptor tiene 72 horas para aceptarla o rechazarla,
 si no lo hace entonces automáticamente será cancelada (*Plazo vencido*).
 
-Podrías volver a enviar la solicitud de cancelación *por segunda vez* aún cuando la solicitud fue previamente rechazada.
+Podrías volver a enviar la solicitud de cancelación *por segunda vez* aun cuando la solicitud fue previamente rechazada.
 
 En ese caso, el receptor puede aceptar o rechazar la cancelación, pero ya no aplicará un lapzo de 72 horas.
 Por lo anterior entonces podrías tener el CFDI en estado de cancelación *en proceso* indefinidamente.
 Incluso, que la cancelación suceda meses después de lo esperado.
 
-
 ## Clientes de conexión
 
-Esta librería no es la que hace directamente las conexión al webservice del SAT.
+Esta librería no es la que hace directamente las conexiones al webservice del SAT.
 
 Esta función se la delega a un objeto `ConsumerClientInterface`.
 
-Tu puedes implementar tu cliente de conexión personalizado para tu entorno siempre que
+Tú puedes implementar tu cliente de conexión personalizado para tu entorno siempre que
 implementes la interfaz `ConsumerClientInterface`.
 
 O si lo prefieres, existen los siguientes consumidores oficiales:
@@ -155,7 +178,7 @@ O si lo prefieres, existen los siguientes consumidores oficiales:
 - [phpcfdi/sat-estado-cfdi-soap](https://github.com/phpcfdi/sat-estado-cfdi-soap):
   Consume el webservice haciendo una llamada SOAP (sin WSDL) para obtener el resultado.
 - [phpcfdi/sat-estado-cfdi-http-psr](https://github.com/phpcfdi/sat-estado-cfdi-http-psr)
-  Consume el webservice haciendo una HTTP utilizando objetos de PSR-7, PSR17 y PSR18 *que tu provees*.
+  Consume el webservice haciendo una HTTP utilizando objetos de PSR-7, PSR17 y PSR18 *que tú provees*.
 
 ### Prueba de cumplimiento de implementación
 
@@ -167,29 +190,25 @@ un test para asegurarse que cumplen correctamente.
 
 Si haces tu propia implementación, asegúrate de crear un test que lo cubra, puedes ver como ejemplos
 <https://github.com/phpcfdi/sat-estado-cfdi-soap/blob/master/tests/Compliance/ComplianceTest.php> o
-<https://github.com/phpcfdi/sat-estado-cfdi-http-psr/blob/master/tests/Compliance/ComplianceTest.php>
-
+<https://github.com/phpcfdi/sat-estado-cfdi-http-psr/blob/master/tests/Compliance/ComplianceTest.php>.
 
 ## Compatilibilidad
 
 Esta librería se mantendrá compatible con al menos la versión con
 [soporte activo de PHP](https://www.php.net/supported-versions.php) más reciente.
 
-También utilizamos [Versionado Semántico 2.0.0](https://semver.org/lang/es/) por lo que puedes usar esta librería
+También utilizamos [Versionado Semántico 2.0.0](docs/SEMVER.md) por lo que puedes usar esta librería
 sin temor a romper tu aplicación.
-
 
 ## Contribuciones
 
 Las contribuciones con bienvenidas. Por favor lee [CONTRIBUTING][] para más detalles
-y recuerda revisar el archivo de tareas pendientes [TODO][] y el [CHANGELOG][].
-
+y recuerda revisar el archivo de tareas pendientes [TODO][] y el archivo [CHANGELOG][].
 
 ## Copyright and License
 
 The `phpcfdi/sat-estado-cfdi` library is copyright © [PhpCfdi](https://www.phpcfdi.com/)
 and licensed for use under the MIT License (MIT). Please see [LICENSE][] for more information.
-
 
 [contributing]: https://github.com/phpcfdi/sat-estado-cfdi/blob/master/CONTRIBUTING.md
 [changelog]: https://github.com/phpcfdi/sat-estado-cfdi/blob/master/docs/CHANGELOG.md

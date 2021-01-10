@@ -1,17 +1,21 @@
 # CHANGELOG
 
-## About SemVer
+## Acerca de SemVer
 
-This library uses SemVer 2.0 `major . minor . fix`. It means that it will not introduce breaking changes
-on `major` versions, introduce new features on `minor` versions and bugfixes on `fix` version. However, this rules
-does not apply to version `0.*.*`.
+Usamos [Versionado Semántico 2.0.0](SEMVER.md) por lo que puedes usar esta librería sin temor a romper tu aplicación.
 
-## About unreleased changes
+## Cambios no liberados en una versión
 
-Unreleased changes are listed at the top and include any change that does not include any bugfix or any change
-on source code. On the first opportunity this changes will be included on the next release.
+Pueden aparecer cambios no liberados que se integran a la rama principal pero no ameritan una nueva liberación de
+versión aunque sí su incorporación en la rama principal de trabajo, generalmente se tratan de cambios en el desarrollo.
 
-## Releases
+## Listado de cambios
+
+### Version 1.0.0
+
+- Se ha agregado soporte para la nueva propiedad `VerificacionEFOS`.
+- A partir de esta versión se ha puesto la documentación del proyecto en español.
+- Se garatiza la compatibilidad con PHP 8.0.
 
 ### Version 0.7.1
 

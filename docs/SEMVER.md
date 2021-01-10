@@ -11,7 +11,7 @@ que nombraremos así: ` Breaking . Feature . Fix `, donde:
 
 ## Composer
 
-[Composer](https://getcomposer.org/) es un gestor de dependencias en proyectos para PHP.
+La herramienta [Composer](https://getcomposer.org/) es un gestor de dependencias en proyectos para PHP.
 Este gestor usa las [reglas](https://getcomposer.org/doc/articles/versions.md)
 de versionado semántico para instalar y actualizar paquetes.
 
@@ -39,4 +39,4 @@ Cuando un elemento es `@internal`, dicho elemento:
 
 - no debe ser una entrada (parámetro)
 - no debe ser una salida (retorno)
-- no debe exponer exponer funcionalidades en los objetos públicos (rasgos)
+- no debe exponer funcionalidades en los objetos públicos (rasgos)

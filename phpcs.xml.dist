@@ -5,7 +5,7 @@
     <arg name="encoding" value="utf-8"/>
     <arg name="report-width" value="auto"/>
     <arg name="extensions" value="php"/>
-    <rule ref="PSR2" />
+    <rule ref="PSR2"/>
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
     <rule ref="Generic.CodeAnalysis.EmptyStatement"/>
     <rule ref="Generic.CodeAnalysis.UnconditionalIfStatement"/>

@@ -7,6 +7,8 @@ namespace PhpCfdi\SatEstadoCfdi\ComplianceTester;
 use PhpCfdi\CfdiExpresiones\DiscoverExtractor;
 use PhpCfdi\SatEstadoCfdi\Consumer;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
+use RuntimeException;
+use Throwable;
 
 /**
  * Create this object from your tests to see if it really get data from webservice.
@@ -25,18 +27,19 @@ class ComplianceTester
     public function runComplianceTests(): bool
     {
         $tests = [
-            'contactWebServiceWithActiveCfdi',
-            'contactWebServiceWithCancelledCfdi',
+            'contact webservice with active cfdi' => function (): void {
+                $this->contactWebServiceWithActiveCfdi();
+            },
+            'contact webservice with cancelled cfdi' => function (): void {
+                $this->contactWebServiceWithCancelledCfdi();
+            },
         ];
-        foreach ($tests as $test) {
+        foreach ($tests as $name => $closure) {
             try {
-                $this->{$test}();
-            } catch (\Throwable $exception) {
-                throw new \RuntimeException(
-                    sprintf('ConsumerClientInterface %s did not pass %s', get_class($this->client), $test),
-                    0,
-                    $exception
-                );
+                call_user_func($closure);
+            } catch (Throwable $exception) {
+                $message = sprintf('ConsumerClientInterface %s did not pass: %s', get_class($this->client), $name);
+                throw new RuntimeException($message, 0, $exception);
             }
         }
         return true;
@@ -57,16 +60,19 @@ class ComplianceTester
         $response = $consumer->execute($expression);
 
         if (! $response->query()->isFound()) {
-            throw new \RuntimeException('It was expected CFDI status request: found');
+            throw new RuntimeException('It was expected CFDI status request: found');
         }
         if (! $response->document()->isActive()) {
-            throw new \RuntimeException('It was expected CFDI status active: active');
+            throw new RuntimeException('It was expected CFDI status active: active');
         }
         if (! $response->cancellable()->isCancellableByDirectCall()) {
-            throw new \RuntimeException('It was expected CFDI status cancellable: directMethod');
+            throw new RuntimeException('It was expected CFDI status cancellable: directMethod');
         }
         if (! $response->cancellation()->isUndefined()) {
-            throw new \RuntimeException('It was expected CFDI status cancellation: undefined');
+            throw new RuntimeException('It was expected CFDI status cancellation: undefined');
+        }
+        if (! $response->efos()->isExcluded()) {
+            throw new RuntimeException('It was expected the efos status: excluded');
         }
     }
 
@@ -85,16 +91,19 @@ class ComplianceTester
         $response = $consumer->execute($expression);
 
         if (! $response->query()->isFound()) {
-            throw new \RuntimeException('It was expected CFDI status request: found');
+            throw new RuntimeException('It was expected CFDI status request: found');
         }
         if (! $response->document()->isCancelled()) {
-            throw new \RuntimeException('It was expected CFDI status active: cancelled');
+            throw new RuntimeException('It was expected CFDI status active: cancelled');
         }
         if (! $response->cancellable()->isNotCancellable()) {
-            throw new \RuntimeException('It was expected CFDI status cancellable: notCancellable');
+            throw new RuntimeException('It was expected CFDI status cancellable: notCancellable');
         }
         if (! $response->cancellation()->isUndefined()) {
-            throw new \RuntimeException('It was expected CFDI status cancellation: undefined');
+            throw new RuntimeException('It was expected CFDI status cancellation: undefined');
+        }
+        if (! $response->efos()->isExcluded()) {
+            throw new RuntimeException('It was expected the efos status: excluded');
         }
     }
 }

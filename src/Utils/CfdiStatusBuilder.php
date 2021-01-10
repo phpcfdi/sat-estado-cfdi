@@ -8,6 +8,7 @@ use PhpCfdi\SatEstadoCfdi\CfdiStatus;
 use PhpCfdi\SatEstadoCfdi\Status\CancellableStatus;
 use PhpCfdi\SatEstadoCfdi\Status\CancellationStatus;
 use PhpCfdi\SatEstadoCfdi\Status\DocumentStatus;
+use PhpCfdi\SatEstadoCfdi\Status\EfosStatus;
 use PhpCfdi\SatEstadoCfdi\Status\QueryStatus;
 
 /**
@@ -27,12 +28,21 @@ class CfdiStatusBuilder
     /** @var string */
     private $estatusCancelacion;
 
-    public function __construct(string $codigoEstatus, string $estado, string $esCancelable, string $estatusCancelacion)
-    {
+    /** @var string */
+    private $validacionEFOS;
+
+    public function __construct(
+        string $codigoEstatus,
+        string $estado,
+        string $esCancelable,
+        string $estatusCancelacion,
+        string $validacionEFOS
+    ) {
         $this->codigoEstatus = $codigoEstatus;
         $this->estado = $estado;
         $this->esCancelable = $esCancelable;
         $this->estatusCancelacion = $estatusCancelacion;
+        $this->validacionEFOS = $validacionEFOS;
     }
 
     public function createQueryStatus(): QueryStatus
@@ -90,13 +100,22 @@ class CfdiStatusBuilder
         return CancellationStatus::undefined();
     }
 
+    public function createEfosStatus(): EfosStatus
+    {
+        if ('200' === $this->validacionEFOS) {
+            return EfosStatus::excluded();
+        }
+        return EfosStatus::included();
+    }
+
     public function create(): CfdiStatus
     {
         return new CfdiStatus(
             $this->createQueryStatus(),
             $this->createDocumentSatus(),
             $this->createCancellableStatus(),
-            $this->createCancellationStatus()
+            $this->createCancellationStatus(),
+            $this->createEfosStatus()
         );
     }
 }
