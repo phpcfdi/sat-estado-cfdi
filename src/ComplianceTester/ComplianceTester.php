@@ -25,18 +25,19 @@ class ComplianceTester
     public function runComplianceTests(): bool
     {
         $tests = [
-            'contactWebServiceWithActiveCfdi',
-            'contactWebServiceWithCancelledCfdi',
+            'contact webservice with active cfdi' => function () {
+                $this->contactWebServiceWithActiveCfdi();
+            },
+            'contact webservice with cancelled cfdi' => function () {
+                $this->contactWebServiceWithCancelledCfdi();
+            }
         ];
-        foreach ($tests as $test) {
+        foreach ($tests as $name => $closure) {
             try {
-                $this->{$test}();
+                call_user_func($closure);
             } catch (\Throwable $exception) {
-                throw new \RuntimeException(
-                    sprintf('ConsumerClientInterface %s did not pass %s', get_class($this->client), $test),
-                    0,
-                    $exception
-                );
+                $message = sprintf('ConsumerClientInterface %s did not pass: %s', get_class($this->client), $name);
+                throw new \RuntimeException($message, 0, $exception);
             }
         }
         return true;
@@ -68,6 +69,9 @@ class ComplianceTester
         if (! $response->cancellation()->isUndefined()) {
             throw new \RuntimeException('It was expected CFDI status cancellation: undefined');
         }
+        if (! $response->efos()->isExcluded()) {
+            throw new \RuntimeException('It was expected the efos status: excluded');
+        }
     }
 
     protected function contactWebServiceWithCancelledCfdi(): void
@@ -95,6 +99,9 @@ class ComplianceTester
         }
         if (! $response->cancellation()->isUndefined()) {
             throw new \RuntimeException('It was expected CFDI status cancellation: undefined');
+        }
+        if (! $response->efos()->isExcluded()) {
+            throw new \RuntimeException('It was expected the efos status: excluded');
         }
     }
 }
