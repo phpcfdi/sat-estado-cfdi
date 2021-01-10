@@ -25,12 +25,12 @@ class ComplianceTester
     public function runComplianceTests(): bool
     {
         $tests = [
-            'contact webservice with active cfdi' => function () {
+            'contact webservice with active cfdi' => function (): void {
                 $this->contactWebServiceWithActiveCfdi();
             },
-            'contact webservice with cancelled cfdi' => function () {
+            'contact webservice with cancelled cfdi' => function (): void {
                 $this->contactWebServiceWithCancelledCfdi();
-            }
+            },
         ];
         foreach ($tests as $name => $closure) {
             try {
