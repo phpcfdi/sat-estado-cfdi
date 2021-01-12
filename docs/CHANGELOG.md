@@ -11,13 +11,13 @@ versión aunque sí su incorporación en la rama principal de trabajo, generalme
 
 ## Listado de cambios
 
-### Version 1.0.0
+### Version 1.0.0 2021-01-10
 
 - Se ha agregado soporte para la nueva propiedad `VerificacionEFOS`.
 - A partir de esta versión se ha puesto la documentación del proyecto en español.
 - Se garatiza la compatibilidad con PHP 8.0.
 
-### Version 0.7.1
+### Version 0.7.1 2021-01-08
 
 - Add support for PHP 8.0.
 - Change ownership from Carlos C Soto to PhpCfdi.
