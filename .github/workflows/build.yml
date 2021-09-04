@@ -11,7 +11,7 @@ jobs:
 
   ci: # this job runs all the development tools and upload code coverage to scrutinizer
 
-    name: Continuous Integration
+    name: PHP 8.0 (full)
     runs-on: "ubuntu-latest"
 
     steps:
@@ -24,9 +24,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.0'
-          extensions: dom
           coverage: xdebug
-          tools: composer:v2, phpcs, php-cs-fixer, phpstan, cs2pr
+          tools: composer:v2, phpcs, php-cs-fixer, phpstan, psalm, infection, cs2pr
         env:
           fail-fast: true
 
@@ -51,7 +50,7 @@ jobs:
         run: php-cs-fixer fix --dry-run --format=checkstyle | cs2pr
 
       - name: Tests (phpunit with code coverage)
-        run: vendor/bin/phpunit --testdox --verbose --coverage-clover=build/coverage-clover.xml
+        run: vendor/bin/phpunit --testdox --verbose --coverage-xml=build/coverage --log-junit=build/coverage/junit.xml
 
       - name: Code analysis (phpstan)
         run: phpstan analyse --no-progress --verbose
@@ -60,17 +59,16 @@ jobs:
         run: psalm --no-progress --output-format=github
 
       - name: Mutation testing analysis
-        run:
-        continue-on-error: true
+        run: infection --skip-initial-tests --coverage=build/coverage --no-progress --no-interaction --logger-github
 
   build: # this job runs tests on all php supported versions
 
-    name: PHP ${{ matrix.php-versions }}
+    name: PHP ${{ matrix.php-versions }} (tests)
     runs-on: "ubuntu-latest"
 
     strategy:
       matrix:
-        php-versions: ['7.3', '7.4', '8.0']
+        php-versions: ['7.3', '7.4']
 
     steps:
 
@@ -82,7 +80,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: dom
           coverage: none
           tools: composer:v2, cs2pr
         env:
