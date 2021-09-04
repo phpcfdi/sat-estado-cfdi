@@ -11,6 +11,15 @@ versión aunque sí su incorporación en la rama principal de trabajo, generalme
 
 ## Listado de cambios
 
+### Version 1.0.1 2021-09-03
+
+- La versión menor de PHP es 7.3.
+- Se actualiza PHPUnit a 9.5.
+- Se migra de Travis-CI a GitHub Workflows. Gracias Travis-CI.
+- Se instalan las herramientas de desarrollo usando `phive` en lugar de `composer`.
+- Se agregan revisiones de `psalm` e `infection`.
+- Se cambia la rama principal a `main`.
+
 ### Version 1.0.0 2021-01-10
 
 - Se ha agregado soporte para la nueva propiedad `VerificacionEFOS`.

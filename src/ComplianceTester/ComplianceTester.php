@@ -11,8 +11,9 @@ use RuntimeException;
 use Throwable;
 
 /**
- * Create this object from your tests to see if it really get data from webservice.
+ * Create this object from your tests to see if it really gets data from webservice.
  * If it throws an exception means that it fail
+ * @codeCoverageIgnore
  */
 class ComplianceTester
 {
@@ -24,6 +25,11 @@ class ComplianceTester
         $this->client = $client;
     }
 
+    /**
+     * Call this method to check for compliance on consumer client implementation
+     *
+     * @noinspection PhpUnused
+     */
     public function runComplianceTests(): bool
     {
         $tests = [

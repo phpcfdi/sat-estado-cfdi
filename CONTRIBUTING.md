@@ -64,6 +64,7 @@ Considera las siguientes directrices:
 ```shell
 # Actualiza tus dependencias
 composer update
+phive update
 
 # Verificación de estilo de código
 composer dev:check-style
@@ -74,12 +75,22 @@ composer dev:fix-style
 # Ejecución de pruebas
 composer dev:test
 
-# Ejecución todo en uno, corregir estilo, verificar estilo y correr pruebas
+# Ejecución todo en uno: corregir estilo, verificar estilo y correr pruebas
 composer dev:build
+```
+
+## Ejecutar GitHub Actions localmente
+
+Puedes usar [`act`](https://github.com/nektos/act) para ejecutar GitHub Actions localmente, tal como se
+muestra en [`actions/setup-php-action`](https://github.com/marketplace/actions/setup-php-action#local-testing-setup)
+puedes ejecutar el siguiente comando:
+
+```shell
+act -P ubuntu-latest=shivammathur/node:latest
 ```
 
 [phpCfdi]:      https://github.com/phpcfdi/
 [project]:      https://github.com/phpcfdi/sat-estado-cfdi
 [contributors]: https://github.com/phpcfdi/sat-estado-cfdi/graphs/contributors
-[coc]:          https://github.com/phpcfdi/sat-estado-cfdi/blob/master/CODE_OF_CONDUCT.md
+[coc]:          https://github.com/phpcfdi/sat-estado-cfdi/blob/main/CODE_OF_CONDUCT.md
 [issues]:       https://github.com/phpcfdi/sat-estado-cfdi/issues
