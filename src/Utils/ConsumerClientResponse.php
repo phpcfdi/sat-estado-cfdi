@@ -9,7 +9,7 @@ use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientResponseInterface;
 
 /**
  * This is a generic implementation of ConsumerClientResponseInterface
- * You can use it or you can create your own if you are creating your own implementation.
+ * You can use it, or you can create your own implementation as your convenience.
  */
 class ConsumerClientResponse implements ConsumerClientResponseInterface
 {
@@ -18,7 +18,7 @@ class ConsumerClientResponse implements ConsumerClientResponseInterface
 
     public function __construct()
     {
-        $this->map = new ArrayObject();
+        $this->map = new ArrayObject([]);
     }
 
     public function set(string $keyword, string $content): void

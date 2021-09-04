@@ -2,20 +2,17 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     cacheResultFile="build/phpunit.result.cache"
+    bootstrap="tests/bootstrap.php"
     colors="true"
-    verbose="true"
-    bootstrap="tests/bootstrap.php">
+    >
     <testsuites>
-        <testsuite name="Default">
-            <directory>./tests/</directory>
+        <testsuite name="default">
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist>
+    <coverage>
+        <include>
             <directory suffix=".php">./src/</directory>
-            <exclude>
-                <directory suffix=".php">./src/ComplianceTester</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+        </include>
+    </coverage>
 </phpunit>

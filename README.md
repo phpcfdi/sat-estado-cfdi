@@ -11,7 +11,7 @@
 > Consulta el estado de un CFDI en el webservice del SAT
 
 :us: This library contains helpers to consume the **Servicio de Consulta de CFDI** from **SAT**.
-The documentation of this project is in spanish as this is the natural language for intented audience.
+The documentation of this project is in spanish as this is the natural language for intended audience.
 
 :mexico: Esta librería contiene objetos de ayuda para consumir el **Servicio de Consulta de CFDI del SAT**.
 La documentación del proyecto está en español porque ese es el lenguaje de los usuarios que la utilizarán.
@@ -27,7 +27,7 @@ La documentación del proyecto está en español porque ese es el lenguaje de lo
 **Cambios recientes en el servicio**:
 
 - Por motivo del cambio en el proceso de cancelación, en 2018 agregaron nuevos estados.
-- Por una razón desconocida -e inexplicable-, el WSDL ya no se encuentra disponible desde 2018. Aunque sí se puede consumir el servicio.
+- Por una razón desconocida —e inexplicable—, el WSDL ya no se encuentra disponible desde 2018. Aunque sí se puede consumir el servicio.
 - A finales de 2020 agregaron el campo de respuesta `VerificacionEFOS`.
 
 ## Instalación
@@ -178,7 +178,7 @@ O si lo prefieres, existen los siguientes consumidores oficiales:
 - [phpcfdi/sat-estado-cfdi-soap](https://github.com/phpcfdi/sat-estado-cfdi-soap):
   Consume el webservice haciendo una llamada SOAP (sin WSDL) para obtener el resultado.
 - [phpcfdi/sat-estado-cfdi-http-psr](https://github.com/phpcfdi/sat-estado-cfdi-http-psr)
-  Consume el webservice haciendo una HTTP utilizando objetos de PSR-7, PSR17 y PSR18 *que tú provees*.
+  Consume el webservice haciendo una solicitud HTTP utilizando objetos de PSR-7, PSR17 y PSR18 *que tú provees*.
 
 ### Prueba de cumplimiento de implementación
 
@@ -189,10 +189,10 @@ Los paquetes `phpcfdi/sat-estado-cfdi-soap` y `phpcfdi/sat-estado-cfdi-http-psr`
 un test para asegurarse que cumplen correctamente.
 
 Si haces tu propia implementación, asegúrate de crear un test que lo cubra, puedes ver como ejemplos
-<https://github.com/phpcfdi/sat-estado-cfdi-soap/blob/master/tests/Compliance/ComplianceTest.php> o
-<https://github.com/phpcfdi/sat-estado-cfdi-http-psr/blob/master/tests/Compliance/ComplianceTest.php>.
+<https://github.com/phpcfdi/sat-estado-cfdi-soap/blob/main/tests/Compliance/ComplianceTest.php> o
+<https://github.com/phpcfdi/sat-estado-cfdi-http-psr/blob/main/tests/Compliance/ComplianceTest.php>.
 
-## Compatilibilidad
+## Compatibilidad
 
 Esta librería se mantendrá compatible con al menos la versión con
 [soporte activo de PHP](https://www.php.net/supported-versions.php) más reciente.
@@ -210,22 +210,22 @@ y recuerda revisar el archivo de tareas pendientes [TODO][] y el archivo [CHANGE
 The `phpcfdi/sat-estado-cfdi` library is copyright © [PhpCfdi](https://www.phpcfdi.com/)
 and licensed for use under the MIT License (MIT). Please see [LICENSE][] for more information.
 
-[contributing]: https://github.com/phpcfdi/sat-estado-cfdi/blob/master/CONTRIBUTING.md
-[changelog]: https://github.com/phpcfdi/sat-estado-cfdi/blob/master/docs/CHANGELOG.md
-[todo]: https://github.com/phpcfdi/sat-estado-cfdi/blob/master/docs/TODO.md
+[contributing]: https://github.com/phpcfdi/sat-estado-cfdi/blob/main/CONTRIBUTING.md
+[changelog]: https://github.com/phpcfdi/sat-estado-cfdi/blob/main/docs/CHANGELOG.md
+[todo]: https://github.com/phpcfdi/sat-estado-cfdi/blob/main/docs/TODO.md
 
 [source]: https://github.com/phpcfdi/sat-estado-cfdi
 [release]: https://github.com/phpcfdi/sat-estado-cfdi/releases
-[license]: https://github.com/phpcfdi/sat-estado-cfdi/blob/master/LICENSE
-[build]: https://travis-ci.com/phpcfdi/sat-estado-cfdi?branch=master
+[license]: https://github.com/phpcfdi/sat-estado-cfdi/blob/main/LICENSE
+[build]: https://github.com/phpcfdi/sat-estado-cfdi/actions/workflows/build.yml?query=branch:main
 [quality]: https://scrutinizer-ci.com/g/phpcfdi/sat-estado-cfdi/
-[coverage]: https://scrutinizer-ci.com/g/phpcfdi/sat-estado-cfdi/code-structure/master/code-coverage
+[coverage]: https://scrutinizer-ci.com/g/phpcfdi/sat-estado-cfdi/code-structure/main/code-coverage
 [downloads]: https://packagist.org/packages/phpcfdi/sat-estado-cfdi
 
-[badge-source]: https://img.shields.io/badge/source-phpcfdi/sat--estado--cfdi-blue.svg?style=flat-square
-[badge-release]: https://img.shields.io/github/release/phpcfdi/sat-estado-cfdi.svg?style=flat-square
-[badge-license]: https://img.shields.io/github/license/phpcfdi/sat-estado-cfdi.svg?style=flat-square
-[badge-build]: https://img.shields.io/travis/com/phpcfdi/sat-estado-cfdi/master.svg?style=flat-square
-[badge-quality]: https://img.shields.io/scrutinizer/g/phpcfdi/sat-estado-cfdi/master.svg?style=flat-square
-[badge-coverage]: https://img.shields.io/scrutinizer/coverage/g/phpcfdi/sat-estado-cfdi/master.svg?style=flat-square
-[badge-downloads]: https://img.shields.io/packagist/dt/phpcfdi/sat-estado-cfdi.svg?style=flat-square
+[badge-source]: https://img.shields.io/badge/source-phpcfdi/sat--estado--cfdi-blue?style=flat-square
+[badge-release]: https://img.shields.io/github/release/phpcfdi/sat-estado-cfdi?style=flat-square
+[badge-license]: https://img.shields.io/github/license/phpcfdi/sat-estado-cfdi?style=flat-square
+[badge-build]: https://img.shields.io/github/workflow/status/phpcfdi/sat-estado-cfdi/build/main?style=flat-square
+[badge-quality]: https://img.shields.io/scrutinizer/g/phpcfdi/sat-estado-cfdi/main?style=flat-square
+[badge-coverage]: https://img.shields.io/scrutinizer/coverage/g/phpcfdi/sat-estado-cfdi/main?style=flat-square
+[badge-downloads]: https://img.shields.io/packagist/dt/phpcfdi/sat-estado-cfdi?style=flat-square
