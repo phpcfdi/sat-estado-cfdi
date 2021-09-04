@@ -23,7 +23,6 @@
     },
     "require": {
         "php": ">=7.3",
-        "ext-dom": "*",
         "eclipxe/enum": "^0.2"
     },
     "require-dev": {
