@@ -50,7 +50,7 @@ jobs:
         run: php-cs-fixer fix --dry-run --format=checkstyle | cs2pr
 
       - name: Tests (phpunit with code coverage)
-        run: vendor/bin/phpunit --testdox --verbose --coverage-xml=build/coverage --log-junit=build/coverage/junit.xml
+        run: vendor/bin/phpunit --testdox --verbose --coverage-clover=build/coverage-clover.xml --coverage-xml=build/coverage --log-junit=build/coverage/junit.xml
 
       - name: Code analysis (phpstan)
         run: phpstan analyse --no-progress --verbose
@@ -60,6 +60,13 @@ jobs:
 
       - name: Mutation testing analysis
         run: infection --skip-initial-tests --coverage=build/coverage --no-progress --no-interaction --logger-github
+
+      # see https://github.com/marketplace/actions/action-scrutinizer
+      - name: Upload code coverage to scrutinizer
+        uses: sudo-bot/action-scrutinizer@latest
+        with:
+          cli-args: "--format=php-clover build/coverage-clover.xml"
+        continue-on-error: true
 
   build: # this job runs tests on all php supported versions
 
