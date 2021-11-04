@@ -11,6 +11,12 @@ versión aunque sí su incorporación en la rama principal de trabajo, generalme
 
 ## Listado de cambios
 
+### Version 1.0.2 2021-11-04
+
+- Las reglas del SAT cambiaron y la prueba de aceptación antes devolvía el estado "Cancelable sin aceptación"
+  y ahora devuelve el estado "Cancelable con aceptación".
+- Se corrige el nombre del archivo de configuración de PHPStan para ser excluido del paquete de distribución.
+
 ### Version 1.0.1 2021-09-03
 
 - La versión menor de PHP es 7.3.
