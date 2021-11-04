@@ -71,8 +71,8 @@ class ComplianceTester
         if (! $response->document()->isActive()) {
             throw new RuntimeException('It was expected CFDI status active: active');
         }
-        if (! $response->cancellable()->isCancellableByDirectCall()) {
-            throw new RuntimeException('It was expected CFDI status cancellable: directMethod');
+        if (! $response->cancellable()->isCancellableByApproval()) {
+            throw new RuntimeException('It was expected CFDI status cancellable: by approval');
         }
         if (! $response->cancellation()->isUndefined()) {
             throw new RuntimeException('It was expected CFDI status cancellation: undefined');
