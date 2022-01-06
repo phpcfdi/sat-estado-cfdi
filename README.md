@@ -160,7 +160,7 @@ si no lo hace entonces automáticamente será cancelada (*Plazo vencido*).
 
 Podrías volver a enviar la solicitud de cancelación *por segunda vez* aun cuando la solicitud fue previamente rechazada.
 
-En ese caso, el receptor puede aceptar o rechazar la cancelación, pero ya no aplicará un lapzo de 72 horas.
+En ese caso, el receptor puede aceptar o rechazar la cancelación, pero ya no aplicará un lapso de 72 horas.
 Por lo anterior entonces podrías tener el CFDI en estado de cancelación *en proceso* indefinidamente.
 Incluso, que la cancelación suceda meses después de lo esperado.
 
