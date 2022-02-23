@@ -138,17 +138,17 @@ Posibles estados:
 
 #### Estados mutuamente excluyentes:
 
-CodigoEstatus | Estado        | EsCancelable              | EstatusCancelacion       | Explicación
-------------- | ------------- | ------------------------- | ------------------------ | -----------------------------------------------------
-N - ...       | *             | *                         | *                        | El SAT no sabe del CFDI con la expresión dada
-S - ...       | Cancelado     | *                         | Plazo vencido            | Cancelado por plazo vencido
-S - ...       | Cancelado     | *                         | Cancelado con aceptación | Cancelado con aceptación del receptor
-S - ...       | Cancelado     | *                         | Cancelado sin aceptación | No fue requerido preguntarle al receptor y se canceló
-S - ...       | Vigente       | No cancelable             | *                        | No se puede cancelar
-S - ...       | Vigente       | Cancelable sin aceptación | *                        | Se puede cancelar, pero no se ha realizado la cancelación
-S - ...       | Vigente       | Cancelable con aceptación | (ninguno)                | Se puede cancelar, pero no se ha realizado la solicitud
-S - ...       | Vigente       | Cancelable con aceptación | En proceso               | Se hizo la solicitud y está en espera de respuesta
-S - ...       | Vigente       | Cancelable con aceptación | Solicitud rechazada      | Se hizo la solicitud y fue rechazada
+| CodigoEstatus | Estado    | EsCancelable              | EstatusCancelacion       | Explicación                                               |
+|---------------|-----------|---------------------------|--------------------------|-----------------------------------------------------------|
+| N - ...       | *         | *                         | *                        | El SAT no sabe del CFDI con la expresión dada             |
+| S - ...       | Cancelado | *                         | Plazo vencido            | Cancelado por plazo vencido                               |
+| S - ...       | Cancelado | *                         | Cancelado con aceptación | Cancelado con aceptación del receptor                     |
+| S - ...       | Cancelado | *                         | Cancelado sin aceptación | No fue requerido preguntarle al receptor y se canceló     |
+| S - ...       | Vigente   | No cancelable             | *                        | No se puede cancelar                                      |
+| S - ...       | Vigente   | Cancelable sin aceptación | *                        | Se puede cancelar, pero no se ha realizado la cancelación |
+| S - ...       | Vigente   | Cancelable con aceptación | (ninguno)                | Se puede cancelar, pero no se ha realizado la solicitud   |
+| S - ...       | Vigente   | Cancelable con aceptación | En proceso               | Se hizo la solicitud y está en espera de respuesta        |
+| S - ...       | Vigente   | Cancelable con aceptación | Solicitud rechazada      | Se hizo la solicitud y fue rechazada                      |
 
 Cuando tienes un CFDI en estado *Cancelable con aceptación*
 y mandas a hacer la cancelación entonces su estado de cancelación cambiaría a *En proceso*.
