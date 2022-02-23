@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi\Tests;
 
-class TestCase extends \PHPUnit\Framework\TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     public static function filePath(string $append = ''): string
     {

@@ -8,7 +8,7 @@ use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientResponseInterface;
 use PhpCfdi\SatEstadoCfdi\Utils\ConsumerClientResponse;
 
-class FakeConsumerClient implements ConsumerClientInterface
+final class FakeConsumerClient implements ConsumerClientInterface
 {
     /**
      * consume method will return this variable when invoked

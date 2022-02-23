@@ -12,7 +12,7 @@ use PhpCfdi\SatEstadoCfdi\Status\EfosStatus;
 use PhpCfdi\SatEstadoCfdi\Status\QueryStatus;
 use PhpCfdi\SatEstadoCfdi\Tests\TestCase;
 
-class CfdiStatusTest extends TestCase
+final class CfdiStatusTest extends TestCase
 {
     public function testObjectReturnCorrectProperties(): void
     {

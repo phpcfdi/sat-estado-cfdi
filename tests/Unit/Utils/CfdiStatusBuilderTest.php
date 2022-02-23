@@ -7,7 +7,7 @@ namespace PhpCfdi\SatEstadoCfdi\Tests\Unit\Utils;
 use PhpCfdi\SatEstadoCfdi\Tests\TestCase;
 use PhpCfdi\SatEstadoCfdi\Utils\CfdiStatusBuilder;
 
-class CfdiStatusBuilderTest extends TestCase
+final class CfdiStatusBuilderTest extends TestCase
 {
     public function testCreateUsingEmptyResponse(): void
     {

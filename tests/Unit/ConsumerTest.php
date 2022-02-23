@@ -8,7 +8,7 @@ use PhpCfdi\SatEstadoCfdi\Consumer;
 use PhpCfdi\SatEstadoCfdi\Tests\FakeConsumerClient;
 use PhpCfdi\SatEstadoCfdi\Tests\TestCase;
 
-class ConsumerTest extends TestCase
+final class ConsumerTest extends TestCase
 {
     public function testHasSameFactoryAndUriAsConstructed(): void
     {
