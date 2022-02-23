@@ -26,7 +26,7 @@
         "eclipxe/enum": "^0.2"
     },
     "require-dev": {
-        "phpcfdi/cfdi-expresiones": "^2.0",
+        "phpcfdi/cfdi-expresiones": "^3.0",
         "phpunit/phpunit": "^9.5"
     },
     "suggest": {

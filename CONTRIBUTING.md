@@ -86,7 +86,7 @@ muestra en [`actions/setup-php-action`](https://github.com/marketplace/actions/s
 puedes ejecutar el siguiente comando:
 
 ```shell
-act -P ubuntu-latest=shivammathur/node:latest
+act -P ubuntu-latest=shivammathur/node:latest -W .github/workflows/build.yml
 ```
 
 [phpCfdi]:      https://github.com/phpcfdi/
