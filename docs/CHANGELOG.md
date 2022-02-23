@@ -11,6 +11,16 @@ versión aunque sí su incorporación en la rama principal de trabajo, generalme
 
 ## Listado de cambios
 
+### Version 1.0.3 2022-02-22
+
+- Se actualiza el año en el archivo de licencia. Feliz 2022.
+- Se corrige el grupo de mantenedores de phpCfdi.
+- Se actualizan las dependencias de desarrollo.
+- Se corrige el archivo de configuración de Psalm porque el atributo `totallyTyped` está deprecado.
+- Se actualiza la dependencia de desarrollo `phpcfdi/cfdi-expresiones:^3.0`.
+- Se deja de utilizar Scrutinizer CI. Gracias Scrutinizer CI.
+- El flujo de integración continua se cambia de pasos a trabajos.
+
 ### Version 1.0.2 2021-11-04
 
 - Las reglas del SAT cambiaron y la prueba de aceptación antes devolvía el estado "Cancelable sin aceptación"
