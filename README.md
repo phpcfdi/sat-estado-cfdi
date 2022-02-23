@@ -16,6 +16,9 @@ The documentation of this project is in spanish as this is the natural language 
 :mexico: Esta librería contiene objetos de ayuda para consumir el **Servicio de Consulta de CFDI del SAT**.
 La documentación del proyecto está en español porque ese es el lenguaje de los usuarios que la utilizarán.
 
+Esta librería solo permite verificar el estado de un *CFDI Regular* y no de *CFDI de Retenciones e información de pagos*.
+Para estos últimos, use la librería [phpcfdi/sat-estado-retenciones](https://github.com/phpcfdi/sat-estado-retenciones).
+
 **Servicio de Consulta de CFDI del SAT**:
 
 - Servicio productivo: <https://consultaqr.facturaelectronica.sat.gob.mx/ConsultaCFDIService.svc>
