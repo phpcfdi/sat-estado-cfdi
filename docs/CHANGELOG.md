@@ -6,7 +6,7 @@ Usamos [Versionado Semántico 2.0.0](SEMVER.md) por lo que puedes usar esta libr
 
 ## Cambios no liberados en una versión
 
-Pueden aparecer cambios no liberados que se integran a la rama principal pero no ameritan una nueva liberación de
+Pueden aparecer cambios no liberados que se integran a la rama principal, pero no ameritan una nueva liberación de
 versión aunque sí su incorporación en la rama principal de trabajo, generalmente se tratan de cambios en el desarrollo.
 
 ## Listado de cambios
@@ -38,7 +38,7 @@ versión aunque sí su incorporación en la rama principal de trabajo, generalme
 - Change ownership from Carlos C Soto to PhpCfdi.
 - Documentation: Update README badges, contributing instructions and license.
 - Upgrade to PHPStan 0.12.
-- Update Travis-CI and Scrutinizer pipe lines.
+- Update Travis-CI and Scrutinizer pipelines.
 - Remove PHPLint.
 
 ### Version 0.7.0 2019-05-16
