@@ -9,7 +9,7 @@ on:
 
 jobs:
 
-  ci: # this job runs all the development tools and upload code coverage to scrutinizer
+  ci: # this job runs all the development tools
 
     name: PHP 8.0 (full)
     runs-on: "ubuntu-latest"
@@ -60,13 +60,6 @@ jobs:
 
       - name: Mutation testing analysis
         run: infection --skip-initial-tests --coverage=build/coverage --no-progress --no-interaction --logger-github
-
-      # see https://github.com/marketplace/actions/action-scrutinizer
-      - name: Upload code coverage to scrutinizer
-        uses: sudo-bot/action-scrutinizer@latest
-        with:
-          cli-args: "--format=php-clover build/coverage-clover.xml"
-        continue-on-error: true
 
   build: # this job runs tests on all php supported versions
 
