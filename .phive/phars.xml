@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phive xmlns="https://phar.io/phive">
-  <phar name="php-cs-fixer" version="^3.6.0" installed="3.6.0" location="./tools/php-cs-fixer" copy="false"/>
-  <phar name="phpcs" version="^3.6.2" installed="3.6.2" location="./tools/phpcs" copy="false"/>
-  <phar name="phpcbf" version="^3.6.2" installed="3.6.2" location="./tools/phpcbf" copy="false"/>
-  <phar name="phpstan" version="^1.4.6" installed="1.4.6" location="./tools/phpstan" copy="false"/>
-  <phar name="psalm" version="^4.21.0" installed="4.21.0" location="./tools/psalm" copy="false"/>
-  <phar name="infection" version="^0.23.0" installed="0.23.0" location="./tools/infection" copy="false"/>
+  <phar name="php-cs-fixer" version="^3.14.4" installed="3.14.4" location="./tools/php-cs-fixer" copy="false"/>
+  <phar name="phpcs" version="^3.7.2" installed="3.7.2" location="./tools/phpcs" copy="false"/>
+  <phar name="phpcbf" version="^3.7.2" installed="3.7.2" location="./tools/phpcbf" copy="false"/>
+  <phar name="phpstan" version="^1.10.3" installed="1.10.3" location="./tools/phpstan" copy="false"/>
+  <phar name="psalm" version="^4.30.0" installed="4.30.0" location="./tools/psalm" copy="false"/>
+  <phar name="infection" version="^0.26.19" installed="0.26.19" location="./tools/infection" copy="false"/>
 </phive>
