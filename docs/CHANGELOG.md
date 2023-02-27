@@ -7,7 +7,24 @@ Usamos [Versionado Semántico 2.0.0](SEMVER.md) por lo que puedes usar esta libr
 ## Cambios no liberados en una versión
 
 Pueden aparecer cambios no liberados que se integran a la rama principal, pero no ameritan una nueva liberación de
-versión aunque sí su incorporación en la rama principal de trabajo, generalmente se tratan de cambios en el desarrollo.
+versión, aunque sí su incorporación en la rama principal de trabajo. Generalmente, se tratan de cambios en el desarrollo.
+
+### Mantenimiento 2023-02-27
+
+Esta es una actualización de mantenimiento que no genera una nueva liberación de código.
+
+- Se actualiza el año en la licencia. ¡Feliz 2023!
+- Se actualiza la configuración de estilo de código a la utilizada por otros proyectos de phpCfdi.
+- Se corrige la insignia `badge-build`.
+- Se corrige la liga al proyecto en la guía de contribución.
+- En los flujos de trabajo de integración continua:
+  - Se agrega PHP 8.2 a la matriz de pruebas
+  - Los trabajos se ejecutan en PHP 8.2
+  - Se actualizan las acciones de GitHub a la versión 3.
+  - Se sustituye la directiva `::set-output` por `$GITHUB_OUTPUT`.
+  - Se elimina la instalación de `composer` donde no es necesaria.
+  - Se agrega el evento `workflow_dispatch`.
+- Se actualizan las herramientas de desarrollo.
 
 ## Listado de cambios
 
