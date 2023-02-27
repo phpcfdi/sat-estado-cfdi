@@ -23,7 +23,7 @@ jobs:
         with:
           php-version: '8.2'
           coverage: none
-          tools: composer:v2, cs2pr, phpcs
+          tools: cs2pr, phpcs
         env:
           fail-fast: true
       - name: Code style (phpcs)
@@ -40,7 +40,7 @@ jobs:
         with:
           php-version: '8.2'
           coverage: none
-          tools: composer:v2, cs2pr, php-cs-fixer
+          tools: cs2pr, php-cs-fixer
         env:
           fail-fast: true
       - name: Code style (php-cs-fixer)
