@@ -17,11 +17,9 @@ use Throwable;
  */
 class ComplianceTester
 {
-    private ConsumerClientInterface $client;
-
-    public function __construct(ConsumerClientInterface $client)
-    {
-        $this->client = $client;
+    public function __construct(
+        private ConsumerClientInterface $client,
+    ) {
     }
 
     /**
@@ -43,7 +41,7 @@ class ComplianceTester
             try {
                 call_user_func($closure);
             } catch (Throwable $exception) {
-                $message = sprintf('ConsumerClientInterface %s did not pass: %s', get_class($this->client), $name);
+                $message = sprintf('ConsumerClientInterface %s did not pass: %s', $this->client::class, $name);
                 throw new RuntimeException($message, 0, $exception);
             }
         }

@@ -13,14 +13,10 @@ class Consumer
 
     public const WEBSERVICE_URI_DEVELOPMENT = 'https://pruebacfdiconsultaqr.cloudapp.net/ConsultaCFDIService.svc';
 
-    private ConsumerClientInterface $client;
-
-    private string $uri;
-
-    public function __construct(ConsumerClientInterface $factory, string $uri = self::WEBSERVICE_URI_PRODUCTION)
-    {
-        $this->client = $factory;
-        $this->uri = $uri;
+    public function __construct(
+        private ConsumerClientInterface $client,
+        private string $uri = self::WEBSERVICE_URI_PRODUCTION,
+    ) {
     }
 
     public function getClient(): ConsumerClientInterface

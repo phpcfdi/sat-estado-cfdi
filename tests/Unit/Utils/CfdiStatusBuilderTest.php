@@ -65,7 +65,6 @@ final class CfdiStatusBuilderTest extends TestCase
     }
 
     /**
-     * @param string $input
      * @testWith ["No cancelable"]
      *           ["foo"]
      *           [""]
@@ -107,7 +106,6 @@ final class CfdiStatusBuilderTest extends TestCase
     }
 
     /**
-     * @param string $input
      * @testWith [""]
      *           ["foo"]
      */
@@ -118,7 +116,6 @@ final class CfdiStatusBuilderTest extends TestCase
     }
 
     /**
-     * @param string $input
      * @testWith [""]
      *           ["100"]
      *           ["199"]

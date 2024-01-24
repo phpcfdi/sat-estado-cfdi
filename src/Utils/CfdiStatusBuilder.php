@@ -16,34 +16,19 @@ use PhpCfdi\SatEstadoCfdi\Status\QueryStatus;
  */
 class CfdiStatusBuilder
 {
-    private string $codigoEstatus;
-
-    private string $estado;
-
-    private string $esCancelable;
-
-    private string $estatusCancelacion;
-
-    private string $validacionEFOS;
-
     public function __construct(
-        string $codigoEstatus,
-        string $estado,
-        string $esCancelable,
-        string $estatusCancelacion,
-        string $validacionEFOS
+        private string $codigoEstatus,
+        private string $estado,
+        private string $esCancelable,
+        private string $estatusCancelacion,
+        private string $validacionEFOS,
     ) {
-        $this->codigoEstatus = $codigoEstatus;
-        $this->estado = $estado;
-        $this->esCancelable = $esCancelable;
-        $this->estatusCancelacion = $estatusCancelacion;
-        $this->validacionEFOS = $validacionEFOS;
     }
 
     public function createQueryStatus(): QueryStatus
     {
         // S - Comprobante obtenido satisfactoriamente
-        if (0 === strpos($this->codigoEstatus, 'S - ')) {
+        if (str_starts_with($this->codigoEstatus, 'S - ')) {
             return QueryStatus::found();
         }
         // N - 60? ...
