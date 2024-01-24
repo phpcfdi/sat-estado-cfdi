@@ -6,20 +6,15 @@ namespace PhpCfdi\SatEstadoCfdi;
 
 class CfdiStatus
 {
-    /** @var Status\QueryStatus */
-    private $query;
+    private Status\QueryStatus $query;
 
-    /** @var Status\DocumentStatus */
-    private $document;
+    private Status\DocumentStatus $document;
 
-    /** @var Status\CancellableStatus */
-    private $cancellable;
+    private Status\CancellableStatus $cancellable;
 
-    /** @var Status\CancellationStatus */
-    private $cancellation;
+    private Status\CancellationStatus $cancellation;
 
-    /** @var Status\EfosStatus */
-    private $efos;
+    private Status\EfosStatus $efos;
 
     public function __construct(
         Status\QueryStatus $query,

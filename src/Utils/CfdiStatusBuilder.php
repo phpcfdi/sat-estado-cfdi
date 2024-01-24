@@ -16,20 +16,15 @@ use PhpCfdi\SatEstadoCfdi\Status\QueryStatus;
  */
 class CfdiStatusBuilder
 {
-    /** @var string */
-    private $codigoEstatus;
+    private string $codigoEstatus;
 
-    /** @var string */
-    private $estado;
+    private string $estado;
 
-    /** @var string */
-    private $esCancelable;
+    private string $esCancelable;
 
-    /** @var string */
-    private $estatusCancelacion;
+    private string $estatusCancelacion;
 
-    /** @var string */
-    private $validacionEFOS;
+    private string $validacionEFOS;
 
     public function __construct(
         string $codigoEstatus,

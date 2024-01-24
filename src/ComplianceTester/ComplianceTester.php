@@ -17,8 +17,7 @@ use Throwable;
  */
 class ComplianceTester
 {
-    /** @var ConsumerClientInterface */
-    private $client;
+    private ConsumerClientInterface $client;
 
     public function __construct(ConsumerClientInterface $client)
     {

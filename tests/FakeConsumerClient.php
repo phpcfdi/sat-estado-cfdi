@@ -12,10 +12,8 @@ final class FakeConsumerClient implements ConsumerClientInterface
 {
     /**
      * consume method will return this variable when invoked
-     *
-     * @var ConsumerClientResponseInterface
      */
-    private $consumeResponse;
+    private ConsumerClientResponseInterface $consumeResponse;
 
     /**
      * consume method will populate this variable with $uri input
@@ -46,7 +44,7 @@ final class FakeConsumerClient implements ConsumerClientInterface
      */
     public function setClientResponse(array $predefined): void
     {
-        $this->consumeResponse = $this->consumerClientResponseFromArray($predefined);
+        $this->consumeResponse = self::consumerClientResponseFromArray($predefined);
     }
 
     /**
