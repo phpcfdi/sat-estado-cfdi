@@ -6,6 +6,7 @@ namespace PhpCfdi\SatEstadoCfdi\Tests\Unit\Utils;
 
 use PhpCfdi\SatEstadoCfdi\Tests\TestCase;
 use PhpCfdi\SatEstadoCfdi\Utils\CfdiStatusBuilder;
+use PHPUnit\Framework\Attributes\TestWith;
 
 final class CfdiStatusBuilderTest extends TestCase
 {
@@ -64,11 +65,9 @@ final class CfdiStatusBuilderTest extends TestCase
         $this->assertTrue($builder->createCancellableStatus()->isCancellableByApproval());
     }
 
-    /**
-     * @testWith ["No cancelable"]
-     *           ["foo"]
-     *           [""]
-     */
+    #[TestWith(['No cancelable'])]
+    #[TestWith(['foo'])]
+    #[TestWith([''])]
     public function testCreateUsingCancellableNotCancellable(string $input): void
     {
         $builder = new CfdiStatusBuilder('', '', $input, '', '');
@@ -105,23 +104,19 @@ final class CfdiStatusBuilderTest extends TestCase
         $this->assertTrue($builder->createCancellationStatus()->isDisapproved());
     }
 
-    /**
-     * @testWith [""]
-     *           ["foo"]
-     */
+    #[TestWith([''])]
+    #[TestWith(['foo'])]
     public function testCreateUsingCancellationAnyOtherValue(string $input): void
     {
         $builder = new CfdiStatusBuilder('', '', '', $input, '');
         $this->assertTrue($builder->createCancellationStatus()->isUndefined());
     }
 
-    /**
-     * @testWith [""]
-     *           ["100"]
-     *           ["199"]
-     *           ["201"]
-     *           ["other"]
-     */
+    #[TestWith([''])]
+    #[TestWith(['100'])]
+    #[TestWith(['199'])]
+    #[TestWith(['201'])]
+    #[TestWith(['other'])]
     public function testCreateUsingValidacionEfosIncluded(string $input): void
     {
         $builder = new CfdiStatusBuilder('', '', '', '', $input);

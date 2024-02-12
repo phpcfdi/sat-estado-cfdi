@@ -27,10 +27,10 @@
     },
     "require-dev": {
         "phpcfdi/cfdi-expresiones": "^3.0",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^11.0"
     },
     "suggest": {
-        "phpcfdi/cfdi-expresiones": "Genera expresiones de CFDI 3.3, CFDI 3.2 y RET 1.0"
+        "phpcfdi/cfdi-expresiones": "Genera expresiones de CFDI 4.0, 3.3, CFDI 3.2, RET 2.0 y RET 1.0"
     },
     "autoload": {
         "psr-4": {
@@ -54,13 +54,13 @@
         ],
         "dev:test": [
             "@dev:check-style",
-            "@php vendor/bin/phpunit --testdox --verbose --stop-on-failure",
+            "@php vendor/bin/phpunit --testdox --stop-on-failure",
             "@php tools/phpstan analyse --no-progress",
             "@php tools/psalm --no-progress",
             "@php tools/infection --no-progress --no-interaction --show-mutations"
         ],
         "dev:coverage": [
-            "@php -dzend_extension=xdebug.so -dxdebug.mode=coverage vendor/bin/phpunit --verbose --coverage-html build/coverage/html/"
+            "@php -dzend_extension=xdebug.so -dxdebug.mode=coverage vendor/bin/phpunit --coverage-html build/coverage/html/"
         ]
     },
     "scripts-descriptions": {
