@@ -22,7 +22,7 @@
         }
     },
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "eclipxe/enum": "^0.2"
     },
     "require-dev": {

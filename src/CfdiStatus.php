@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi;
 
-class CfdiStatus
+readonly class CfdiStatus
 {
     public function __construct(
         private Status\QueryStatus $query,

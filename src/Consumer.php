@@ -7,7 +7,7 @@ namespace PhpCfdi\SatEstadoCfdi;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
 use PhpCfdi\SatEstadoCfdi\Utils\CfdiStatusBuilder;
 
-class Consumer
+readonly class Consumer
 {
     public const WEBSERVICE_URI_PRODUCTION = 'https://consultaqr.facturaelectronica.sat.gob.mx/ConsultaCFDIService.svc';
 

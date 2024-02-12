@@ -14,7 +14,7 @@ use PhpCfdi\SatEstadoCfdi\Status\QueryStatus;
 /**
  * Use this object to create a CfdiStatus from the raw string states from SAT webservice
  */
-class CfdiStatusBuilder
+readonly class CfdiStatusBuilder
 {
     public function __construct(
         private string $codigoEstatus,
