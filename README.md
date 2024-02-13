@@ -256,6 +256,11 @@ Esta librería se mantendrá compatible con al menos la versión con
 También utilizamos [Versionado Semántico 2.0.0](docs/SEMVER.md) por lo que puedes usar esta librería
 sin temor a romper tu aplicación.
 
+| `sat-estado-cfdi` | Versiones soportadas de PHP  |
+|-------------------|------------------------------|
+| 1.0.3             | 7.3, 7.4, 8.0, 8.1, 8.2, 8.3 |
+| 2.0.0             | 8.2, 8.3                     |
+
 ## Contribuciones
 
 Las contribuciones con bienvenidas. Por favor lee [CONTRIBUTING][] para más detalles
