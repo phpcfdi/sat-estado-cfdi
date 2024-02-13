@@ -28,8 +28,8 @@ Para estos últimos, use la librería [phpcfdi/sat-estado-retenciones](https://g
 - Servicio productivo: <https://consultaqr.facturaelectronica.sat.gob.mx/ConsultaCFDIService.svc>
 - Servicio de pruebas: <https://pruebacfdiconsultaqr.cloudapp.net/ConsultaCFDIService.svc>
 - SAT: <https://www.sat.gob.mx/consultas/20585/conoce-los-servicios-especializados-de-validacion>
-- Documentación del Servicio de Consulta de CFDIVersión 1.3 (2020-11-18):
-  <https://www.sat.gob.mx/cs/Satellite?blobcol=urldata&blobkey=id&blobtable=MungoBlobs&blobwhere=1579314559300&ssbinary=true>
+- Documentación del Servicio de Consulta de CFDIVersión 1.4 (noviembre 2022):
+  <https://www.sat.gob.mx/cs/Satellite?blobcol=urldata&blobkey=id&blobtable=MungoBlobs&blobwhere=1461175223997&ssbinary=true>
 
 **Cambios recientes en el servicio**:
 
