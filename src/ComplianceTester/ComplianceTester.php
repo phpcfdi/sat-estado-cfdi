@@ -15,7 +15,7 @@ use Throwable;
  * If it throws an exception means that it fail
  * @codeCoverageIgnore
  */
-class ComplianceTester
+final readonly class ComplianceTester
 {
     public function __construct(
         private readonly ConsumerClientInterface $client,

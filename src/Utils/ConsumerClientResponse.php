@@ -11,10 +11,10 @@ use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientResponseInterface;
  * This is a generic implementation of ConsumerClientResponseInterface
  * You can use it, or you can create your own implementation as your convenience.
  */
-class ConsumerClientResponse implements ConsumerClientResponseInterface
+final readonly class ConsumerClientResponse implements ConsumerClientResponseInterface
 {
     /** @var ArrayObject<string, string> */
-    private readonly ArrayObject $map;
+    private ArrayObject $map;
 
     public function __construct()
     {
