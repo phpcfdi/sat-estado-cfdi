@@ -140,8 +140,8 @@ Posibles estados:
     - `Undefined`: en cualquier otro caso.
 
 - `ValidacionEFOS`: `efos(): EfosStatus`.
-    - `Included`: Si el estado no reportó `200`.
-    - `Excluded`: Si el estado reportó `200`.
+    - `Included`: Si el estado no reportó `200` o `201`.
+    - `Excluded`: Si el estado reportó `200` o `201`.
 
 #### Estados mutuamente excluyentes
 

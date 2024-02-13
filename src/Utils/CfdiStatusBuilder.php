@@ -68,7 +68,7 @@ final readonly class CfdiStatusBuilder
     public function createEfosStatus(): EfosStatus
     {
         return match ($this->validacionEFOS) {
-            '200' => EfosStatus::Excluded,
+            '200', '201' => EfosStatus::Excluded,
             default => EfosStatus::Included,
         };
     }

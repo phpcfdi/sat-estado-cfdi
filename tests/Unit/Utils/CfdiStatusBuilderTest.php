@@ -115,7 +115,7 @@ final class CfdiStatusBuilderTest extends TestCase
     #[TestWith([''])]
     #[TestWith(['100'])]
     #[TestWith(['199'])]
-    #[TestWith(['201'])]
+    #[TestWith(['202'])]
     #[TestWith(['other'])]
     public function testCreateUsingValidacionEfosIncluded(string $input): void
     {
@@ -123,9 +123,11 @@ final class CfdiStatusBuilderTest extends TestCase
         $this->assertTrue($builder->createEfosStatus()->isIncluded());
     }
 
-    public function testCreateUsingValidacionEfosExcluded(): void
+    #[TestWith(['200'])] /* RFC Emisor no EFOS */
+    #[TestWith(['201'])] /* RFC Emisor y RFC A cuenta de terceros no EFOS */
+    public function testCreateUsingValidacionEfosExcluded(string $input): void
     {
-        $builder = new CfdiStatusBuilder('', '', '', '', '200');
+        $builder = new CfdiStatusBuilder('', '', '', '', $input);
         $this->assertTrue($builder->createEfosStatus()->isExcluded());
     }
 }
