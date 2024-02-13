@@ -71,6 +71,83 @@ if ($cfdiStatus->cancellable()->isNotCancellable()) {
 }
 ```
 
+### Clientes de consumo `ConsumerClientInterface`
+
+Esta librería incluye dos diferentes clientes de consumo: `SoapConsumerClient` y `HttpConsumerClient`.
+
+Además, puedes usar tu propio cliente de consumo implementando la interface `ConsumerClientInterface`.
+
+#### Cliente SOAP `SoapConsumerClient`
+
+El cliente `SoapConsumerClient` permite hacer el consumo usando la estrategia SOAP.
+
+Requerimientos:
+
+- `ext-soap`: Extensión SOAP de PHP.
+
+Ejemplo:
+
+```php
+use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapConsumerClient;
+use PhpCfdi\SatEstadoCfdi\Consumer;
+
+function createConsumerUsingSoap(): Consumer
+{
+    $client = new SoapConsumerClient();
+    return new Consumer($client);
+}
+```
+
+#### Cliente HTTP PSR `HttpConsumerClient`
+
+El cliente `HttpConsumerClient` permite hacer el consumo usando la estrategia HTTP con base en los estándares PSR.
+
+Estándares utilizados:
+
+- PSR-18: HTTP Client: Interfaces para clientes HTTP (el que hace la llamada POST).
+  <https://www.php-fig.org/psr/psr-18/>
+- PSR-17: HTTP Factories: Interfaces de fábricas de HTTP Request y Response (para PSR-7).
+  <https://www.php-fig.org/psr/psr-17/>
+
+Las librerías de Guzzle
+[`guzzlehttp/guzzle`](https://github.com/guzzle/guzzle), y
+[`guzzlehttp/psr7`](https://github.com/guzzle/psr7)
+proveen los estándares necesarios.
+
+O puedes ver en [Packagist](https://packagist.org/) los que te agraden:
+
+- PSR-18: <https://packagist.org/providers/psr/http-client-implementation>
+- PSR-17: <https://packagist.org/providers/psr/http-factory-implementation>
+
+Requerimientos:
+
+- `ext-dom`: Extensión DOM de PHP.
+- `psr/http-client: ^1.0`: Estándar PSR-18 (Cliente HTTP).
+- `psr/http-factory: ^1.0`: Estándar PSR-17 (Fábricas de mensajes HTTP).
+- Algunas librerías que implementen PSR-18 y PSR-17, por ejemplo:
+  - Guzzle: `guzzlehttp/guzzle` y `guzzlehttp/psr7`
+  - Symfony: `symfony/http-client` y `nyholm/psr7`
+
+Ejemplo:
+
+```php
+use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerClient;
+use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerFactory;
+use PhpCfdi\SatEstadoCfdi\Consumer;
+
+function createConsumerUsingGuzzle(): Consumer
+{
+    // Implements PSR-18 \Psr\Http\Client\ClientInterface
+    $guzzleClient = new \GuzzleHttp\Client();
+    // Implements PSR-17 \Psr\Http\Message\RequestFactoryInterface and PSR-17 \Psr\Http\Message\StreamFactoryInterface
+    $guzzleFactory = new \GuzzleHttp\Psr7\HttpFactory();
+
+    $factory = new HttpConsumerFactory($guzzleClient, $guzzleFactory, $guzzleFactory);
+    $client = new HttpConsumerClient($factory);
+    return new Consumer($client);
+}
+```
+
 ### Expresiones (input)
 
 El consumidor requiere una expresión para poder consultar.
@@ -170,34 +247,6 @@ Podrías volver a enviar la solicitud de cancelación *por segunda vez* aun cuan
 En ese caso, el receptor puede aceptar o rechazar la cancelación, pero ya no aplicará un lapso de 72 horas.
 Por lo anterior entonces podrías tener el CFDI en estado de cancelación *en proceso* indefinidamente.
 Incluso, que la cancelación suceda meses después de lo esperado.
-
-## Clientes de conexión
-
-Esta librería no es la que hace directamente las conexiones al webservice del SAT.
-
-Esta función se la delega a un objeto `ConsumerClientInterface`.
-
-Tú puedes implementar tu cliente de conexión personalizado para tu entorno siempre que
-implementes la interfaz `ConsumerClientInterface`.
-
-O si lo prefieres, existen los siguientes consumidores oficiales:
-
-- [phpcfdi/sat-estado-cfdi-soap](https://github.com/phpcfdi/sat-estado-cfdi-soap):
-  Consume el webservice haciendo una llamada SOAP (sin WSDL) para obtener el resultado.
-- [phpcfdi/sat-estado-cfdi-http-psr](https://github.com/phpcfdi/sat-estado-cfdi-http-psr)
-  Consume el webservice haciendo una solicitud HTTP utilizando objetos de PSR-7, PSR17 y PSR18 *que tú provees*.
-
-### Prueba de cumplimiento de implementación
-
-Se incluye la clase `PhpCfdi\SatEstadoCfdi\ComplianceTester\ComplianceTester` que contacta al
-webservice del SAT con datos conocidos y evalua la respuesta.
-
-Los paquetes `phpcfdi/sat-estado-cfdi-soap` y `phpcfdi/sat-estado-cfdi-http-psr` implementan
-un test para asegurarse que cumplen correctamente.
-
-Si haces tu propia implementación, asegúrate de crear un test que lo cubra, puedes ver como ejemplos
-<https://github.com/phpcfdi/sat-estado-cfdi-soap/blob/main/tests/Compliance/ComplianceTest.php> o
-<https://github.com/phpcfdi/sat-estado-cfdi-http-psr/blob/main/tests/Compliance/ComplianceTest.php>.
 
 ## Compatibilidad
 
