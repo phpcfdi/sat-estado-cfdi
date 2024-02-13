@@ -17,7 +17,7 @@
 :us: This library contains helpers to consume the **Servicio de Consulta de CFDI** from **SAT**.
 The documentation of this project is in spanish as this is the natural language for intended audience.
 
-:mexico: Esta librería contiene objetos de ayuda para consumir el **Servicio de Consulta de CFDI del SAT**.
+:mexico: Esta librería se utiliza para consumir el **Servicio de Consulta de CFDI del SAT**.
 La documentación del proyecto está en español porque ese es el lenguaje de los usuarios que la utilizarán.
 
 Esta librería solo permite verificar el estado de un *CFDI Regular* y no de *CFDI de Retenciones e información de pagos*.
@@ -34,7 +34,8 @@ Para estos últimos, use la librería [phpcfdi/sat-estado-retenciones](https://g
 **Cambios recientes en el servicio**:
 
 - Por motivo del cambio en el proceso de cancelación, en 2018 agregaron nuevos estados.
-- Por una razón desconocida —e inexplicable—, el WSDL ya no se encuentra disponible desde 2018. Aunque sí se puede consumir el servicio.
+- Por una razón desconocida e inexplicable, el WSDL no estuvo disponible de 2018 a 2020.
+  Esta librería usa una estrategia en donde no depende del WSDL para consumir el servicio.
 - A finales de 2020 agregaron el campo de respuesta `VerificacionEFOS`.
 
 ## Instalación
@@ -153,7 +154,7 @@ function createConsumerUsingGuzzle(): Consumer
 El consumidor requiere una expresión para poder consultar.
 La expresión es el texto que viene en el código QR de la representación impresa de un CFDI.
 
-Las expresiones son diferentes para CFDI 3.2, CFDI 3.3 y RET 1.0.
+Las expresiones son diferentes para CFDI 3.2, CFDI 3.3, CFDI 4.0, RET 1.0 y RET 2.0.
 Tienen reglas específicas de formato y de la información que debe contener.
 
 Si no cuentas con la expresión, te recomiendo usar la librería
@@ -169,7 +170,7 @@ use PhpCfdi\SatEstadoCfdi\Consumer;
 
 // lectura del contenido del CFDI
 $document = new DOMDocument();
-$document->load('archivo-cfdi33.xml');
+$document->load('archivo-cfdi.xml');
 
 // creación de la expresión
 $expressionExtractor = new DiscoverExtractor();
