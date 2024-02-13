@@ -15,10 +15,10 @@ use Throwable;
  * If it throws an exception means that it fail
  * @codeCoverageIgnore
  */
-readonly class ComplianceTester
+class ComplianceTester
 {
     public function __construct(
-        private ConsumerClientInterface $client,
+        private readonly ConsumerClientInterface $client,
     ) {
     }
 

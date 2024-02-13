@@ -14,14 +14,14 @@ use PhpCfdi\SatEstadoCfdi\Status\QueryStatus;
 /**
  * Use this object to create a CfdiStatus from the raw string states from SAT webservice
  */
-readonly class CfdiStatusBuilder
+class CfdiStatusBuilder
 {
     public function __construct(
-        private string $codigoEstatus,
-        private string $estado,
-        private string $esCancelable,
-        private string $estatusCancelacion,
-        private string $validacionEFOS,
+        private readonly string $codigoEstatus,
+        private readonly string $estado,
+        private readonly string $esCancelable,
+        private readonly string $estatusCancelacion,
+        private readonly string $validacionEFOS,
     ) {
     }
 

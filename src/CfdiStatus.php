@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi;
 
-readonly class CfdiStatus
+class CfdiStatus
 {
     public function __construct(
-        private Status\QueryStatus $query,
-        private Status\DocumentStatus $document,
-        private Status\CancellableStatus $cancellable,
-        private Status\CancellationStatus $cancellation,
-        private Status\EfosStatus $efos
+        private readonly Status\QueryStatus $query,
+        private readonly Status\DocumentStatus $document,
+        private readonly Status\CancellableStatus $cancellable,
+        private readonly Status\CancellationStatus $cancellation,
+        private readonly Status\EfosStatus $efos
     ) {
     }
 

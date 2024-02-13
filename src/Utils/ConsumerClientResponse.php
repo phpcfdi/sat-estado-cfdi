@@ -14,7 +14,7 @@ use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientResponseInterface;
 class ConsumerClientResponse implements ConsumerClientResponseInterface
 {
     /** @var ArrayObject<string, string> */
-    private $map;
+    private readonly ArrayObject $map;
 
     public function __construct()
     {
@@ -23,11 +23,11 @@ class ConsumerClientResponse implements ConsumerClientResponseInterface
 
     public function set(string $keyword, string $content): void
     {
-        $this->map[$keyword] = $content;
+        $this->map->offsetSet($keyword, $content);
     }
 
     public function get(string $keyword): string
     {
-        return $this->map[$keyword] ?? '';
+        return $this->map->offsetExists($keyword) ? strval($this->map->offsetGet($keyword)) : '';
     }
 }
