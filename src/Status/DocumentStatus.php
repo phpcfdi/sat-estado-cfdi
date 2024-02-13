@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi\Status;
 
-use Eclipxe\Enum\Enum;
+use PhpCfdi\SatEstadoCfdi\Internal\EnumIsTypeTrait;
 
 /**
- * @method static self active()
- * @method static self cancelled()
- * @method static self notFound()
- *
  * @method bool isActive()
  * @method bool isCancelled()
  * @method bool isNotFound()
  */
-class DocumentStatus extends Enum
+enum DocumentStatus
 {
+    use EnumIsTypeTrait;
+
+    case Active;
+    case Cancelled;
+    case NotFound;
 }

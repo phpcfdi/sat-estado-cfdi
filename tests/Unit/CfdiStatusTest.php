@@ -16,11 +16,11 @@ final class CfdiStatusTest extends TestCase
 {
     public function testObjectReturnCorrectProperties(): void
     {
-        $query = QueryStatus::found();
-        $document = DocumentStatus::active();
-        $cancellable = CancellableStatus::notCancellable();
-        $cancellation = CancellationStatus::undefined();
-        $efos = EfosStatus::excluded();
+        $query = QueryStatus::Found;
+        $document = DocumentStatus::Active;
+        $cancellable = CancellableStatus::NotCancellable;
+        $cancellation = CancellationStatus::Undefined;
+        $efos = EfosStatus::Excluded;
         $cfdiStatus = new CfdiStatus($query, $document, $cancellable, $cancellation, $efos);
 
         $this->assertSame($query, $cfdiStatus->query());

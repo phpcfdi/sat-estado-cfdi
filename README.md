@@ -112,38 +112,38 @@ if ($cfdiStatus->document()->isActive()) {
 
 Después de consumir el servicio, se responderá con un objeto `CfdiStatus` que agrupa de los cuatro estados.
 
-No compares directamente los valores de los estados, en su lugar utiliza los métodos `is*`,
-por ejemplo `$response->document()->isCancelled()`.
+Los estados son enumeradores, puedes compararlos rápidamente usando métodos de ayuda `is*`,
+por ejemplo: `$response->document()->isCancelled()`.
 
 Posibles estados:
 
 - `CodigoEstatus`: `query(): QueryStatus`.
-    - `found`: Si el estado inicia con `S - `.
-    - `notFound`: en cualquier otro caso.
+    - `Found`: Si el estado inicia con `S - `.
+    - `NotFound`: en cualquier otro caso.
 
 - `Estado`: `document(): DocumentStatus`.
-    - `active`: Si el estado reportó `Vigente`.
-    - `cancelled`: Si el estado reportó `Cancelado`.
-    - `notFound`: en cualquier otro caso.
+    - `Active`: Si el estado reportó `Vigente`.
+    - `Cancelled`: Si el estado reportó `Cancelado`.
+    - `NotFound`: en cualquier otro caso.
 
 - `EsCancelable`: `cancellable(): CancellableStatus`.
-    - `cancellableByDirectCall`: Si el estado reportó `Cancelable sin aceptación`.
-    - `cancellableByApproval`: Si el estado reportó `Cancelable con aceptación`.
-    - `notCancellable`: en cualquier otro caso.
+    - `CancellableByDirectCall`: Si el estado reportó `Cancelable sin aceptación`.
+    - `CancellableByApproval`: Si el estado reportó `Cancelable con aceptación`.
+    - `NotCancellable`: en cualquier otro caso.
 
 - `EstatusCancelacion`: `cancellation(): CancellationStatus`.
-    - `cancelledByDirectCall`: Si el estado reportó `Cancelado sin aceptación`.
-    - `cancelledByApproval`: Si el estado reportó `Cancelado con aceptación`.
-    - `cancelledByExpiration`: Si el estado reportó `Plazo vencido`.
-    - `pending`: Si el estado reportó `En proceso`.
-    - `disapproved`: Si el estado reportó `Solicitud rechazada`.
-    - `undefined`: en cualquier otro caso.
+    - `CancelledByDirectCall`: Si el estado reportó `Cancelado sin aceptación`.
+    - `CancelledByApproval`: Si el estado reportó `Cancelado con aceptación`.
+    - `CancelledByExpiration`: Si el estado reportó `Plazo vencido`.
+    - `Pending`: Si el estado reportó `En proceso`.
+    - `Disapproved`: Si el estado reportó `Solicitud rechazada`.
+    - `Undefined`: en cualquier otro caso.
 
 - `ValidacionEFOS`: `efos(): EfosStatus`.
-    - `included`: Si el estado no reportó `200`.
-    - `excluded`: Si el estado reportó `200`.
+    - `Included`: Si el estado no reportó `200`.
+    - `Excluded`: Si el estado reportó `200`.
 
-#### Estados mutuamente excluyentes:
+#### Estados mutuamente excluyentes
 
 | CodigoEstatus | Estado    | EsCancelable              | EstatusCancelacion       | Explicación                                               |
 |---------------|-----------|---------------------------|--------------------------|-----------------------------------------------------------|

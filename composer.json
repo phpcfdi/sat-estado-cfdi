@@ -22,8 +22,7 @@
         }
     },
     "require": {
-        "php": ">=8.2",
-        "eclipxe/enum": "^0.2"
+        "php": ">=8.2"
     },
     "require-dev": {
         "phpcfdi/cfdi-expresiones": "^3.0",
