@@ -11,5 +11,7 @@
     "mutators": {
         "@default": true
     },
-    "initialTestsPhpOptions": "-dzend_extension=xdebug.so -dxdebug.mode=coverage"
+    "initialTestsPhpOptions": "-dzend_extension=xdebug.so -dxdebug.mode=coverage",
+    "testFramework": "phpunit",
+    "testFrameworkOptions": "--testsuite=unit"
 }
