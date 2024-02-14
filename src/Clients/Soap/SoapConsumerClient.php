@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi\Clients\Soap;
 
+use PhpCfdi\SatEstadoCfdi\Contracts\Constants;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientResponseInterface;
 use PhpCfdi\SatEstadoCfdi\Utils\ConsumerClientResponse;
@@ -14,7 +15,7 @@ use stdClass;
 final readonly class SoapConsumerClient implements ConsumerClientInterface
 {
     public const SOAP_OPTIONS = [
-        'soapaction' => 'http://tempuri.org/IConsultaCFDIService/Consulta',
+        'soapaction' => Constants::SOAP_ACTION,
     ];
 
     public function __construct(
@@ -35,7 +36,7 @@ final readonly class SoapConsumerClient implements ConsumerClientInterface
         $encoding = null;
         $soapClient = $this->getSoapClientFactory()->create($uri);
         $arguments = [
-            new SoapVar($expression, $encoding, '', '', 'expresionImpresa', 'http://tempuri.org/'),
+            new SoapVar($expression, $encoding, '', '', 'expresionImpresa', Constants::XMLNS_SOAP_URI),
         ];
         $options = self::SOAP_OPTIONS;
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi\Clients\Soap;
 
+use PhpCfdi\SatEstadoCfdi\Contracts\Constants;
 use SoapClient;
 
 class SoapClientFactory
@@ -13,7 +14,7 @@ class SoapClientFactory
         'location' => '',
 
         // target namespace of the SOAP service
-        'uri' => 'http://tempuri.org/',
+        'uri' => Constants::XMLNS_SOAP_URI,
 
         // SOAP_RPC (default) or SOAP_DOCUMENT, must be SOAP_RPC
         'style' => SOAP_RPC,

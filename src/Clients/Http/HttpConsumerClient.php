@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpCfdi\SatEstadoCfdi\Clients\Http;
 
 use PhpCfdi\SatEstadoCfdi\Clients\Http\Internal\SoapXml;
+use PhpCfdi\SatEstadoCfdi\Contracts\Constants;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientResponseInterface;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -33,7 +34,7 @@ class HttpConsumerClient implements ConsumerClientInterface
 
         // headers
         $request = $request->withHeader('Content-Type', 'text/xml; charset=utf-8');
-        $request = $request->withHeader('SOAPAction', 'http://tempuri.org/IConsultaCFDIService/Consulta');
+        $request = $request->withHeader('SOAPAction', Constants::SOAP_ACTION);
 
         // body
         $xml = $this->soapXml->createXmlRequest($expression);

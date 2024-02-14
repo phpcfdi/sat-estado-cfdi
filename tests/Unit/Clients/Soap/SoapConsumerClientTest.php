@@ -10,6 +10,7 @@ use DOMDocument;
 use DOMXPath;
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapClientFactory;
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapConsumerClient;
+use PhpCfdi\SatEstadoCfdi\Contracts\Constants;
 use PhpCfdi\SatEstadoCfdi\Tests\TestCase;
 use PhpCfdi\SatEstadoCfdi\Utils\ConsumerClientResponse;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -95,12 +96,12 @@ final class SoapConsumerClientTest extends TestCase
         $expectedExpression = 'expression';
         $soapUriHost = 'localhost';
         $soapUriPath = '/non-existent-service';
-        $soapUri = sprintf('http://%s%s', $soapUriHost, $soapUriPath);
+        $soapUri = sprintf('%s://%s%s', 'http', $soapUriHost, $soapUriPath);
         $expectedHeaderHost = sprintf('Host: %s', $soapUriHost);
         $expectedHeaderCommand = sprintf('POST %s', $soapUriPath);
-        $expectedHeaderHostAction = 'SOAPAction: "http://tempuri.org/IConsultaCFDIService/Consulta"';
+        $expectedHeaderHostAction = sprintf('SOAPAction: "%s"', Constants::SOAP_ACTION);
         $soapClient = new SoapClient(null, [
-            'uri' => 'http://tempuri.org/',
+            'uri' => Constants::XMLNS_SOAP_URI,
             'location' => $soapUri,
             'trace' => true,
         ]);
@@ -130,8 +131,8 @@ final class SoapConsumerClientTest extends TestCase
         $document->formatOutput = true;
         $document->loadXML($requestBody);
         $xpath = new DOMXPath($document, false);
-        $xpath->registerNamespace('e', 'http://schemas.xmlsoap.org/soap/envelope/');
-        $xpath->registerNamespace('x', 'http://tempuri.org/');
+        $xpath->registerNamespace('e', Constants::XMLNS_ENVELOPE);
+        $xpath->registerNamespace('x', Constants::XMLNS_SOAP_URI);
 
         $this->assertSame(
             $expectedExpression,

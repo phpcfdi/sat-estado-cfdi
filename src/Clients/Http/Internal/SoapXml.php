@@ -6,6 +6,7 @@ namespace PhpCfdi\SatEstadoCfdi\Clients\Http\Internal;
 
 use DOMDocument;
 use DOMElement;
+use PhpCfdi\SatEstadoCfdi\Contracts\Constants;
 
 /**
  * Class to create requests and process responses
@@ -15,8 +16,6 @@ use DOMElement;
  */
 final readonly class SoapXml
 {
-    private const XML_NAMESPACE = 'http://tempuri.org/';
-
     /**
      * Extract the information from expected soap response
      *
@@ -50,7 +49,7 @@ final readonly class SoapXml
     private function obtainFirstElement(DOMDocument $document, string $elementName): ?DOMElement
     {
         /** @var iterable<DOMElement> $elements */
-        $elements = $document->getElementsByTagNameNS(self::XML_NAMESPACE, $elementName);
+        $elements = $document->getElementsByTagNameNS(Constants::XMLNS_SOAP_URI, $elementName);
         foreach ($elements as $consultaResult) {
             return $consultaResult;
         }
@@ -59,13 +58,13 @@ final readonly class SoapXml
 
     public function createXmlRequest(string $expression): string
     {
-        $soap = 'http://schemas.xmlsoap.org/soap/envelope/';
+        $soap = Constants::XMLNS_ENVELOPE;
         $document = new DOMDocument('1.0', 'UTF-8');
         /** @noinspection PhpUnhandledExceptionInspection */
         $document->appendChild($document->createElementNS($soap, 's:Envelope'))
             ->appendChild($document->createElementNS($soap, 's:Body'))
-            ->appendChild($document->createElementNS(self::XML_NAMESPACE, 'c:Consulta'))
-            ->appendChild($document->createElementNS(self::XML_NAMESPACE, 'c:expresionImpresa'))
+            ->appendChild($document->createElementNS(Constants::XMLNS_SOAP_URI, 'c:Consulta'))
+            ->appendChild($document->createElementNS(Constants::XMLNS_SOAP_URI, 'c:expresionImpresa'))
             ->appendChild($document->createTextNode($expression));
         return strval($document->saveXML());
     }

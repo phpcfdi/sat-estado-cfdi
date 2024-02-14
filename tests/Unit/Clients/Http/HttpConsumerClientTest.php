@@ -7,6 +7,7 @@ namespace PhpCfdi\SatEstadoCfdi\Tests\Unit\Clients\Http;
 use GuzzleHttp\Psr7\HttpFactory as ResponseFactory;
 use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerClient;
 use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerFactoryInterface;
+use PhpCfdi\SatEstadoCfdi\Contracts\Constants;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
 use PhpCfdi\SatEstadoCfdi\Tests\HttpTestCase as TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,7 +30,7 @@ final class HttpConsumerClientTest extends TestCase
         $expectedFile = $this->filePath('soap-request-foobar.xml');
         $expectedUri = 'http://example.com/';
         $expectedContentType = 'text/xml; charset=utf-8';
-        $expectedSoapAction = 'http://tempuri.org/IConsultaCFDIService/Consulta';
+        $expectedSoapAction = Constants::SOAP_ACTION;
 
         $factory = $this->createHttpConsumerFactory();
         $client = new HttpConsumerClient($factory);
