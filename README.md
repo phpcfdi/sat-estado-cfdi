@@ -149,6 +149,49 @@ function createConsumerUsingGuzzle(): Consumer
 }
 ```
 
+El siguiente es un ejemplo usando `symfony/http-client` y `nyholm/psr7`:
+
+```php
+use PhpCfdi\SatEstadoCfdi\Consumer;
+use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerClient;
+use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerFactory;
+
+function createConsumerUsingSymfonyNyholm(): Consumer
+{
+    $httpClient = new \Symfony\Component\HttpClient\Psr18Client();
+    $messageFactory = new \Nyholm\Psr7\Factory\Psr17Factory();
+    
+    $factory = new HttpConsumerFactory($httpClient, $messageFactory, $messageFactory);
+    $client = new HttpConsumerClient($factory);
+    return new Consumer($client);
+}
+```
+
+Para Laravel puedes usar algún paquete adicional como [`wimski/laravel-psr-http`](https://packagist.org/packages/wimski/laravel-psr-http),
+que gracias al uso del propio framework y `php-http/discovery`, facilita la creación de los objetos,
+ya sea que los fabrique directamente usando el contenedor, o bien los inyecte como dependencias.
+
+```php
+<?php
+use PhpCfdi\SatEstadoCfdi\Consumer;
+use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerClient;
+use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerFactory;
+
+function createConsumerUsingLaravel(): Consumer
+{
+    $httpClient = app(\Psr\Http\Client\ClientInterface::class);
+    $requestFactory = app(Psr\Http\Message\RequestFactoryInterface::class);
+    $streamFactory = app(Psr\Http\Message\StreamFactoryInterface::class);
+    
+    $factory = new HttpConsumerFactory($httpClient, $requestFactory, $streamFactory);
+    $client = new HttpConsumerClient($factory);
+    return new Consumer($client);
+}
+```
+
+También te recomiendo hacer tu propio *Service Provider* o configurar el *Service Container*
+y solo requerir la clase `Consumer` como cualquier otra dependencia y permitir que sea inyectada.
+
 ### Expresiones (input)
 
 El consumidor requiere una expresión para poder consultar.
