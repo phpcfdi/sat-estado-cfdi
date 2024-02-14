@@ -57,8 +57,6 @@ Los pasos básicos son:
 
 ```php
 <?php
-declare(strict_types=1);
-
 use PhpCfdi\SatEstadoCfdi\Consumer;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
 
@@ -89,6 +87,7 @@ Requerimientos:
 Ejemplo:
 
 ```php
+<?php
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapConsumerClient;
 use PhpCfdi\SatEstadoCfdi\Consumer;
 
@@ -126,12 +125,13 @@ Requerimientos:
 - `psr/http-client: ^1.0`: Estándar PSR-18 (Cliente HTTP).
 - `psr/http-factory: ^1.0`: Estándar PSR-17 (Fábricas de mensajes HTTP).
 - Algunas librerías que implementen PSR-18 y PSR-17, por ejemplo:
-  - Guzzle: `guzzlehttp/guzzle` y `guzzlehttp/psr7`
-  - Symfony: `symfony/http-client` y `nyholm/psr7`
+  - Guzzle: `guzzlehttp/guzzle` y `guzzlehttp/psr7`.
+  - Symfony: `symfony/http-client` y `nyholm/psr7` o `laminas/laminas-diactoros`.
 
 Ejemplo:
 
 ```php
+<?php
 use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerClient;
 use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerFactory;
 use PhpCfdi\SatEstadoCfdi\Consumer;
@@ -163,8 +163,6 @@ usando `composer require phpcfdi/cfdi-expresiones`.
 
 ```php
 <?php
-declare(strict_types=1);
-
 use PhpCfdi\CfdiExpresiones\DiscoverExtractor;
 use PhpCfdi\SatEstadoCfdi\Consumer;
 
