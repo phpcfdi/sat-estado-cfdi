@@ -1,13 +1,16 @@
 <?php
 
+/** @noinspection PhpUnhandledExceptionInspection */
+
 declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi\Tests\Unit\Clients\Soap;
 
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapClientFactory;
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapConsumerClient;
+use PhpCfdi\SatEstadoCfdi\Consumer;
 use PhpCfdi\SatEstadoCfdi\Tests\TestCase;
-use PHPUnit\Framework\MockObject\Exception;
+use PhpCfdi\SatEstadoCfdi\Utils\ConsumerClientResponse;
 use PHPUnit\Framework\MockObject\MockObject;
 use SoapClient;
 use SoapVar;
@@ -74,27 +77,26 @@ final class SoapConsumerClientTest extends TestCase
         $this->assertSame('X - dummy!', $response->get('EstadoConsulta'));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testMethodCallConsulta(): void
     {
-        $client = new class () extends SoapConsumerClient {
-            public function callConsulta(SoapClient $soapClient, array $arguments, array $options) // phpcs:ignore
-            {
-                return parent::callConsulta($soapClient, $arguments, $options);
-            }
-        };
-        $fakeResult = (object) ['result' => 'ok'];
-        $arguments = [];
-        $options = [];
+        $expectedResultValues = ['x-key' => 'x-value'];
+        $expectedResult = new ConsumerClientResponse($expectedResultValues);
+
         /** @var SoapClient&MockObject $soapClient */
         $soapClient = $this->createMock(SoapClient::class);
         $soapClient->expects($this->once())
             ->method('__soapCall')
-            ->with('Consulta', $arguments, $options, null, null)
-            ->willReturn($fakeResult);
-        $value = $client->callConsulta($soapClient, $arguments, $options);
-        $this->assertSame($fakeResult, $value);
+            ->willReturn((object) $expectedResultValues);
+
+        /** @var SoapClientFactory&MockObject $factory */
+        $factory = $this->createMock(SoapClientFactory::class);
+        $factory->expects($this->once())
+            ->method('create')
+            ->willReturn($soapClient);
+
+        $client = new SoapConsumerClient($factory);
+
+        $value = $client->consume(Consumer::WEBSERVICE_URI_DEVELOPMENT, '...expression');
+        $this->assertEquals($expectedResult, $value);
     }
 }
