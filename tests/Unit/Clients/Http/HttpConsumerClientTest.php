@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi\Tests\Unit\Clients\Http;
 
-use GuzzleHttp\Psr7\HttpFactory as ResponseFactory;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\HttpFactory;
 use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerClient;
+use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerFactory;
 use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerFactoryInterface;
 use PhpCfdi\SatEstadoCfdi\Contracts\Constants;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
@@ -60,23 +64,18 @@ final class HttpConsumerClientTest extends TestCase
 
     public function testConsume(): void
     {
+        $httpFactory = new HttpFactory();
         $xmlContent = $this->fileContentPath('soap-response.xml');
-        $factory = $this->createHttpConsumerFactory();
-        $preparedResponse = (new ResponseFactory())->createResponse(200)
-            ->withBody($factory->streamFactory()->createStream($xmlContent));
-
-        // create a class that intercept sendRequest and return a prepared Response object
-        /**
-         * @var HttpConsumerClient&MockObject $client
-         */
-        $client = $this->getMockBuilder(HttpConsumerClient::class)
-            ->enableOriginalConstructor()
-            ->setConstructorArgs([$factory])
-            ->onlyMethods(['sendRequest'])
-            ->getMock();
-        $client->method('sendRequest')->willReturn($preparedResponse);
+        $preparedResponse = $httpFactory->createResponse(200)
+            ->withBody($httpFactory->createStream($xmlContent));
+        $httpClient = new Client(['handler' => HandlerStack::create(
+            new MockHandler([$preparedResponse]),
+        )]);
+        $factory = new HttpConsumerFactory($httpClient, $httpFactory, $httpFactory);
+        $client = new HttpConsumerClient($factory);
 
         $container = $client->consume('https://example.com/', '');
+
         $this->assertSame('S - Comprobante obtenido satisfactoriamente.', $container->get('CodigoEstatus'));
     }
 
@@ -100,13 +99,7 @@ final class HttpConsumerClientTest extends TestCase
             ->method('httpClient')
             ->willReturn($httpClient);
 
-        $httpConsumetClient = new class ($factory) extends HttpConsumerClient {
-            /** @noinspection PhpOverridingMethodVisibilityInspection */
-            public function sendRequest(RequestInterface $request): ResponseInterface // phpcs:ignore
-            {
-                return parent::sendRequest($request);
-            }
-        };
+        $httpConsumetClient = new HttpConsumerClient($factory);
 
         $this->assertSame($response, $httpConsumetClient->sendRequest($request));
     }

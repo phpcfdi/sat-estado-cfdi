@@ -16,12 +16,12 @@ use Psr\Http\Message\StreamFactoryInterface;
  * store request factory and stream factory (psr-17)
  * and create the ConsumerClientResponse
  */
-class HttpConsumerFactory implements HttpConsumerFactoryInterface
+final readonly class HttpConsumerFactory implements HttpConsumerFactoryInterface
 {
     public function __construct(
-        private readonly ClientInterface $httpClient,
-        private readonly RequestFactoryInterface $requestFactory,
-        private readonly StreamFactoryInterface $streamFactory,
+        private ClientInterface $httpClient,
+        private RequestFactoryInterface $requestFactory,
+        private StreamFactoryInterface $streamFactory,
     ) {
     }
 

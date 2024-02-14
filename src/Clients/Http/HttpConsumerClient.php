@@ -12,12 +12,12 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class HttpConsumerClient implements ConsumerClientInterface
+final readonly class HttpConsumerClient implements ConsumerClientInterface
 {
-    private readonly SoapXml $soapXml;
+    private SoapXml $soapXml;
 
     public function __construct(
-        private readonly HttpConsumerFactoryInterface $factory,
+        private HttpConsumerFactoryInterface $factory,
     ) {
         $this->soapXml = new SoapXml();
     }
@@ -72,7 +72,7 @@ class HttpConsumerClient implements ConsumerClientInterface
      * @return ResponseInterface
      * @throws ClientExceptionInterface
      */
-    protected function sendRequest(RequestInterface $request): ResponseInterface
+    public function sendRequest(RequestInterface $request): ResponseInterface
     {
         return $this->factory->httpClient()->sendRequest($request);
     }
