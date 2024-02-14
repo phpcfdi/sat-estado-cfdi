@@ -13,7 +13,7 @@ use DOMElement;
  *
  * @internal
  */
-class SoapXml
+final readonly class SoapXml
 {
     private const XML_NAMESPACE = 'http://tempuri.org/';
 
@@ -61,6 +61,7 @@ class SoapXml
     {
         $soap = 'http://schemas.xmlsoap.org/soap/envelope/';
         $document = new DOMDocument('1.0', 'UTF-8');
+        /** @noinspection PhpUnhandledExceptionInspection */
         $document->appendChild($document->createElementNS($soap, 's:Envelope'))
             ->appendChild($document->createElementNS($soap, 's:Body'))
             ->appendChild($document->createElementNS(self::XML_NAMESPACE, 'c:Consulta'))
