@@ -6,17 +6,37 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi\Tests\Unit\Clients\Soap;
 
+use DOMDocument;
+use DOMXPath;
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapClientFactory;
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapConsumerClient;
-use PhpCfdi\SatEstadoCfdi\Consumer;
 use PhpCfdi\SatEstadoCfdi\Tests\TestCase;
 use PhpCfdi\SatEstadoCfdi\Utils\ConsumerClientResponse;
 use PHPUnit\Framework\MockObject\MockObject;
 use SoapClient;
-use SoapVar;
+use SoapFault;
+use stdClass;
 
 final class SoapConsumerClientTest extends TestCase
 {
+    /** @param stdClass|array<mixed>|false $expectedResultValues */
+    private function createClientWithMockSoapClient($expectedResultValues): SoapConsumerClient
+    {
+        /** @var SoapClient&MockObject $soapClient */
+        $soapClient = $this->createMock(SoapClient::class);
+        $soapClient->expects($this->once())
+            ->method('__soapCall')
+            ->willReturn($expectedResultValues);
+
+        /** @var SoapClientFactory&MockObject $factory */
+        $factory = $this->createMock(SoapClientFactory::class);
+        $factory->expects($this->once())
+            ->method('create')
+            ->willReturn($soapClient);
+
+        return new SoapConsumerClient($factory);
+    }
+
     public function testConsumerClientCanBeCreatedWithoutArguments(): void
     {
         $client = new SoapConsumerClient();
@@ -32,48 +52,30 @@ final class SoapConsumerClientTest extends TestCase
 
     public function testConsumeReceivingFalseAsResponse(): void
     {
-        $client = new SpySoapConsumerClient(false);
+        $client = $this->createClientWithMockSoapClient(false);
 
         $response = $client->consume('serviceUri', 'expression');
+
         $this->assertSame('', $response->get('EstadoConsulta'));
-    }
-
-    public function testConsumeSpyCallConsulta(): void
-    {
-        $soapConsumerClient = new SpySoapConsumerClient(false);
-        $soapConsumerClient->doParentCallConsulta = true;
-        $expression = 'expression';
-        $soapUri = 'http://localhost/non-existent-service';
-        $soapConsumerClient->consume($soapUri, $expression);
-
-        $requestHeaders = (string) $soapConsumerClient->lastSoapClient->__getLastRequestHeaders();
-        $this->assertStringContainsString('Host: localhost', $requestHeaders);
-        $this->assertStringContainsString('POST /non-existent-service', $requestHeaders);
-
-        $argument = $soapConsumerClient->lastArguments[0] ?? null;
-        $this->assertNotNull($argument);
-        $this->assertInstanceOf(SoapVar::class, $argument);
-        $this->assertSame($expression, $argument->enc_value);
-
-        $options = $soapConsumerClient->lastOptions;
-        $this->assertSame($soapConsumerClient::SOAP_OPTIONS, $options);
     }
 
     public function testConsumeReceivingArrayAsResponse(): void
     {
         $callReturn = ['EstadoConsulta' => 'X - dummy!'];
-        $client = new SpySoapConsumerClient($callReturn);
+        $client = $this->createClientWithMockSoapClient($callReturn);
 
         $response = $client->consume('serviceUri', 'expression');
+
         $this->assertSame('X - dummy!', $response->get('EstadoConsulta'));
     }
 
     public function testConsumeReceivingStdclassAsResponse(): void
     {
         $callReturn = (object) ['EstadoConsulta' => 'X - dummy!'];
-        $client = new SpySoapConsumerClient($callReturn);
+        $client = $this->createClientWithMockSoapClient($callReturn);
 
         $response = $client->consume('serviceUri', 'expression');
+
         $this->assertSame('X - dummy!', $response->get('EstadoConsulta'));
     }
 
@@ -81,22 +83,59 @@ final class SoapConsumerClientTest extends TestCase
     {
         $expectedResultValues = ['x-key' => 'x-value'];
         $expectedResult = new ConsumerClientResponse($expectedResultValues);
+        $client = $this->createClientWithMockSoapClient((object) $expectedResultValues);
 
-        /** @var SoapClient&MockObject $soapClient */
-        $soapClient = $this->createMock(SoapClient::class);
-        $soapClient->expects($this->once())
-            ->method('__soapCall')
-            ->willReturn((object) $expectedResultValues);
+        $value = $client->consume('serviceUri', '...expression');
 
+        $this->assertEquals($expectedResult, $value);
+    }
+
+    public function testSoapRequestContent(): void
+    {
+        $expectedExpression = 'expression';
+        $soapUriHost = 'localhost';
+        $soapUriPath = '/non-existent-service';
+        $soapUri = sprintf('http://%s%s', $soapUriHost, $soapUriPath);
+        $expectedHeaderHost = sprintf('Host: %s', $soapUriHost);
+        $expectedHeaderCommand = sprintf('POST %s', $soapUriPath);
+        $expectedHeaderHostAction = 'SOAPAction: "http://tempuri.org/IConsultaCFDIService/Consulta"';
+        $soapClient = new SoapClient(null, [
+            'uri' => 'http://tempuri.org/',
+            'location' => $soapUri,
+            'trace' => true,
+        ]);
         /** @var SoapClientFactory&MockObject $factory */
         $factory = $this->createMock(SoapClientFactory::class);
         $factory->expects($this->once())
             ->method('create')
             ->willReturn($soapClient);
-
         $client = new SoapConsumerClient($factory);
 
-        $value = $client->consume(Consumer::WEBSERVICE_URI_DEVELOPMENT, '...expression');
-        $this->assertEquals($expectedResult, $value);
+        try {
+            $client->consume($soapUri, $expectedExpression);
+        } catch (SoapFault) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement
+        }
+
+        $requestHeaders = (string) $soapClient->__getLastRequestHeaders();
+        $this->assertStringContainsString($expectedHeaderHost, $requestHeaders);
+        $this->assertStringContainsString($expectedHeaderCommand, $requestHeaders);
+        $this->assertStringContainsString(
+            $expectedHeaderHostAction,
+            $requestHeaders,
+        );
+
+        $requestBody = (string) $soapClient->__getLastRequest();
+        $document = new DOMDocument();
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+        $document->loadXML($requestBody);
+        $xpath = new DOMXPath($document, false);
+        $xpath->registerNamespace('e', 'http://schemas.xmlsoap.org/soap/envelope/');
+        $xpath->registerNamespace('x', 'http://tempuri.org/');
+
+        $this->assertSame(
+            $expectedExpression,
+            ($xpath->query('//x:Consulta/x:expresionImpresa/text()') ?: null)?->item(0)?->textContent,
+        );
     }
 }

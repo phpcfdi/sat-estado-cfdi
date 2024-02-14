@@ -7,19 +7,18 @@ namespace PhpCfdi\SatEstadoCfdi\Clients\Soap;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientResponseInterface;
 use PhpCfdi\SatEstadoCfdi\Utils\ConsumerClientResponse;
-use SoapClient;
 use SoapFault;
 use SoapVar;
 use stdClass;
 
-class SoapConsumerClient implements ConsumerClientInterface
+final readonly class SoapConsumerClient implements ConsumerClientInterface
 {
     public const SOAP_OPTIONS = [
         'soapaction' => 'http://tempuri.org/IConsultaCFDIService/Consulta',
     ];
 
     public function __construct(
-        private readonly SoapClientFactory $soapClientFactory = new SoapClientFactory(),
+        private SoapClientFactory $soapClientFactory = new SoapClientFactory(),
     ) {
     }
 
@@ -41,7 +40,8 @@ class SoapConsumerClient implements ConsumerClientInterface
         $options = self::SOAP_OPTIONS;
 
         // make call
-        $data = $this->callConsulta($soapClient, $arguments, $options);
+        /** @var stdClass|array<mixed>|false $data */
+        $data = $soapClient->__soapCall('Consulta', $arguments, $options);
 
         // process call
         if (is_array($data)) {
@@ -59,20 +59,5 @@ class SoapConsumerClient implements ConsumerClientInterface
         }
 
         return $clientResponse;
-    }
-
-    /**
-     * This method is abstracted here to be able to mock responses in tests.
-     *
-     * @param mixed[] $arguments
-     * @param array<string, mixed> $options
-     * @return stdClass|mixed[]|false
-     * @throws SoapFault
-     */
-    protected function callConsulta(SoapClient $soapClient, array $arguments, array $options)
-    {
-        /** @var stdClass|mixed[]|false $return */
-        $return = $soapClient->__soapCall('Consulta', $arguments, $options);
-        return $return;
     }
 }
