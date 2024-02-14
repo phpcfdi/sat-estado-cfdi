@@ -37,7 +37,7 @@ exit(call_user_func(function (string $command, string ...$arguments): int {
         $factory = new HttpConsumerFactory(
             new Client(),
             new HttpFactory(),
-            new HttpFactory()
+            new HttpFactory(),
         );
         $consumer = new Consumer(new HttpConsumerClient($factory));
 
@@ -54,7 +54,7 @@ exit(call_user_func(function (string $command, string ...$arguments): int {
 
         echo json_encode(
             $result,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS,
         ), PHP_EOL;
 
         return 0;

@@ -40,9 +40,9 @@ trait ComplaintTestsTrait
                 DocumentStatus::Active,
                 CancellableStatus::CancellableByApproval,
                 CancellationStatus::Undefined,
-                EfosStatus::Excluded
+                EfosStatus::Excluded,
             ),
-            $response
+            $response,
         );
     }
 
@@ -66,9 +66,9 @@ trait ComplaintTestsTrait
                 DocumentStatus::Cancelled,
                 CancellableStatus::NotCancellable,
                 CancellationStatus::Undefined,
-                EfosStatus::Excluded
+                EfosStatus::Excluded,
             ),
-            $response
+            $response,
         );
     }
 
@@ -92,9 +92,9 @@ trait ComplaintTestsTrait
                 DocumentStatus::NotFound,
                 CancellableStatus::NotCancellable,
                 CancellationStatus::Undefined,
-                EfosStatus::Included
+                EfosStatus::Included,
             ),
-            $response
+            $response,
         );
     }
 

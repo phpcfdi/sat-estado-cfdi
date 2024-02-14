@@ -80,7 +80,7 @@ final readonly class CfdiStatusBuilder
             $this->createDocumentSatus(),
             $this->createCancellableStatus(),
             $this->createCancellationStatus(),
-            $this->createEfosStatus()
+            $this->createEfosStatus(),
         );
     }
 }

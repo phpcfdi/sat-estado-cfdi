@@ -38,7 +38,7 @@ final readonly class Consumer
             $responseConsumer->get('Estado'),
             $responseConsumer->get('EsCancelable'),
             $responseConsumer->get('EstatusCancelacion'),
-            $responseConsumer->get('ValidacionEFOS')
+            $responseConsumer->get('ValidacionEFOS'),
         );
 
         return $builder->create();

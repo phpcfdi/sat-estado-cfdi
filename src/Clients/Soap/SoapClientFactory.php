@@ -49,14 +49,14 @@ class SoapClientFactory
             self::DEFAULT_OPTIONS,
             $this->customSoapOptions(),
             self::MANDATORY_OPTIONS,
-            ['location' => $serviceLocation] // set the location to final place
+            ['location' => $serviceLocation], // set the location to final place
         );
     }
 
     public function create(string $serviceLocation): SoapClient
     {
         return $this->createSoapClientWithOptions(
-            $this->finalSoapOptions($serviceLocation)
+            $this->finalSoapOptions($serviceLocation),
         );
     }
 

@@ -11,7 +11,7 @@ final readonly class CfdiStatus
         private Status\DocumentStatus $document,
         private Status\CancellableStatus $cancellable,
         private Status\CancellationStatus $cancellation,
-        private Status\EfosStatus $efos
+        private Status\EfosStatus $efos,
     ) {
     }
 
