@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi;
 
+use PhpCfdi\SatEstadoCfdi\Contracts\Constants;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
 use PhpCfdi\SatEstadoCfdi\Utils\CfdiStatusBuilder;
 
 final readonly class Consumer
 {
-    public const WEBSERVICE_URI_PRODUCTION = 'https://consultaqr.facturaelectronica.sat.gob.mx/ConsultaCFDIService.svc';
-
-    public const WEBSERVICE_URI_DEVELOPMENT = 'https://pruebacfdiconsultaqr.cloudapp.net/ConsultaCFDIService.svc';
-
     public function __construct(
         private ConsumerClientInterface $client,
-        private string $uri = self::WEBSERVICE_URI_PRODUCTION,
+        private string $uri = Constants::WEBSERVICE_URI_PRODUCTION,
     ) {
     }
 
