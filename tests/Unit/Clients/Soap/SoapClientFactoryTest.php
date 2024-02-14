@@ -6,7 +6,6 @@ namespace PhpCfdi\SatEstadoCfdi\Tests\Unit\Clients\Soap;
 
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapClientFactory;
 use PhpCfdi\SatEstadoCfdi\Tests\TestCase;
-use SoapClient;
 
 final class SoapClientFactoryTest extends TestCase
 {
@@ -50,20 +49,12 @@ final class SoapClientFactoryTest extends TestCase
 
     public function testCreateCallsCreateSoapClientWithOptionsUsingFinalOptions(): void
     {
-        $factory = new class () extends SoapClientFactory {
-            /** @var array<string, mixed> */
-            public array $spyOptions;
-
-            protected function createSoapClientWithOptions(array $options): SoapClient
-            {
-                $this->spyOptions = $options;
-                return parent::createSoapClientWithOptions($options);
-            }
-        };
+        $factory = new SoapClientFactory(soapClientClass: SpySoapClient::class);
 
         $finalOptions = $factory->finalSoapOptions('x-location');
-        $factory->create('x-location');
+        /** @var SpySoapClient $soapClient */
+        $soapClient = $factory->create('x-location');
 
-        $this->assertSame($finalOptions, $factory->spyOptions);
+        $this->assertSame($finalOptions, $soapClient->createdWithOptions);
     }
 }

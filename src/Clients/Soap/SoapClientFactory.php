@@ -7,7 +7,7 @@ namespace PhpCfdi\SatEstadoCfdi\Clients\Soap;
 use PhpCfdi\SatEstadoCfdi\Contracts\Constants;
 use SoapClient;
 
-class SoapClientFactory
+final readonly class SoapClientFactory implements SoapClientFactoryInterface
 {
     public const MANDATORY_OPTIONS = [
         // URL of the SOAP server to send the request to
@@ -31,9 +31,13 @@ class SoapClientFactory
         'connection_timeout' => 10, // 10 seconds for timeout
     ];
 
-    /** @param array<string, mixed> $customSoapOptions */
+    /**
+     * @param array<string, mixed> $customSoapOptions
+     * @param class-string<SoapClient> $soapClientClass
+     */
     public function __construct(
-        private readonly array $customSoapOptions = [],
+        private array $customSoapOptions = [],
+        private string $soapClientClass = SoapClient::class,
     ) {
     }
 
@@ -50,27 +54,17 @@ class SoapClientFactory
             self::DEFAULT_OPTIONS,
             $this->customSoapOptions(),
             self::MANDATORY_OPTIONS,
-            ['location' => $serviceLocation], // set the location to final place
+            /* set the location to final place */
+            ['location' => $serviceLocation],
         );
     }
 
     public function create(string $serviceLocation): SoapClient
     {
-        return $this->createSoapClientWithOptions(
-            $this->finalSoapOptions($serviceLocation),
-        );
-    }
+        $options = $this->finalSoapOptions($serviceLocation);
 
-    /**
-     * Override this method to build your own SoapClient
-     *
-     * @param array<string, mixed> $options
-     * @return SoapClient
-     * @noinspection PhpDocMissingThrowsInspection
-     */
-    protected function createSoapClientWithOptions(array $options): SoapClient
-    {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        return new SoapClient(null, $options);
+        $soapClientClass = $this->soapClientClass;
+        /** @psalm-suppress UnsafeInstantiation */
+        return new $soapClientClass(null, $options);
     }
 }

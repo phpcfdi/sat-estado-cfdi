@@ -9,6 +9,7 @@ namespace PhpCfdi\SatEstadoCfdi\Tests\Unit\Clients\Soap;
 use DOMDocument;
 use DOMXPath;
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapClientFactory;
+use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapClientFactoryInterface;
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapConsumerClient;
 use PhpCfdi\SatEstadoCfdi\Contracts\Constants;
 use PhpCfdi\SatEstadoCfdi\Tests\TestCase;
@@ -29,8 +30,8 @@ final class SoapConsumerClientTest extends TestCase
             ->method('__soapCall')
             ->willReturn($expectedResultValues);
 
-        /** @var SoapClientFactory&MockObject $factory */
-        $factory = $this->createMock(SoapClientFactory::class);
+        /** @var SoapClientFactoryInterface&MockObject $factory */
+        $factory = $this->createMock(SoapClientFactoryInterface::class);
         $factory->expects($this->once())
             ->method('create')
             ->willReturn($soapClient);
@@ -44,7 +45,7 @@ final class SoapConsumerClientTest extends TestCase
         $this->assertInstanceOf(SoapClientFactory::class, $client->getSoapClientFactory());
     }
 
-    public function testConsumerClientCanBeCreatedWithSoapclientFactory(): void
+    public function testConsumerClientCanBeCreatedWithSoapClientFactory(): void
     {
         $factory = new SoapClientFactory();
         $client = new SoapConsumerClient($factory);
@@ -105,8 +106,8 @@ final class SoapConsumerClientTest extends TestCase
             'location' => $soapUri,
             'trace' => true,
         ]);
-        /** @var SoapClientFactory&MockObject $factory */
-        $factory = $this->createMock(SoapClientFactory::class);
+        /** @var SoapClientFactoryInterface&MockObject $factory */
+        $factory = $this->createMock(SoapClientFactoryInterface::class);
         $factory->expects($this->once())
             ->method('create')
             ->willReturn($soapClient);

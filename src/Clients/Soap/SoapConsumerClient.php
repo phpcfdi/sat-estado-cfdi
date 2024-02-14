@@ -19,11 +19,11 @@ final readonly class SoapConsumerClient implements ConsumerClientInterface
     ];
 
     public function __construct(
-        private SoapClientFactory $soapClientFactory = new SoapClientFactory(),
+        private SoapClientFactoryInterface $soapClientFactory = new SoapClientFactory(),
     ) {
     }
 
-    public function getSoapClientFactory(): SoapClientFactory
+    public function getSoapClientFactory(): SoapClientFactoryInterface
     {
         return $this->soapClientFactory;
     }
