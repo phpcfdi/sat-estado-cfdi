@@ -16,9 +16,10 @@ final readonly class ConsumerClientResponse implements ConsumerClientResponseInt
     /** @var ArrayObject<string, string> */
     private ArrayObject $map;
 
-    public function __construct()
+    /** @param array<string, string> $values */
+    public function __construct(array $values = [])
     {
-        $this->map = new ArrayObject([]);
+        $this->map = new ArrayObject($values);
     }
 
     public function set(string $keyword, string $content): void

@@ -11,7 +11,7 @@ use PhpCfdi\SatEstadoCfdi\Utils\ConsumerClientResponse;
 final class FakeConsumerClient implements ConsumerClientInterface
 {
     /** consume method will return this variable when invoked */
-    private ConsumerClientResponseInterface $consumeResponse;
+    private readonly ConsumerClientResponseInterface $consumeResponse;
 
     /** consume method will populate this variable with $uri input */
     public string $lastUri = '';
@@ -19,26 +19,10 @@ final class FakeConsumerClient implements ConsumerClientInterface
     /** consume method will populate this variable with $expression input */
     public string $lastExpression = '';
 
-    /** @param array<string, string> $predefined */
-    public function __construct(array $predefined = [])
+    /** @param array<string, string> $values */
+    public function __construct(array $values = [])
     {
-        $this->setClientResponse($predefined);
-    }
-
-    /** @param array<string, string> $predefined */
-    public function setClientResponse(array $predefined): void
-    {
-        $this->consumeResponse = self::consumerClientResponseFromArray($predefined);
-    }
-
-    /** @param array<string, string> $input */
-    public static function consumerClientResponseFromArray(array $input): ConsumerClientResponseInterface
-    {
-        $consumeResponse = new ConsumerClientResponse();
-        foreach ($input as $key => $value) {
-            $consumeResponse->set($key, $value);
-        }
-        return $consumeResponse;
+        $this->consumeResponse = new ConsumerClientResponse($values);
     }
 
     public function consume(string $uri, string $expression): ConsumerClientResponseInterface
