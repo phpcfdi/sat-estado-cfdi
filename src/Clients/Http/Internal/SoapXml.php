@@ -37,10 +37,10 @@ final readonly class SoapXml
 
         $extracted = [];
         foreach ($consultaResult->childNodes as $children) {
-            if (! $children instanceof DOMElement || null === $children->localName) {
+            if (! $children instanceof DOMElement) {
                 continue;
             }
-            $extracted[$children->localName] = $children->textContent;
+            $extracted[strval($children->localName)] = $children->textContent;
         }
 
         return $extracted;
