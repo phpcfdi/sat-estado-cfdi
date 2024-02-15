@@ -130,10 +130,7 @@ final class SoapConsumerClientTest extends TestCase
         $requestHeaders = (string) $soapClient->__getLastRequestHeaders();
         $this->assertStringContainsString($expectedHeaderHost, $requestHeaders);
         $this->assertStringContainsString($expectedHeaderCommand, $requestHeaders);
-        $this->assertStringContainsString(
-            $expectedHeaderHostAction,
-            $requestHeaders,
-        );
+        $this->assertStringContainsString($expectedHeaderHostAction, $requestHeaders);
 
         $requestBody = (string) $soapClient->__getLastRequest();
         $document = new DOMDocument();
