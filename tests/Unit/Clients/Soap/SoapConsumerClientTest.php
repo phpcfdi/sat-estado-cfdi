@@ -118,7 +118,7 @@ final class SoapConsumerClientTest extends TestCase
         $soapCall = $soapClient->getLastSoapCall();
         $soapVar = $soapCall['args'][0] ?? null;
 
-        $this->assertSame(SoapConsumerClient::SOAP_METHOD_CONSULTA, $soapCall['name']);
+        $this->assertSame(Constants::SOAP_METHOD, $soapCall['name']);
 
         $this->assertInstanceOf(SoapVar::class, $soapVar);
         $this->assertSame('expresionImpresa', $soapVar->enc_name);

@@ -17,8 +17,6 @@ final readonly class SoapConsumerClient implements ConsumerClientInterface
         'soapaction' => Constants::SOAP_ACTION,
     ];
 
-    public const SOAP_METHOD_CONSULTA = 'Consulta';
-
     public function __construct(
         private SoapClientFactoryInterface $soapClientFactory = new SoapClientFactory(),
     ) {
@@ -42,7 +40,7 @@ final readonly class SoapConsumerClient implements ConsumerClientInterface
 
         // make call
         /** @psalm-var mixed $data */
-        $data = $soapClient->__soapCall(self::SOAP_METHOD_CONSULTA, $arguments, self::SOAP_OPTIONS);
+        $data = $soapClient->__soapCall(Constants::SOAP_METHOD, $arguments, self::SOAP_OPTIONS);
 
         return ConsumerClientResponse::createFromValues($data);
     }
