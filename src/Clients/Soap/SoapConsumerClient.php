@@ -13,10 +13,6 @@ use SoapVar;
 
 final readonly class SoapConsumerClient implements ConsumerClientInterface
 {
-    public const SOAP_OPTIONS = [
-        'soapaction' => Constants::SOAP_ACTION,
-    ];
-
     public function __construct(
         private SoapClientFactoryInterface $soapClientFactory = new SoapClientFactory(),
     ) {
@@ -38,9 +34,12 @@ final readonly class SoapConsumerClient implements ConsumerClientInterface
         $encoding = null;
         $arguments = [new SoapVar($expression, $encoding, '', '', 'expresionImpresa', Constants::XMLNS_SOAP_URI)];
 
+        // prepare options
+        $options = ['soapaction' => Constants::SOAP_ACTION];
+
         // make call
         /** @psalm-var mixed $data */
-        $data = $soapClient->__soapCall(Constants::SOAP_METHOD, $arguments, self::SOAP_OPTIONS);
+        $data = $soapClient->__soapCall(Constants::SOAP_METHOD, $arguments, $options);
 
         return ConsumerClientResponse::createFromValues($data);
     }
