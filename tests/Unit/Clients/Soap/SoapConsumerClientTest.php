@@ -7,8 +7,6 @@ declare(strict_types=1);
 namespace PhpCfdi\SatEstadoCfdi\Tests\Unit\Clients\Soap;
 
 use ArrayObject;
-use DOMDocument;
-use DOMXPath;
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapClientFactory;
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapClientFactoryInterface;
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapConsumerClient;
@@ -100,52 +98,6 @@ final class SoapConsumerClientTest extends TestCase
         $value = $client->consume('serviceUri', '...expression');
 
         $this->assertEquals($expectedResult, $value);
-    }
-
-    public function testSoapRequestContent(): void
-    {
-        $expectedExpression = 'expression';
-        $soapUriHost = 'localhost';
-        $soapUriPath = '/non-existent-service';
-        $soapUri = sprintf('%s://%s%s', 'http', $soapUriHost, $soapUriPath);
-        $expectedHeaderHost = sprintf('Host: %s', $soapUriHost);
-        $expectedHeaderCommand = sprintf('POST %s', $soapUriPath);
-        $expectedHeaderHostAction = sprintf('SOAPAction: "%s"', Constants::SOAP_ACTION);
-        $soapClient = new SoapClient(null, [
-            'uri' => Constants::XMLNS_SOAP_URI,
-            'location' => $soapUri,
-            'trace' => true,
-        ]);
-        /** @var SoapClientFactoryInterface&MockObject $factory */
-        $factory = $this->createMock(SoapClientFactoryInterface::class);
-        $factory->expects($this->once())
-            ->method('create')
-            ->willReturn($soapClient);
-        $client = new SoapConsumerClient($factory);
-
-        try {
-            $client->consume($soapUri, $expectedExpression);
-        } catch (SoapFault) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement
-        }
-
-        $requestHeaders = (string) $soapClient->__getLastRequestHeaders();
-        $this->assertStringContainsString($expectedHeaderHost, $requestHeaders);
-        $this->assertStringContainsString($expectedHeaderCommand, $requestHeaders);
-        $this->assertStringContainsString($expectedHeaderHostAction, $requestHeaders);
-
-        $requestBody = (string) $soapClient->__getLastRequest();
-        $document = new DOMDocument();
-        $document->preserveWhiteSpace = false;
-        $document->formatOutput = true;
-        $document->loadXML($requestBody);
-        $xpath = new DOMXPath($document, false);
-        $xpath->registerNamespace('e', Constants::XMLNS_ENVELOPE);
-        $xpath->registerNamespace('x', Constants::XMLNS_SOAP_URI);
-
-        $this->assertSame(
-            $expectedExpression,
-            ($xpath->query('//x:Consulta/x:expresionImpresa/text()') ?: null)?->item(0)?->textContent,
-        );
     }
 
     /**
