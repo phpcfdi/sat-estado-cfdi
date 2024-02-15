@@ -8,7 +8,6 @@ namespace PhpCfdi\SatEstadoCfdi\Tests\Unit\Clients\Soap;
 
 use ArrayObject;
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapClientFactory;
-use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapClientFactoryInterface;
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapConsumerClient;
 use PhpCfdi\SatEstadoCfdi\Contracts\Constants;
 use PhpCfdi\SatEstadoCfdi\Tests\TestCase;
@@ -28,11 +27,7 @@ final class SoapConsumerClientTest extends TestCase
             ->method('__soapCall')
             ->willReturn($expectedResultValues);
 
-        /** @var SoapClientFactoryInterface&MockObject $factory */
-        $factory = $this->createMock(SoapClientFactoryInterface::class);
-        $factory->expects($this->once())
-            ->method('create')
-            ->willReturn($soapClient);
+        $factory = new FakeSoapClientFactory($soapClient);
 
         return new SoapConsumerClient($factory);
     }
@@ -112,17 +107,7 @@ final class SoapConsumerClientTest extends TestCase
             'location' => $soapLocation,
             'trace' => true,
         ]);
-
-        $factory = new class ($soapClient) implements SoapClientFactoryInterface {
-            public function __construct(public readonly SpySoapClient $soapClient)
-            {
-            }
-
-            public function create(string $serviceLocation): SoapClient
-            {
-                return $this->soapClient;
-            }
-        };
+        $factory = new FakeSoapClientFactory($soapClient);
         $client = new SoapConsumerClient($factory);
 
         try {
@@ -130,7 +115,6 @@ final class SoapConsumerClientTest extends TestCase
         } catch (SoapFault) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement
         }
 
-        $soapClient = $factory->soapClient;
         $soapCall = $soapClient->getLastSoapCall();
         $soapVar = $soapCall['args'][0] ?? null;
 
