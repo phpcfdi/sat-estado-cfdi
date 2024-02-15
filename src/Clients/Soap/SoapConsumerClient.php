@@ -17,7 +17,7 @@ final readonly class SoapConsumerClient implements ConsumerClientInterface
         'soapaction' => Constants::SOAP_ACTION,
     ];
 
-    private const SOAP_METHOD_CONSULTA = 'Consulta';
+    public const SOAP_METHOD_CONSULTA = 'Consulta';
 
     public function __construct(
         private SoapClientFactoryInterface $soapClientFactory = new SoapClientFactory(),
