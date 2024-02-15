@@ -107,7 +107,7 @@ jobs:
       - name: Psalm version
         run: psalm --version
       - name: Psalm
-        run: psalm --no-progress
+        run: psalm --no-progress --output-format=checkstyle
 
   tests:
     name: Tests on PHP ${{ matrix.php-versions }}
