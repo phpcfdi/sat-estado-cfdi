@@ -17,5 +17,6 @@ interface HttpConsumerFactoryInterface
 
     public function streamFactory(): StreamFactoryInterface;
 
-    public function newConsumerClientResponse(): ConsumerClientResponseInterface;
+    /** @param array<string, string> $values */
+    public function newConsumerClientResponse(array $values): ConsumerClientResponseInterface;
 }

@@ -40,8 +40,9 @@ final readonly class HttpConsumerFactory implements HttpConsumerFactoryInterface
         return $this->streamFactory;
     }
 
-    public function newConsumerClientResponse(): ConsumerClientResponseInterface
+    /** @param array<string, string> $values */
+    public function newConsumerClientResponse(array $values = []): ConsumerClientResponseInterface
     {
-        return new ConsumerClientResponse();
+        return ConsumerClientResponse::createFromValues($values);
     }
 }

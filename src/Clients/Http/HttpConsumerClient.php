@@ -45,16 +45,9 @@ final readonly class HttpConsumerClient implements ConsumerClientInterface
 
     public function createConsumerClientResponse(string $xmlResponse): ConsumerClientResponseInterface
     {
-        // parse body
-        $dataExtracted = $this->soapXml->extractDataFromXmlResponse($xmlResponse, 'ConsultaResult');
+        $values = $this->soapXml->extractDataFromXmlResponse($xmlResponse, 'ConsultaResult');
 
-        // create & populate container
-        $container = $this->factory->newConsumerClientResponse();
-        foreach ($dataExtracted as $key => $value) {
-            $container->set($key, $value);
-        }
-
-        return $container;
+        return $this->factory->newConsumerClientResponse($values);
     }
 
     /** @throws ClientExceptionInterface */

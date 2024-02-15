@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi\Tests\Unit\Clients\Soap;
 
+use ArrayObject;
 use DOMDocument;
 use DOMXPath;
 use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapClientFactory;
@@ -17,12 +18,10 @@ use PhpCfdi\SatEstadoCfdi\Utils\ConsumerClientResponse;
 use PHPUnit\Framework\MockObject\MockObject;
 use SoapClient;
 use SoapFault;
-use stdClass;
 
 final class SoapConsumerClientTest extends TestCase
 {
-    /** @param stdClass|array<mixed>|false $expectedResultValues */
-    private function createClientWithMockSoapClient($expectedResultValues): SoapConsumerClient
+    private function createClientWithMockSoapClient(mixed $expectedResultValues): SoapConsumerClient
     {
         /** @var SoapClient&MockObject $soapClient */
         $soapClient = $this->createMock(SoapClient::class);
@@ -71,9 +70,19 @@ final class SoapConsumerClientTest extends TestCase
         $this->assertSame('X - dummy!', $response->get('EstadoConsulta'));
     }
 
-    public function testConsumeReceivingStdclassAsResponse(): void
+    public function testConsumeReceivingObjectAsResponse(): void
     {
         $callReturn = (object) ['EstadoConsulta' => 'X - dummy!'];
+        $client = $this->createClientWithMockSoapClient($callReturn);
+
+        $response = $client->consume('serviceUri', 'expression');
+
+        $this->assertSame('X - dummy!', $response->get('EstadoConsulta'));
+    }
+
+    public function testConsumeReceivingTraversableAsResponse(): void
+    {
+        $callReturn = new ArrayObject(['EstadoConsulta' => 'X - dummy!']);
         $client = $this->createClientWithMockSoapClient($callReturn);
 
         $response = $client->consume('serviceUri', 'expression');

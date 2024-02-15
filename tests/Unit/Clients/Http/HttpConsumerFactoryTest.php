@@ -53,8 +53,8 @@ final class HttpConsumerFactoryTest extends TestCase
     public function testFactoryNewConsumerClientResponseReturnsNewObjects(): void
     {
         $factory = $this->createFactoryWithMockObjects();
-        $first = $factory->newConsumerClientResponse();
-        $second = $factory->newConsumerClientResponse();
+        $first = $factory->newConsumerClientResponse([]);
+        $second = $factory->newConsumerClientResponse([]);
         $this->assertNotSame($first, $second);
     }
 }
