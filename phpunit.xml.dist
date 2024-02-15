@@ -5,6 +5,12 @@
     bootstrap="tests/bootstrap.php"
     defaultTestSuite="complete"
     colors="true"
+    displayDetailsOnIncompleteTests="true"
+    displayDetailsOnSkippedTests="true"
+    displayDetailsOnTestsThatTriggerDeprecations="true"
+    displayDetailsOnTestsThatTriggerNotices="true"
+    displayDetailsOnTestsThatTriggerWarnings="true"
+    displayDetailsOnTestsThatTriggerErrors="true"
     >
     <testsuites>
         <testsuite name="complete">
