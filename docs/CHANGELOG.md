@@ -11,7 +11,7 @@ versión, aunque sí su incorporación en la rama principal de trabajo. Generalm
 
 ## Listado de cambios
 
-### Versión 2.0.0 2024-02-14 ♥
+### Versión 2.0.0 2024-03-06
 
 Si ya habías implementado la versión 1.x, consula la [Guía de actualización de la versión 1.x a 2.x](UPGRADE_v1_v2.md).
 Si es una implementación nueva, solamente sigue la documentación del proyecto.
