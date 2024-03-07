@@ -11,24 +11,14 @@ use PhpCfdi\SatEstadoCfdi\Utils\CfdiStatusBuilder;
 final readonly class Consumer
 {
     public function __construct(
-        private ConsumerClientInterface $client,
-        private string $uri = Constants::WEBSERVICE_URI_PRODUCTION,
+        public ConsumerClientInterface $client,
+        public string $uri = Constants::WEBSERVICE_URI_PRODUCTION,
     ) {
-    }
-
-    public function getClient(): ConsumerClientInterface
-    {
-        return $this->client;
-    }
-
-    public function getUri(): string
-    {
-        return $this->uri;
     }
 
     public function execute(string $expression): CfdiStatus
     {
-        $responseConsumer = $this->getClient()->consume($this->getUri(), $expression);
+        $responseConsumer = $this->client->consume($this->uri, $expression);
 
         $builder = new CfdiStatusBuilder(
             $responseConsumer->get('CodigoEstatus'),

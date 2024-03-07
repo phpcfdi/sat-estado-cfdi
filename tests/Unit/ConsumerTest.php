@@ -16,8 +16,8 @@ final class ConsumerTest extends TestCase
         $uri = 'https://example.com';
 
         $consumer = new Consumer($client, $uri);
-        $this->assertSame($client, $consumer->getClient());
-        $this->assertSame($uri, $consumer->getUri());
+        $this->assertSame($client, $consumer->client);
+        $this->assertSame($uri, $consumer->uri);
     }
 
     public function testCallConsumerAndGetExpectedResponseStatus(): void
