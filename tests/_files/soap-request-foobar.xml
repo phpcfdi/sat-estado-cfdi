@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+    <s:Body>
+        <c:Consulta xmlns:c="http://tempuri.org/">
+            <c:expresionImpresa>?a=foo&amp;b=bar</c:expresionImpresa>
+        </c:Consulta>
+    </s:Body>
+</s:Envelope>

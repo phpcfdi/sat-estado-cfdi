@@ -17,7 +17,7 @@
 :us: This library contains helpers to consume the **Servicio de Consulta de CFDI** from **SAT**.
 The documentation of this project is in spanish as this is the natural language for intended audience.
 
-:mexico: Esta librería contiene objetos de ayuda para consumir el **Servicio de Consulta de CFDI del SAT**.
+:mexico: Esta librería se utiliza para consumir el **Servicio de Consulta de CFDI del SAT**.
 La documentación del proyecto está en español porque ese es el lenguaje de los usuarios que la utilizarán.
 
 Esta librería solo permite verificar el estado de un *CFDI Regular* y no de *CFDI de Retenciones e información de pagos*.
@@ -28,13 +28,14 @@ Para estos últimos, use la librería [phpcfdi/sat-estado-retenciones](https://g
 - Servicio productivo: <https://consultaqr.facturaelectronica.sat.gob.mx/ConsultaCFDIService.svc>
 - Servicio de pruebas: <https://pruebacfdiconsultaqr.cloudapp.net/ConsultaCFDIService.svc>
 - SAT: <https://www.sat.gob.mx/consultas/20585/conoce-los-servicios-especializados-de-validacion>
-- Documentación del Servicio de Consulta de CFDIVersión 1.3 (2020-11-18):
-  <https://www.sat.gob.mx/cs/Satellite?blobcol=urldata&blobkey=id&blobtable=MungoBlobs&blobwhere=1579314559300&ssbinary=true>
+- Documentación del Servicio de Consulta de CFDIVersión 1.4 (noviembre 2022):
+  <https://www.sat.gob.mx/cs/Satellite?blobcol=urldata&blobkey=id&blobtable=MungoBlobs&blobwhere=1461175223997&ssbinary=true>
 
 **Cambios recientes en el servicio**:
 
 - Por motivo del cambio en el proceso de cancelación, en 2018 agregaron nuevos estados.
-- Por una razón desconocida —e inexplicable—, el WSDL ya no se encuentra disponible desde 2018. Aunque sí se puede consumir el servicio.
+- Por una razón desconocida e inexplicable, el WSDL no estuvo disponible de 2018 a 2020.
+  Esta librería usa una estrategia en donde no depende del WSDL para consumir el servicio.
 - A finales de 2020 agregaron el campo de respuesta `VerificacionEFOS`.
 
 ## Instalación
@@ -56,8 +57,6 @@ Los pasos básicos son:
 
 ```php
 <?php
-declare(strict_types=1);
-
 use PhpCfdi\SatEstadoCfdi\Consumer;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientInterface;
 
@@ -66,17 +65,139 @@ $consumer = new Consumer($client);
 
 $cfdiStatus = $consumer->execute('...expression');
 
-if ($cfdiStatus->cancellable()->isNotCancellable()) {
+if ($cfdiStatus->cancellable->isNotCancellable()) {
     echo 'CFDI no es cancelable';
 }
 ```
+
+### Clientes de consumo `ConsumerClientInterface`
+
+Esta librería incluye dos diferentes clientes de consumo: `SoapConsumerClient` y `HttpConsumerClient`.
+
+Además, puedes usar tu propio cliente de consumo implementando la interface `ConsumerClientInterface`.
+
+#### Cliente SOAP `SoapConsumerClient`
+
+El cliente `SoapConsumerClient` permite hacer el consumo usando la estrategia SOAP.
+
+Requerimientos:
+
+- `ext-soap`: Extensión SOAP de PHP.
+
+Ejemplo:
+
+```php
+<?php
+use PhpCfdi\SatEstadoCfdi\Clients\Soap\SoapConsumerClient;
+use PhpCfdi\SatEstadoCfdi\Consumer;
+
+function createConsumerUsingSoap(): Consumer
+{
+    $client = new SoapConsumerClient();
+    return new Consumer($client);
+}
+```
+
+#### Cliente HTTP PSR `HttpConsumerClient`
+
+El cliente `HttpConsumerClient` permite hacer el consumo usando la estrategia HTTP con base en los estándares PSR.
+
+Estándares utilizados:
+
+- PSR-18: HTTP Client: Interfaces para clientes HTTP (el que hace la llamada POST).
+  <https://www.php-fig.org/psr/psr-18/>
+- PSR-17: HTTP Factories: Interfaces de fábricas de HTTP Request y Response (para PSR-7).
+  <https://www.php-fig.org/psr/psr-17/>
+
+Las librerías de Guzzle
+[`guzzlehttp/guzzle`](https://github.com/guzzle/guzzle), y
+[`guzzlehttp/psr7`](https://github.com/guzzle/psr7)
+proveen los estándares necesarios.
+
+O puedes ver en [Packagist](https://packagist.org/) los que te agraden:
+
+- PSR-18: <https://packagist.org/providers/psr/http-client-implementation>
+- PSR-17: <https://packagist.org/providers/psr/http-factory-implementation>
+
+Requerimientos:
+
+- `ext-dom`: Extensión DOM de PHP.
+- `psr/http-client: ^1.0`: Estándar PSR-18 (Cliente HTTP).
+- `psr/http-factory: ^1.0`: Estándar PSR-17 (Fábricas de mensajes HTTP).
+- Algunas librerías que implementen PSR-18 y PSR-17, por ejemplo:
+  - Guzzle: `guzzlehttp/guzzle` y `guzzlehttp/psr7`.
+  - Symfony: `symfony/http-client` y `nyholm/psr7` o `laminas/laminas-diactoros`.
+
+Ejemplo:
+
+```php
+<?php
+use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerClient;
+use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerFactory;
+use PhpCfdi\SatEstadoCfdi\Consumer;
+
+function createConsumerUsingGuzzle(): Consumer
+{
+    // Implements PSR-18 \Psr\Http\Client\ClientInterface
+    $guzzleClient = new \GuzzleHttp\Client();
+    // Implements PSR-17 \Psr\Http\Message\RequestFactoryInterface and PSR-17 \Psr\Http\Message\StreamFactoryInterface
+    $guzzleFactory = new \GuzzleHttp\Psr7\HttpFactory();
+
+    $factory = new HttpConsumerFactory($guzzleClient, $guzzleFactory, $guzzleFactory);
+    $client = new HttpConsumerClient($factory);
+    return new Consumer($client);
+}
+```
+
+El siguiente es un ejemplo usando `symfony/http-client` y `nyholm/psr7`:
+
+```php
+use PhpCfdi\SatEstadoCfdi\Consumer;
+use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerClient;
+use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerFactory;
+
+function createConsumerUsingSymfonyNyholm(): Consumer
+{
+    $httpClient = new \Symfony\Component\HttpClient\Psr18Client();
+    $messageFactory = new \Nyholm\Psr7\Factory\Psr17Factory();
+    
+    $factory = new HttpConsumerFactory($httpClient, $messageFactory, $messageFactory);
+    $client = new HttpConsumerClient($factory);
+    return new Consumer($client);
+}
+```
+
+Para Laravel puedes usar algún paquete adicional como [`wimski/laravel-psr-http`](https://packagist.org/packages/wimski/laravel-psr-http),
+que gracias al uso del propio framework y `php-http/discovery`, facilita la creación de los objetos,
+ya sea que los fabrique directamente usando el contenedor, o bien los inyecte como dependencias.
+
+```php
+<?php
+use PhpCfdi\SatEstadoCfdi\Consumer;
+use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerClient;
+use PhpCfdi\SatEstadoCfdi\Clients\Http\HttpConsumerFactory;
+
+function createConsumerUsingLaravel(): Consumer
+{
+    $httpClient = app(\Psr\Http\Client\ClientInterface::class);
+    $requestFactory = app(Psr\Http\Message\RequestFactoryInterface::class);
+    $streamFactory = app(Psr\Http\Message\StreamFactoryInterface::class);
+    
+    $factory = new HttpConsumerFactory($httpClient, $requestFactory, $streamFactory);
+    $client = new HttpConsumerClient($factory);
+    return new Consumer($client);
+}
+```
+
+También te recomiendo hacer tu propio *Service Provider* o configurar el *Service Container*
+y solo requerir la clase `Consumer` como cualquier otra dependencia y permitir que sea inyectada.
 
 ### Expresiones (input)
 
 El consumidor requiere una expresión para poder consultar.
 La expresión es el texto que viene en el código QR de la representación impresa de un CFDI.
 
-Las expresiones son diferentes para CFDI 3.2, CFDI 3.3 y RET 1.0.
+Las expresiones son diferentes para CFDI 3.2, CFDI 3.3, CFDI 4.0, RET 1.0 y RET 2.0.
 Tienen reglas específicas de formato y de la información que debe contener.
 
 Si no cuentas con la expresión, te recomiendo usar la librería
@@ -85,14 +206,12 @@ usando `composer require phpcfdi/cfdi-expresiones`.
 
 ```php
 <?php
-declare(strict_types=1);
-
 use PhpCfdi\CfdiExpresiones\DiscoverExtractor;
 use PhpCfdi\SatEstadoCfdi\Consumer;
 
 // lectura del contenido del CFDI
 $document = new DOMDocument();
-$document->load('archivo-cfdi33.xml');
+$document->load('archivo-cfdi.xml');
 
 // creación de la expresión
 $expressionExtractor = new DiscoverExtractor();
@@ -103,7 +222,7 @@ $expression = $expressionExtractor->extract($document);
 $cfdiStatus = $consumer->execute($expression);
 
 // usar el estado
-if ($cfdiStatus->document()->isActive()) {
+if ($cfdiStatus->document->isActive()) {
     echo 'El CFDI se encuentra vigente';
 }
 ```
@@ -112,38 +231,38 @@ if ($cfdiStatus->document()->isActive()) {
 
 Después de consumir el servicio, se responderá con un objeto `CfdiStatus` que agrupa de los cuatro estados.
 
-No compares directamente los valores de los estados, en su lugar utiliza los métodos `is*`,
-por ejemplo `$response->document()->isCancelled()`.
+Los estados son enumeradores, puedes compararlos rápidamente usando métodos de ayuda `is*`,
+por ejemplo: `$response->document->isCancelled()`.
 
 Posibles estados:
 
-- `CodigoEstatus`: `query(): QueryStatus`.
-    - `found`: Si el estado inicia con `S - `.
-    - `notFound`: en cualquier otro caso.
+- `CodigoEstatus`: `query: QueryStatus`.
+    - `Found`: Si el estado inicia con `S - `.
+    - `NotFound`: en cualquier otro caso.
 
-- `Estado`: `document(): DocumentStatus`.
-    - `active`: Si el estado reportó `Vigente`.
-    - `cancelled`: Si el estado reportó `Cancelado`.
-    - `notFound`: en cualquier otro caso.
+- `Estado`: `document: DocumentStatus`.
+    - `Active`: Si el estado reportó `Vigente`.
+    - `Cancelled`: Si el estado reportó `Cancelado`.
+    - `NotFound`: en cualquier otro caso.
 
-- `EsCancelable`: `cancellable(): CancellableStatus`.
-    - `cancellableByDirectCall`: Si el estado reportó `Cancelable sin aceptación`.
-    - `cancellableByApproval`: Si el estado reportó `Cancelable con aceptación`.
-    - `notCancellable`: en cualquier otro caso.
+- `EsCancelable`: `cancellable: CancellableStatus`.
+    - `CancellableByDirectCall`: Si el estado reportó `Cancelable sin aceptación`.
+    - `CancellableByApproval`: Si el estado reportó `Cancelable con aceptación`.
+    - `NotCancellable`: en cualquier otro caso.
 
-- `EstatusCancelacion`: `cancellation(): CancellationStatus`.
-    - `cancelledByDirectCall`: Si el estado reportó `Cancelado sin aceptación`.
-    - `cancelledByApproval`: Si el estado reportó `Cancelado con aceptación`.
-    - `cancelledByExpiration`: Si el estado reportó `Plazo vencido`.
-    - `pending`: Si el estado reportó `En proceso`.
-    - `disapproved`: Si el estado reportó `Solicitud rechazada`.
-    - `undefined`: en cualquier otro caso.
+- `EstatusCancelacion`: `cancellation: CancellationStatus`.
+    - `CancelledByDirectCall`: Si el estado reportó `Cancelado sin aceptación`.
+    - `CancelledByApproval`: Si el estado reportó `Cancelado con aceptación`.
+    - `CancelledByExpiration`: Si el estado reportó `Plazo vencido`.
+    - `Pending`: Si el estado reportó `En proceso`.
+    - `Disapproved`: Si el estado reportó `Solicitud rechazada`.
+    - `Undefined`: en cualquier otro caso.
 
-- `ValidacionEFOS`: `efos(): EfosStatus`.
-    - `included`: Si el estado no reportó `200`.
-    - `excluded`: Si el estado reportó `200`.
+- `ValidacionEFOS`: `efos: EfosStatus`.
+    - `Included`: Si el estado no reportó `200` o `201`.
+    - `Excluded`: Si el estado reportó `200` o `201`.
 
-#### Estados mutuamente excluyentes:
+#### Estados mutuamente excluyentes
 
 | CodigoEstatus | Estado    | EsCancelable              | EstatusCancelacion       | Explicación                                               |
 |---------------|-----------|---------------------------|--------------------------|-----------------------------------------------------------|
@@ -171,34 +290,6 @@ En ese caso, el receptor puede aceptar o rechazar la cancelación, pero ya no ap
 Por lo anterior entonces podrías tener el CFDI en estado de cancelación *en proceso* indefinidamente.
 Incluso, que la cancelación suceda meses después de lo esperado.
 
-## Clientes de conexión
-
-Esta librería no es la que hace directamente las conexiones al webservice del SAT.
-
-Esta función se la delega a un objeto `ConsumerClientInterface`.
-
-Tú puedes implementar tu cliente de conexión personalizado para tu entorno siempre que
-implementes la interfaz `ConsumerClientInterface`.
-
-O si lo prefieres, existen los siguientes consumidores oficiales:
-
-- [phpcfdi/sat-estado-cfdi-soap](https://github.com/phpcfdi/sat-estado-cfdi-soap):
-  Consume el webservice haciendo una llamada SOAP (sin WSDL) para obtener el resultado.
-- [phpcfdi/sat-estado-cfdi-http-psr](https://github.com/phpcfdi/sat-estado-cfdi-http-psr)
-  Consume el webservice haciendo una solicitud HTTP utilizando objetos de PSR-7, PSR17 y PSR18 *que tú provees*.
-
-### Prueba de cumplimiento de implementación
-
-Se incluye la clase `PhpCfdi\SatEstadoCfdi\ComplianceTester\ComplianceTester` que contacta al
-webservice del SAT con datos conocidos y evalua la respuesta.
-
-Los paquetes `phpcfdi/sat-estado-cfdi-soap` y `phpcfdi/sat-estado-cfdi-http-psr` implementan
-un test para asegurarse que cumplen correctamente.
-
-Si haces tu propia implementación, asegúrate de crear un test que lo cubra, puedes ver como ejemplos
-<https://github.com/phpcfdi/sat-estado-cfdi-soap/blob/main/tests/Compliance/ComplianceTest.php> o
-<https://github.com/phpcfdi/sat-estado-cfdi-http-psr/blob/main/tests/Compliance/ComplianceTest.php>.
-
 ## Compatibilidad
 
 Esta librería se mantendrá compatible con al menos la versión con
@@ -206,6 +297,13 @@ Esta librería se mantendrá compatible con al menos la versión con
 
 También utilizamos [Versionado Semántico 2.0.0](docs/SEMVER.md) por lo que puedes usar esta librería
 sin temor a romper tu aplicación.
+
+| `sat-estado-cfdi` | Versiones soportadas de PHP  |
+|-------------------|------------------------------|
+| 1.0.3             | 7.3, 7.4, 8.0, 8.1, 8.2, 8.3 |
+| 2.0.0             | 8.2, 8.3                     |
+
+- [Guía de actualización de la versión 1.x a 2.x](docs/UPGRADE_v1_v2.md).
 
 ## Contribuciones
 

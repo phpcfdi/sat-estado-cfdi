@@ -16,8 +16,8 @@ final class ConsumerTest extends TestCase
         $uri = 'https://example.com';
 
         $consumer = new Consumer($client, $uri);
-        $this->assertSame($client, $consumer->getClient());
-        $this->assertSame($uri, $consumer->getUri());
+        $this->assertSame($client, $consumer->client);
+        $this->assertSame($uri, $consumer->uri);
     }
 
     public function testCallConsumerAndGetExpectedResponseStatus(): void
@@ -35,10 +35,10 @@ final class ConsumerTest extends TestCase
         $consumer = new Consumer($fakeClient);
         $response = $consumer->execute($fakeExpression);
 
-        $this->assertTrue($response->query()->isFound());
-        $this->assertTrue($response->document()->isActive());
-        $this->assertTrue($response->cancellable()->isCancellableByApproval());
-        $this->assertTrue($response->cancellation()->isPending());
-        $this->assertTrue($response->efos()->isExcluded());
+        $this->assertTrue($response->query->isFound());
+        $this->assertTrue($response->document->isActive());
+        $this->assertTrue($response->cancellable->isCancellableByApproval());
+        $this->assertTrue($response->cancellation->isPending());
+        $this->assertTrue($response->efos->isExcluded());
     }
 }

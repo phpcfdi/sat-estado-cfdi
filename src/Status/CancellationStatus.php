@@ -4,16 +4,9 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi\Status;
 
-use Eclipxe\Enum\Enum;
+use PhpCfdi\SatEstadoCfdi\Internal\EnumIsTypeTrait;
 
 /**
- * @method static self undefined()
- * @method static self pending()
- * @method static self disapproved()
- * @method static self cancelledByApproval()
- * @method static self cancelledByExpiration()
- * @method static self cancelledByDirectCall()
- *
  * @method bool isUndefined()
  * @method bool isPending()
  * @method bool isDisapproved()
@@ -21,6 +14,14 @@ use Eclipxe\Enum\Enum;
  * @method bool isCancelledByExpiration()
  * @method bool isCancelledByDirectCall()
  */
-class CancellationStatus extends Enum
+enum CancellationStatus
 {
+    use EnumIsTypeTrait;
+
+    case Undefined;
+    case Pending;
+    case Disapproved;
+    case CancelledByApproval;
+    case CancelledByExpiration;
+    case CancelledByDirectCall;
 }

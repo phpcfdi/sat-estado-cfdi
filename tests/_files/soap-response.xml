@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+    <s:Body>
+        <ConsultaResponse xmlns="http://tempuri.org/">
+            <ConsultaResult xmlns:a="http://schemas.datacontract.org/2004/07/Sat.Cfdi.Negocio.ConsultaCfdi.Servicio">
+                <a:CodigoEstatus>S - Comprobante obtenido satisfactoriamente.</a:CodigoEstatus>
+                <a:EsCancelable>Cancelable con aceptación</a:EsCancelable>
+                <a:Estado>Vigente</a:Estado>
+                <a:EstatusCancelacion>Solicitud rechazada</a:EstatusCancelacion>
+            </ConsultaResult>
+        </ConsultaResponse>
+    </s:Body>
+</s:Envelope>

@@ -4,30 +4,44 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi\Utils;
 
-use ArrayObject;
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientResponseInterface;
 
 /**
  * This is a generic implementation of ConsumerClientResponseInterface
  * You can use it, or you can create your own implementation as your convenience.
  */
-class ConsumerClientResponse implements ConsumerClientResponseInterface
+final readonly class ConsumerClientResponse implements ConsumerClientResponseInterface
 {
-    /** @var ArrayObject<string, string> */
-    private $map;
-
-    public function __construct()
-    {
-        $this->map = new ArrayObject([]);
+    /** @param array<string, string> $values */
+    public function __construct(
+        private array $values,
+    ) {
     }
 
-    public function set(string $keyword, string $content): void
+    public static function createFromValues(mixed $values): self
     {
-        $this->map[$keyword] = $content;
+        if (is_array($values)) {
+            $values = (object) $values;
+        } elseif ($values instanceof \Traversable) {
+            $values = (object) iterator_to_array($values);
+        }
+        if (! is_object($values)) {
+            $values = (object) [];
+        }
+
+        $final = [];
+        /** @psalm-var mixed $value */
+        foreach (get_object_vars($values) as $key => $value) {
+            if (is_scalar($value)) {
+                $final[strval($key)] = strval($value);
+            }
+        }
+
+        return new self($final);
     }
 
     public function get(string $keyword): string
     {
-        return $this->map[$keyword] ?? '';
+        return $this->values[$keyword] ?? '';
     }
 }

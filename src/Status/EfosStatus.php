@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi\Status;
 
-use Eclipxe\Enum\Enum;
+use PhpCfdi\SatEstadoCfdi\Internal\EnumIsTypeTrait;
 
 /**
- * @method static self included()
- * @method static self excluded()
- *
  * @method bool isIncluded()
  * @method bool isExcluded()
  */
-class EfosStatus extends Enum
+enum EfosStatus
 {
+    use EnumIsTypeTrait;
+
+    case Included;
+    case Excluded;
 }

@@ -14,15 +14,15 @@ on:
 jobs:
 
   phpcs:
-    name: Code style (phpcs)
+    name: Coding standards (phpcs)
     runs-on: "ubuntu-latest"
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.3'
           coverage: none
           tools: cs2pr, phpcs
         env:
@@ -31,34 +31,33 @@ jobs:
         run: phpcs -q --report=checkstyle | cs2pr
 
   php-cs-fixer:
-    name: Code style (php-cs-fixer)
+    name: Coding standards (php-cs-fixer)
     runs-on: "ubuntu-latest"
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.3'
           coverage: none
           tools: cs2pr, php-cs-fixer
         env:
           fail-fast: true
       - name: Code style (php-cs-fixer)
         run: php-cs-fixer fix --dry-run --format=checkstyle | cs2pr
-        env:
-          PHP_CS_FIXER_IGNORE_ENV: 1
 
   phpstan:
     name: Code analysis (phpstan)
     runs-on: "ubuntu-latest"
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.3'
+          extensions: soap
           coverage: none
           tools: composer:v2, phpstan
         env:
@@ -67,7 +66,7 @@ jobs:
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
@@ -82,11 +81,12 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.3'
+          extensions: soap
           coverage: none
           tools: composer:v2, psalm
         env:
@@ -95,29 +95,32 @@ jobs:
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
       - name: Install project dependencies
         run: composer upgrade --no-interaction --no-progress --prefer-dist
+      - name: Psalm version
+        run: psalm --version
       - name: Psalm
-        run: psalm --no-progress
+        run: psalm --no-progress --output-format=checkstyle
 
   tests:
     name: Tests on PHP ${{ matrix.php-versions }}
     runs-on: "ubuntu-latest"
     strategy:
       matrix:
-        php-versions: ['7.3', '7.4', '8.0', '8.1', '8.2']
+        php-versions: ['8.2', '8.3']
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
+          extensions: soap
           coverage: none
           tools: composer:v2
         env:
@@ -126,7 +129,7 @@ jobs:
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
@@ -134,4 +137,4 @@ jobs:
       - name: Install project dependencies
         run: composer upgrade --no-interaction --no-progress --prefer-dist
       - name: Tests (phpunit)
-        run: vendor/bin/phpunit --testdox --verbose
+        run: vendor/bin/phpunit --testdox

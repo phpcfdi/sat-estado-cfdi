@@ -6,6 +6,7 @@ namespace PhpCfdi\SatEstadoCfdi\Tests\Unit\Utils;
 
 use PhpCfdi\SatEstadoCfdi\Tests\TestCase;
 use PhpCfdi\SatEstadoCfdi\Utils\CfdiStatusBuilder;
+use PHPUnit\Framework\Attributes\TestWith;
 
 final class CfdiStatusBuilderTest extends TestCase
 {
@@ -15,11 +16,11 @@ final class CfdiStatusBuilderTest extends TestCase
 
         $response = $builder->create();
         // default states
-        $this->assertTrue($response->query()->isNotFound());
-        $this->assertTrue($response->document()->isNotFound());
-        $this->assertTrue($response->cancellable()->isNotCancellable());
-        $this->assertTrue($response->cancellation()->isUndefined());
-        $this->assertTrue($response->efos()->isIncluded());
+        $this->assertTrue($response->query->isNotFound());
+        $this->assertTrue($response->document->isNotFound());
+        $this->assertTrue($response->cancellable->isNotCancellable());
+        $this->assertTrue($response->cancellation->isUndefined());
+        $this->assertTrue($response->efos->isIncluded());
     }
 
     public function testCreateUsingRequestDifferentThanFound(): void
@@ -64,12 +65,9 @@ final class CfdiStatusBuilderTest extends TestCase
         $this->assertTrue($builder->createCancellableStatus()->isCancellableByApproval());
     }
 
-    /**
-     * @param string $input
-     * @testWith ["No cancelable"]
-     *           ["foo"]
-     *           [""]
-     */
+    #[TestWith(['No cancelable'])]
+    #[TestWith(['foo'])]
+    #[TestWith([''])]
     public function testCreateUsingCancellableNotCancellable(string $input): void
     {
         $builder = new CfdiStatusBuilder('', '', $input, '', '');
@@ -106,34 +104,30 @@ final class CfdiStatusBuilderTest extends TestCase
         $this->assertTrue($builder->createCancellationStatus()->isDisapproved());
     }
 
-    /**
-     * @param string $input
-     * @testWith [""]
-     *           ["foo"]
-     */
+    #[TestWith([''])]
+    #[TestWith(['foo'])]
     public function testCreateUsingCancellationAnyOtherValue(string $input): void
     {
         $builder = new CfdiStatusBuilder('', '', '', $input, '');
         $this->assertTrue($builder->createCancellationStatus()->isUndefined());
     }
 
-    /**
-     * @param string $input
-     * @testWith [""]
-     *           ["100"]
-     *           ["199"]
-     *           ["201"]
-     *           ["other"]
-     */
+    #[TestWith([''])]
+    #[TestWith(['100'])]
+    #[TestWith(['199'])]
+    #[TestWith(['202'])]
+    #[TestWith(['other'])]
     public function testCreateUsingValidacionEfosIncluded(string $input): void
     {
         $builder = new CfdiStatusBuilder('', '', '', '', $input);
         $this->assertTrue($builder->createEfosStatus()->isIncluded());
     }
 
-    public function testCreateUsingValidacionEfosExcluded(): void
+    #[TestWith(['200'])] /* RFC Emisor no EFOS */
+    #[TestWith(['201'])] /* RFC Emisor y RFC A cuenta de terceros no EFOS */
+    public function testCreateUsingValidacionEfosExcluded(string $input): void
     {
-        $builder = new CfdiStatusBuilder('', '', '', '', '200');
+        $builder = new CfdiStatusBuilder('', '', '', '', $input);
         $this->assertTrue($builder->createEfosStatus()->isExcluded());
     }
 }

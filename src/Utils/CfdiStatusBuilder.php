@@ -14,98 +14,63 @@ use PhpCfdi\SatEstadoCfdi\Status\QueryStatus;
 /**
  * Use this object to create a CfdiStatus from the raw string states from SAT webservice
  */
-class CfdiStatusBuilder
+final readonly class CfdiStatusBuilder
 {
-    /** @var string */
-    private $codigoEstatus;
-
-    /** @var string */
-    private $estado;
-
-    /** @var string */
-    private $esCancelable;
-
-    /** @var string */
-    private $estatusCancelacion;
-
-    /** @var string */
-    private $validacionEFOS;
-
     public function __construct(
-        string $codigoEstatus,
-        string $estado,
-        string $esCancelable,
-        string $estatusCancelacion,
-        string $validacionEFOS
+        private string $codigoEstatus,
+        private string $estado,
+        private string $esCancelable,
+        private string $estatusCancelacion,
+        private string $validacionEFOS,
     ) {
-        $this->codigoEstatus = $codigoEstatus;
-        $this->estado = $estado;
-        $this->esCancelable = $esCancelable;
-        $this->estatusCancelacion = $estatusCancelacion;
-        $this->validacionEFOS = $validacionEFOS;
     }
 
     public function createQueryStatus(): QueryStatus
     {
         // S - Comprobante obtenido satisfactoriamente
-        if (0 === strpos($this->codigoEstatus, 'S - ')) {
-            return QueryStatus::found();
+        if (str_starts_with($this->codigoEstatus, 'S - ')) {
+            return QueryStatus::Found;
         }
         // N - 60? ...
-        return QueryStatus::notFound();
+        return QueryStatus::NotFound;
     }
 
     public function createDocumentSatus(): DocumentStatus
     {
-        if ('Vigente' === $this->estado) {
-            return DocumentStatus::active();
-        }
-        if ('Cancelado' === $this->estado) {
-            return DocumentStatus::cancelled();
-        }
-        // No encontrado
-        return DocumentStatus::notFound();
+        return match ($this->estado) {
+            'Vigente' => DocumentStatus::Active,
+            'Cancelado' => DocumentStatus::Cancelled,
+            default => DocumentStatus::NotFound,
+        };
     }
 
     public function createCancellableStatus(): CancellableStatus
     {
-        if ('Cancelable sin aceptación' === $this->esCancelable) {
-            return CancellableStatus::cancellableByDirectCall();
-        }
-        if ('Cancelable con aceptación' === $this->esCancelable) {
-            return CancellableStatus::cancellableByApproval();
-        }
-        // No cancelable
-        return CancellableStatus::notCancellable();
+        return match ($this->esCancelable) {
+            'Cancelable sin aceptación' => CancellableStatus::CancellableByDirectCall,
+            'Cancelable con aceptación' => CancellableStatus::CancellableByApproval,
+            default => CancellableStatus::NotCancellable,
+        };
     }
 
     public function createCancellationStatus(): CancellationStatus
     {
-        if ('Cancelado sin aceptación' === $this->estatusCancelacion) {
-            return CancellationStatus::cancelledByDirectCall();
-        }
-        if ('Plazo vencido' === $this->estatusCancelacion) {
-            return CancellationStatus::cancelledByExpiration();
-        }
-        if ('Cancelado con aceptación' === $this->estatusCancelacion) {
-            return CancellationStatus::cancelledByApproval();
-        }
-        if ('En proceso' === $this->estatusCancelacion) {
-            return CancellationStatus::pending();
-        }
-        if ('Solicitud rechazada' === $this->estatusCancelacion) {
-            return CancellationStatus::disapproved();
-        }
-        // vacío
-        return CancellationStatus::undefined();
+        return match ($this->estatusCancelacion) {
+            'Cancelado sin aceptación' => CancellationStatus::CancelledByDirectCall,
+            'Plazo vencido' => CancellationStatus::CancelledByExpiration,
+            'Cancelado con aceptación' => CancellationStatus::CancelledByApproval,
+            'En proceso' => CancellationStatus::Pending,
+            'Solicitud rechazada' => CancellationStatus::Disapproved,
+            default => CancellationStatus::Undefined,
+        };
     }
 
     public function createEfosStatus(): EfosStatus
     {
-        if ('200' === $this->validacionEFOS) {
-            return EfosStatus::excluded();
-        }
-        return EfosStatus::included();
+        return match ($this->validacionEFOS) {
+            '200', '201' => EfosStatus::Excluded,
+            default => EfosStatus::Included,
+        };
     }
 
     public function create(): CfdiStatus
@@ -115,7 +80,7 @@ class CfdiStatusBuilder
             $this->createDocumentSatus(),
             $this->createCancellableStatus(),
             $this->createCancellationStatus(),
-            $this->createEfosStatus()
+            $this->createEfosStatus(),
         );
     }
 }

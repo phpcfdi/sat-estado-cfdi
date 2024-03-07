@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace PhpCfdi\SatEstadoCfdi\Status;
 
-use Eclipxe\Enum\Enum;
+use PhpCfdi\SatEstadoCfdi\Internal\EnumIsTypeTrait;
 
 /**
- * @method static self found()
- * @method static self notFound()
- *
  * @method bool isFound()
  * @method bool isNotFound()
  */
-class QueryStatus extends Enum
+enum QueryStatus
 {
+    use EnumIsTypeTrait;
+
+    case Found;
+    case NotFound;
 }

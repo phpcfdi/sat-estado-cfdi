@@ -11,15 +11,16 @@ on:
 jobs:
 
   tests-coverage:
-    name: Tests on PHP 8.0 (code coverage)
+    name: Create code coverage
     runs-on: "ubuntu-latest"
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.3'
+          extensions: soap
           coverage: xdebug
           tools: composer:v2
         env:
@@ -28,7 +29,7 @@ jobs:
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
@@ -36,9 +37,9 @@ jobs:
       - name: Install project dependencies
         run: composer upgrade --no-interaction --no-progress --prefer-dist
       - name: Create code coverage
-        run: vendor/bin/phpunit --testdox --verbose --coverage-xml=build/coverage --coverage-clover=build/coverage/clover.xml --log-junit=build/coverage/junit.xml
+        run: vendor/bin/phpunit --testdox --coverage-xml=build/coverage --coverage-clover=build/coverage/clover.xml --log-junit=build/coverage/junit.xml
       - name: Store code coverage
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: code-coverage
           path: build/coverage
@@ -49,11 +50,12 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.3'
+          extensions: soap
           coverage: none
           tools: composer:v2,infection
         env:
@@ -62,7 +64,7 @@ jobs:
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
@@ -70,7 +72,7 @@ jobs:
       - name: Install project dependencies
         run: composer upgrade --no-interaction --no-progress --prefer-dist
       - name: Obtain code coverage
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: code-coverage
           path: build/coverage
@@ -107,20 +109,20 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Unshallow clone to provide blame information
         run: git fetch --unshallow
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.3'
           coverage: none
           tools: composer:v2
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
@@ -128,7 +130,7 @@ jobs:
       - name: Install project dependencies
         run: composer upgrade --no-interaction --no-progress --prefer-dist
       - name: Obtain code coverage
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: code-coverage
           path: build/coverage

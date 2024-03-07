@@ -17,10 +17,6 @@ interface ConsumerClientInterface
      *     'EsCancelable' => 'Cancelable con aceptación',
      *     'EstatusCancelacion' => 'En proceso',
      * ]
-     *
-     * @param string $uri
-     * @param string $expression
-     * @return ConsumerClientResponseInterface
      */
     public function consume(string $uri, string $expression): ConsumerClientResponseInterface;
 }

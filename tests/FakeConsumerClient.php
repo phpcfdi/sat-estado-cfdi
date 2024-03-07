@@ -10,56 +10,19 @@ use PhpCfdi\SatEstadoCfdi\Utils\ConsumerClientResponse;
 
 final class FakeConsumerClient implements ConsumerClientInterface
 {
-    /**
-     * consume method will return this variable when invoked
-     *
-     * @var ConsumerClientResponseInterface
-     */
-    private $consumeResponse;
+    /** consume method will return this variable when invoked */
+    private readonly ConsumerClientResponseInterface $consumeResponse;
 
-    /**
-     * consume method will populate this variable with $uri input
-     *
-     * @var string
-     */
-    public $lastUri = '';
+    /** consume method will populate this variable with $uri input */
+    public string $lastUri = '';
 
-    /**
-     * consume method will populate this variable with $expression input
-     *
-     * @var string
-     */
-    public $lastExpression = '';
+    /** consume method will populate this variable with $expression input */
+    public string $lastExpression = '';
 
-    /**
-     * FakeConsumerClient constructor.
-     *
-     * @param array<string, string> $predefined
-     */
-    public function __construct(array $predefined = [])
+    /** @param array<string, string> $values */
+    public function __construct(array $values = [])
     {
-        $this->setClientResponse($predefined);
-    }
-
-    /**
-     * @param array<string, string> $predefined
-     */
-    public function setClientResponse(array $predefined): void
-    {
-        $this->consumeResponse = $this->consumerClientResponseFromArray($predefined);
-    }
-
-    /**
-     * @param array<string, string> $input
-     * @return ConsumerClientResponseInterface
-     */
-    public static function consumerClientResponseFromArray(array $input): ConsumerClientResponseInterface
-    {
-        $consumeResponse = new ConsumerClientResponse();
-        foreach ($input as $key => $value) {
-            $consumeResponse->set($key, $value);
-        }
-        return $consumeResponse;
+        $this->consumeResponse = new ConsumerClientResponse($values);
     }
 
     public function consume(string $uri, string $expression): ConsumerClientResponseInterface

@@ -9,6 +9,25 @@ Usamos [Versionado Semántico 2.0.0](SEMVER.md) por lo que puedes usar esta libr
 Pueden aparecer cambios no liberados que se integran a la rama principal, pero no ameritan una nueva liberación de
 versión, aunque sí su incorporación en la rama principal de trabajo. Generalmente, se tratan de cambios en el desarrollo.
 
+## Listado de cambios
+
+### Versión 2.0.0 2024-03-06
+
+Si ya habías implementado la versión 1.x, consula la [Guía de actualización de la versión 1.x a 2.x](UPGRADE_v1_v2.md).
+Si es una implementación nueva, solamente sigue la documentación del proyecto.
+
+Cambios más relevantes:
+
+- La versión mínima es ahora PHP 8.2, se agrega PHP 8.3 a la matriz de pruebas.
+- Se fusiona `phpcfdi/sat-estado-cfdi-soap` en `\PhpCfdi\SatEstadoCfdi\Clients\Soap`.
+- Se fusiona `phpcfdi/sat-estado-cfdi-http-psr` en `\PhpCfdi\SatEstadoCfdi\Clients\Http`.
+- Se dejan de utilizar *getters* a favor de propiedades públicas de solo lectura, excepto en *Excepciones*.
+- Los enumeradores cambian de `eclipxe/enum` a tipos de PHP.
+- Se usa una nueva interface `\PhpCfdi\SatEstadoCfdi\Contracts\Constants` para la especificación de constantes.
+- Se actualiza el año en el archivo de licencia. Feliz 2024.
+- Se actualiza el flujo de trabajo para ejecutar los trabajos en PHP 8.3.
+- Se actualizan las herramientas de desarrollo.
+
 ### Mantenimiento 2023-02-27
 
 Esta es una actualización de mantenimiento que no genera una nueva liberación de código.
@@ -25,8 +44,6 @@ Esta es una actualización de mantenimiento que no genera una nueva liberación 
   - Se elimina la instalación de `composer` donde no es necesaria.
   - Se agrega el evento `workflow_dispatch`.
 - Se actualizan las herramientas de desarrollo.
-
-## Listado de cambios
 
 ### Version 1.0.3 2022-02-22
 
