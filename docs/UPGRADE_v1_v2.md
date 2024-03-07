@@ -4,6 +4,7 @@ Para esta nueva versión hay cambios muy relevantes:
 
 - La versión mínima es ahora PHP 8.2, se agrega PHP 8.3 a la matriz de pruebas.
 - Se fusiona `phpcfdi/sat-estado-cfdi-soap` y `phpcfdi/sat-estado-cfdi-http-psr` en `phpcfdi/sat-estado-cfdi`.
+- Se usan propiedades públicas de solo lectura en lugar de *getters*.
 - Los enumeradores cambian de `eclipxe/enum` a tipos de PHP.
 - Se mueven las constantes a `\PhpCfdi\SatEstadoCfdi\Contracts\Constants`.
 - Las clases ahora son finales y de solo lectura.
@@ -54,6 +55,17 @@ en tu proyecto este sería el cambio más importante:
 No olvides contar con la extension de PHP `ext-dom` activa al momento de la ejecución,
 de lo contrario se producirá un error.
 
+## Propiedades públicas de solo lectura en lugar de *getters*
+
+Aprovechando las mejoras de PHP y que las clases ahora son finales y de solo lectura, se han dejado de
+utilizar los métodos para consultar propiedades (*getters*) y en su lugar se usan las propiedades públicas
+en modo solo lectura. El código que seguramente deberás modificar es para la clase `CfdiStatus`.
+
+```diff
+- return $cfdiStatus->document()->isCancelled();
++ return $cfdiStatus->document->isCancelled();
+```
+
 ## Enumeradores de estado
 
 Los enumeradores ya no usan `eclipxe/enum`, ahora son enumeradores de PHP, por lo que las comparaciones idénticas son válidas.
@@ -65,7 +77,7 @@ Si estabas instanciando algún estado, tu código debería cambiar de un método
 + return QueryStatus::NotFound;
 ```
 
-Los métodos de comprobación `is*` siguen funcionando, por ejemplo: `$result->query()->isFound()`.
+Los métodos de comprobación `is*` siguen funcionando, por ejemplo: `$result->query->isFound()`.
 
 Toma en cuenta que los enumeradores no son `Stringable`, por lo que debes usar la propiedad `name`.
 También el texto cambió de ser la primera letra minúscula a la primera letra mayúscula.

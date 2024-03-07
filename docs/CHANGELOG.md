@@ -21,6 +21,7 @@ Cambios más relevantes:
 - La versión mínima es ahora PHP 8.2, se agrega PHP 8.3 a la matriz de pruebas.
 - Se fusiona `phpcfdi/sat-estado-cfdi-soap` en `\PhpCfdi\SatEstadoCfdi\Clients\Soap`.
 - Se fusiona `phpcfdi/sat-estado-cfdi-http-psr` en `\PhpCfdi\SatEstadoCfdi\Clients\Http`.
+- Se dejan de utilizar *getters* a favor de propiedades públicas de solo lectura, excepto en *Excepciones*.
 - Los enumeradores cambian de `eclipxe/enum` a tipos de PHP.
 - Se usa una nueva interface `\PhpCfdi\SatEstadoCfdi\Contracts\Constants` para la especificación de constantes.
 - Se actualiza el año en el archivo de licencia. Feliz 2024.
