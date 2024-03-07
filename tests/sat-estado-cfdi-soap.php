@@ -36,11 +36,11 @@ exit(call_user_func(function (string $command, string ...$arguments): int {
 
         $result = [
             'expression' => $expression,
-            'query' => $response->query()->name,
-            'document' => $response->document()->name,
-            'cancellable' => $response->cancellable()->name,
-            'cancellation' => $response->cancellation()->name,
-            'efos' => $response->efos()->name,
+            'query' => $response->query->name,
+            'document' => $response->document->name,
+            'cancellable' => $response->cancellable->name,
+            'cancellation' => $response->cancellation->name,
+            'efos' => $response->efos->name,
         ];
 
         echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), PHP_EOL;

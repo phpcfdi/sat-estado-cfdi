@@ -23,10 +23,10 @@ final class CfdiStatusTest extends TestCase
         $efos = EfosStatus::Excluded;
         $cfdiStatus = new CfdiStatus($query, $document, $cancellable, $cancellation, $efos);
 
-        $this->assertSame($query, $cfdiStatus->query());
-        $this->assertSame($document, $cfdiStatus->document());
-        $this->assertSame($cancellable, $cfdiStatus->cancellable());
-        $this->assertSame($cancellation, $cfdiStatus->cancellation());
-        $this->assertSame($efos, $cfdiStatus->efos());
+        $this->assertSame($query, $cfdiStatus->query);
+        $this->assertSame($document, $cfdiStatus->document);
+        $this->assertSame($cancellable, $cfdiStatus->cancellable);
+        $this->assertSame($cancellation, $cfdiStatus->cancellation);
+        $this->assertSame($efos, $cfdiStatus->efos);
     }
 }

@@ -35,10 +35,10 @@ final class ConsumerTest extends TestCase
         $consumer = new Consumer($fakeClient);
         $response = $consumer->execute($fakeExpression);
 
-        $this->assertTrue($response->query()->isFound());
-        $this->assertTrue($response->document()->isActive());
-        $this->assertTrue($response->cancellable()->isCancellableByApproval());
-        $this->assertTrue($response->cancellation()->isPending());
-        $this->assertTrue($response->efos()->isExcluded());
+        $this->assertTrue($response->query->isFound());
+        $this->assertTrue($response->document->isActive());
+        $this->assertTrue($response->cancellable->isCancellableByApproval());
+        $this->assertTrue($response->cancellation->isPending());
+        $this->assertTrue($response->efos->isExcluded());
     }
 }

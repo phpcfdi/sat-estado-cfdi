@@ -65,7 +65,7 @@ $consumer = new Consumer($client);
 
 $cfdiStatus = $consumer->execute('...expression');
 
-if ($cfdiStatus->cancellable()->isNotCancellable()) {
+if ($cfdiStatus->cancellable->isNotCancellable()) {
     echo 'CFDI no es cancelable';
 }
 ```
@@ -222,7 +222,7 @@ $expression = $expressionExtractor->extract($document);
 $cfdiStatus = $consumer->execute($expression);
 
 // usar el estado
-if ($cfdiStatus->document()->isActive()) {
+if ($cfdiStatus->document->isActive()) {
     echo 'El CFDI se encuentra vigente';
 }
 ```
@@ -232,25 +232,25 @@ if ($cfdiStatus->document()->isActive()) {
 Después de consumir el servicio, se responderá con un objeto `CfdiStatus` que agrupa de los cuatro estados.
 
 Los estados son enumeradores, puedes compararlos rápidamente usando métodos de ayuda `is*`,
-por ejemplo: `$response->document()->isCancelled()`.
+por ejemplo: `$response->document->isCancelled()`.
 
 Posibles estados:
 
-- `CodigoEstatus`: `query(): QueryStatus`.
+- `CodigoEstatus`: `query: QueryStatus`.
     - `Found`: Si el estado inicia con `S - `.
     - `NotFound`: en cualquier otro caso.
 
-- `Estado`: `document(): DocumentStatus`.
+- `Estado`: `document: DocumentStatus`.
     - `Active`: Si el estado reportó `Vigente`.
     - `Cancelled`: Si el estado reportó `Cancelado`.
     - `NotFound`: en cualquier otro caso.
 
-- `EsCancelable`: `cancellable(): CancellableStatus`.
+- `EsCancelable`: `cancellable: CancellableStatus`.
     - `CancellableByDirectCall`: Si el estado reportó `Cancelable sin aceptación`.
     - `CancellableByApproval`: Si el estado reportó `Cancelable con aceptación`.
     - `NotCancellable`: en cualquier otro caso.
 
-- `EstatusCancelacion`: `cancellation(): CancellationStatus`.
+- `EstatusCancelacion`: `cancellation: CancellationStatus`.
     - `CancelledByDirectCall`: Si el estado reportó `Cancelado sin aceptación`.
     - `CancelledByApproval`: Si el estado reportó `Cancelado con aceptación`.
     - `CancelledByExpiration`: Si el estado reportó `Plazo vencido`.
@@ -258,7 +258,7 @@ Posibles estados:
     - `Disapproved`: Si el estado reportó `Solicitud rechazada`.
     - `Undefined`: en cualquier otro caso.
 
-- `ValidacionEFOS`: `efos(): EfosStatus`.
+- `ValidacionEFOS`: `efos: EfosStatus`.
     - `Included`: Si el estado no reportó `200` o `201`.
     - `Excluded`: Si el estado reportó `200` o `201`.
 
@@ -302,6 +302,8 @@ sin temor a romper tu aplicación.
 |-------------------|------------------------------|
 | 1.0.3             | 7.3, 7.4, 8.0, 8.1, 8.2, 8.3 |
 | 2.0.0             | 8.2, 8.3                     |
+
+- [Guía de actualización de la versión 1.x a 2.x](docs/UPGRADE_v1_v2.md).
 
 ## Contribuciones
 

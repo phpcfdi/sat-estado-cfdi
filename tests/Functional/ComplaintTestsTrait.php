@@ -101,29 +101,29 @@ trait ComplaintTestsTrait
     private function compareCfdiStatus(CfdiStatus $expected, CfdiStatus $actual): void
     {
         $this->assertSame(
-            $expected->query(),
-            $actual->query(),
-            sprintf('It was expected CFDI status request: %s', $expected->query()->name),
+            $expected->query,
+            $actual->query,
+            sprintf('It was expected CFDI status request: %s', $expected->query->name),
         );
         $this->assertSame(
-            $expected->document(),
-            $actual->document(),
-            sprintf('It was expected CFDI status active: %s', $expected->document()->name),
+            $expected->document,
+            $actual->document,
+            sprintf('It was expected CFDI status active: %s', $expected->document->name),
         );
         $this->assertSame(
-            $expected->cancellable(),
-            $actual->cancellable(),
-            sprintf('It was expected CFDI status cancellable: %s', $expected->cancellable()->name),
+            $expected->cancellable,
+            $actual->cancellable,
+            sprintf('It was expected CFDI status cancellable: %s', $expected->cancellable->name),
         );
         $this->assertSame(
-            $expected->cancellation(),
-            $actual->cancellation(),
-            sprintf('It was expected CFDI status cancellation: %s', $expected->cancellation()->name),
+            $expected->cancellation,
+            $actual->cancellation,
+            sprintf('It was expected CFDI status cancellation: %s', $expected->cancellation->name),
         );
         $this->assertSame(
-            $expected->efos(),
-            $actual->efos(),
-            sprintf('It was expected the efos status: %s', $expected->efos()->name),
+            $expected->efos,
+            $actual->efos,
+            sprintf('It was expected the efos status: %s', $expected->efos->name),
         );
     }
 }
