@@ -14,20 +14,15 @@ use SoapVar;
 final readonly class SoapConsumerClient implements ConsumerClientInterface
 {
     public function __construct(
-        private SoapClientFactoryInterface $soapClientFactory = new SoapClientFactory(),
+        public SoapClientFactoryInterface $soapClientFactory = new SoapClientFactory(),
     ) {
-    }
-
-    public function getSoapClientFactory(): SoapClientFactoryInterface
-    {
-        return $this->soapClientFactory;
     }
 
     /** @throws SoapFault */
     public function consume(string $uri, string $expression): ConsumerClientResponseInterface
     {
         // make soap call
-        $soapClient = $this->getSoapClientFactory()->create($uri);
+        $soapClient = $this->soapClientFactory->create($uri);
 
         // prepare arguments
         /** @psalm-var int $encoding Psalm does not undestand that encoding can be NULL */

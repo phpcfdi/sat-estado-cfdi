@@ -35,14 +35,14 @@ final class SoapConsumerClientTest extends TestCase
     public function testConsumerClientCanBeCreatedWithoutArguments(): void
     {
         $client = new SoapConsumerClient();
-        $this->assertInstanceOf(SoapClientFactory::class, $client->getSoapClientFactory());
+        $this->assertInstanceOf(SoapClientFactory::class, $client->soapClientFactory);
     }
 
     public function testConsumerClientCanBeCreatedWithSoapClientFactory(): void
     {
         $factory = new SoapClientFactory();
         $client = new SoapConsumerClient($factory);
-        $this->assertSame($factory, $client->getSoapClientFactory());
+        $this->assertSame($factory, $client->soapClientFactory);
     }
 
     public function testConsumeReceivingFalseAsResponse(): void
