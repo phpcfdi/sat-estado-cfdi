@@ -26,7 +26,7 @@ final class HttpConsumerClientTest extends TestCase
         $factory = $this->createHttpConsumerFactory();
         $client = new HttpConsumerClient($factory);
         $this->assertInstanceOf(ConsumerClientInterface::class, $client);
-        $this->assertSame($factory, $client->getFactory());
+        $this->assertSame($factory, $client->factory);
     }
 
     public function testCreateSoapHttpRequest(): void

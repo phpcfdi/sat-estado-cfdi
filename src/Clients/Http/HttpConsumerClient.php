@@ -17,14 +17,9 @@ final readonly class HttpConsumerClient implements ConsumerClientInterface
     private SoapXml $soapXml;
 
     public function __construct(
-        private HttpConsumerFactoryInterface $factory,
+        public HttpConsumerFactoryInterface $factory,
     ) {
         $this->soapXml = new SoapXml();
-    }
-
-    public function getFactory(): HttpConsumerFactoryInterface
-    {
-        return $this->factory;
     }
 
     public function createHttpRequest(string $uri, string $expression): RequestInterface
