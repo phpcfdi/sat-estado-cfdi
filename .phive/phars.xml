@@ -5,4 +5,5 @@
   <phar name="phpcbf" version="^3.13.2" installed="3.13.2" location="./tools/phpcbf" copy="false"/>
   <phar name="phpstan" version="^2.1.22" installed="2.1.22" location="./tools/phpstan" copy="false"/>
   <phar name="infection" version="^0.31.1" installed="0.31.2" location="./tools/infection" copy="false"/>
+  <phar name="composer-normalize" version="^2.47.0" installed="2.47.0" location="./tools/composer-normalize" copy="false"/>
 </phive>

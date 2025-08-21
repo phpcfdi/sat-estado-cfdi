@@ -18,6 +18,10 @@ No ha sido necesario liberar una nueva versión debido a que estos cambios no af
 - Se actualiza la integración con *SonarQube Cloud* separando el flujo de trabajo
   a su propio archivo `sonarqube-cloud.yml`.
 - Se mueve el trabajo `infection` al flujo de trabajo `build.yml`.
+- Se agrega `composer-normalize` al proyecto:
+  - Se incluye en las herramientas de desarrollo.
+  - Se agrega a la construcción con `composer` en `dev:check-style` y `dev:fix-style`.
+  - Se agrega a flujo de trabajo principal de construcción.
 - Se elimina el flujo de trabajo `coverage.yml`.
 - Se remueve *PSalm* de las herramientas de desarrollo, gracias por todo.
 - Se actualiza *PHPStan* a la última versión mayor, con esto se corrige la contrucción semanal del proyecto.
