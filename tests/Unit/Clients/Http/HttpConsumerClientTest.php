@@ -81,9 +81,9 @@ final class HttpConsumerClientTest extends TestCase
 
     public function testMethodSendRequest(): void
     {
-        /** @var RequestInterface $request */
+        /** @var RequestInterface&MockObject $request */
         $request = $this->createMock(RequestInterface::class);
-        /** @var ResponseInterface $response */
+        /** @var ResponseInterface&MockObject $response */
         $response = $this->createMock(ResponseInterface::class);
 
         /** @var HttpClientInterface&MockObject $httpClient */
