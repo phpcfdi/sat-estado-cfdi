@@ -13,6 +13,23 @@ on:
 
 jobs:
 
+  composer-normalize:
+    name: Composer normalization
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+          tools: composer-normalize
+        env:
+          fail-fast: true
+      - name: Composer normalize
+        run: composer-normalize
+
   phpcs:
     name: Coding standards (phpcs)
     runs-on: "ubuntu-latest"
@@ -22,7 +39,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           coverage: none
           tools: cs2pr, phpcs
         env:
@@ -39,7 +56,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           coverage: none
           tools: cs2pr, php-cs-fixer
         env:
@@ -56,7 +73,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           extensions: soap
           coverage: none
           tools: composer:v2, phpstan
@@ -76,43 +93,12 @@ jobs:
       - name: PHPStan
         run: phpstan analyse --no-progress --verbose
 
-  psalm:
-    name: Code analysis (psalm)
-    runs-on: "ubuntu-latest"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: soap
-          coverage: none
-          tools: composer:v2, psalm
-        env:
-          fail-fast: true
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-composer-
-      - name: Install project dependencies
-        run: composer upgrade --no-interaction --no-progress --prefer-dist
-      - name: Psalm version
-        run: psalm --version
-      - name: Psalm
-        run: psalm --no-progress --output-format=checkstyle
-
   tests:
     name: Tests on PHP ${{ matrix.php-versions }}
     runs-on: "ubuntu-latest"
     strategy:
       matrix:
-        php-versions: ['8.2', '8.3']
+        php-versions: ['8.2', '8.3', '8.4']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -138,3 +124,34 @@ jobs:
         run: composer upgrade --no-interaction --no-progress --prefer-dist
       - name: Tests (phpunit)
         run: vendor/bin/phpunit --testdox
+
+  infection:
+    name: Mutation testing analysis
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: soap
+          coverage: xdebug
+          tools: composer:v2,infection
+        env:
+          fail-fast: true
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install project dependencies
+        run: composer upgrade --no-interaction --no-progress --prefer-dist
+      - name: Create code coverage
+        run: vendor/bin/phpunit --coverage-xml=build/coverage --coverage-clover=build/coverage/clover.xml --log-junit=build/coverage/junit.xml
+      - name: infection
+        run: infection --skip-initial-tests --coverage=build/coverage --no-progress --no-interaction --logger-github

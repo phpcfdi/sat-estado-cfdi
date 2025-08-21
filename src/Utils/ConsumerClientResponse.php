@@ -30,7 +30,6 @@ final readonly class ConsumerClientResponse implements ConsumerClientResponseInt
         }
 
         $final = [];
-        /** @psalm-var mixed $value */
         foreach (get_object_vars($values) as $key => $value) {
             if (is_scalar($value)) {
                 $final[strval($key)] = strval($value);

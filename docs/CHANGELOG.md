@@ -9,6 +9,25 @@ Usamos [Versionado Semántico 2.0.0](SEMVER.md) por lo que puedes usar esta libr
 Pueden aparecer cambios no liberados que se integran a la rama principal, pero no ameritan una nueva liberación de
 versión, aunque sí su incorporación en la rama principal de trabajo. Generalmente, se tratan de cambios en el desarrollo.
 
+### Mantenimiento 2025-08-21
+
+No ha sido necesario liberar una nueva versión debido a que estos cambios no afectan el código ejecutable.
+
+- Se actualiza la licencia del proyecto a 2025.
+- Se agrega PHP 8.4 a la matriz de pruebas.
+- Se actualiza la integración con *SonarQube Cloud* separando el flujo de trabajo
+  a su propio archivo `sonarqube-cloud.yml`.
+- Se mueve el trabajo `infection` al flujo de trabajo `build.yml`.
+- Se agrega `composer-normalize` al proyecto:
+  - Se incluye en las herramientas de desarrollo.
+  - Se agrega a la construcción con `composer` en `dev:check-style` y `dev:fix-style`.
+  - Se agrega a flujo de trabajo principal de construcción.
+- Se elimina el flujo de trabajo `coverage.yml`.
+- Se remueve *PSalm* de las herramientas de desarrollo, gracias por todo.
+- Se actualiza *PHPStan* a la última versión mayor, con esto se corrige la contrucción semanal del proyecto.
+- Se actualizan las reglas de *PHPCSFixer* a la versión mínima de PHP 8.2.
+- Se actualizan las herramientas de desarrollo.
+
 ## Listado de cambios
 
 ### Versión 2.0.0 2024-03-06

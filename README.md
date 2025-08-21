@@ -301,7 +301,7 @@ sin temor a romper tu aplicación.
 | `sat-estado-cfdi` | Versiones soportadas de PHP  |
 |-------------------|------------------------------|
 | 1.0.3             | 7.3, 7.4, 8.0, 8.1, 8.2, 8.3 |
-| 2.0.0             | 8.2, 8.3                     |
+| 2.0.0             | 8.2, 8.3, 8.4                |
 
 - [Guía de actualización de la versión 1.x a 2.x](docs/UPGRADE_v1_v2.md).
 
