@@ -4,6 +4,5 @@
   <phar name="phpcs" version="^3.13.2" installed="3.13.2" location="./tools/phpcs" copy="false"/>
   <phar name="phpcbf" version="^3.13.2" installed="3.13.2" location="./tools/phpcbf" copy="false"/>
   <phar name="phpstan" version="^1.12.28" installed="1.12.28" location="./tools/phpstan" copy="false"/>
-  <phar name="psalm" version="^5.26.1" installed="5.26.1" location="./tools/psalm" copy="false"/>
   <phar name="infection" version="^0.31.1" installed="0.31.2" location="./tools/infection" copy="false"/>
 </phive>

@@ -64,7 +64,6 @@ final readonly class SoapClientFactory implements SoapClientFactoryInterface
         $options = $this->finalSoapOptions($serviceLocation);
 
         $soapClientClass = $this->soapClientClass;
-        /** @psalm-suppress UnsafeInstantiation */
         return new $soapClientClass(null, $options);
     }
 }

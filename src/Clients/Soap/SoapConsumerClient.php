@@ -25,7 +25,6 @@ final readonly class SoapConsumerClient implements ConsumerClientInterface
         $soapClient = $this->soapClientFactory->create($uri);
 
         // prepare arguments
-        /** @psalm-var int $encoding Psalm does not undestand that encoding can be NULL */
         $encoding = null;
         $arguments = [new SoapVar($expression, $encoding, '', '', 'expresionImpresa', Constants::XMLNS_SOAP_URI)];
 
@@ -33,7 +32,6 @@ final readonly class SoapConsumerClient implements ConsumerClientInterface
         $options = ['soapaction' => Constants::SOAP_ACTION];
 
         // make call
-        /** @psalm-var mixed $data */
         $data = $soapClient->__soapCall(Constants::SOAP_METHOD, $arguments, $options);
 
         return ConsumerClientResponse::createFromValues($data);
