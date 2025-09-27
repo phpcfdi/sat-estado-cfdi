@@ -9,6 +9,16 @@ Usamos [Versionado Semántico 2.0.0](SEMVER.md) por lo que puedes usar esta libr
 Pueden aparecer cambios no liberados que se integran a la rama principal, pero no ameritan una nueva liberación de
 versión, aunque sí su incorporación en la rama principal de trabajo. Generalmente, se tratan de cambios en el desarrollo.
 
+### Mantenimiento 2025-09-26
+
+No ha sido necesario liberar una nueva versión debido a que estos cambios no afectan el código ejecutable.
+
+- Se corrigen las insignias relacionadas a SonarQube Cloud.
+- Se actualizan las reglas de *PHPCSFixer* a la versión 3.88.
+- Se agregan las reglas `array_indentation` y `global_namespace_import` a *PHPCSFixer*.
+- Se actualizan las herramientas de desarrollo.
+- En el flujo de trabajo `build` se usa la variable `matrix.php-version` en singular.
+
 ### Mantenimiento 2025-08-21
 
 No ha sido necesario liberar una nueva versión debido a que estos cambios no afectan el código ejecutable.
