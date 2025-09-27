@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpCfdi\SatEstadoCfdi\Utils;
 
 use PhpCfdi\SatEstadoCfdi\Contracts\ConsumerClientResponseInterface;
+use Traversable;
 
 /**
  * This is a generic implementation of ConsumerClientResponseInterface
@@ -22,7 +23,7 @@ final readonly class ConsumerClientResponse implements ConsumerClientResponseInt
     {
         if (is_array($values)) {
             $values = (object) $values;
-        } elseif ($values instanceof \Traversable) {
+        } elseif ($values instanceof Traversable) {
             $values = (object) iterator_to_array($values);
         }
         if (! is_object($values)) {
