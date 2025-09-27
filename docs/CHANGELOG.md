@@ -18,6 +18,8 @@ No ha sido necesario liberar una nueva versión debido a que estos cambios no af
 - Se agregan las reglas `array_indentation` y `global_namespace_import` a *PHPCSFixer*.
 - Se actualizan las herramientas de desarrollo.
 - En el flujo de trabajo `build` se usa la variable `matrix.php-version` en singular.
+- Se agrega la extensión SOAP al flujo de trabajo de integración con SonarQube Cloud.
+- Se actualiza a la versión 6 de la acción `SonarSource/sonarqube-scan-action`.
 
 ### Mantenimiento 2025-08-21
 
